@@ -1,0 +1,12 @@
+<mat-toolbar color="primary">
+  <span>Rocket</span>
+  <button mat-button [matMenuTriggerFor]="menu">
+    <mat-icon>more_vert</mat-icon>
+  </button>
+  <mat-menu #menu="matMenu">
+    <button mat-menu-item (click)="logout()">
+    <mat-icon>logout</mat-icon>
+    <span>Logout</span>
+    </button>  
+  </mat-menu>
+</mat-toolbar>

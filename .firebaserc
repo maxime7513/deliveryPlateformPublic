@@ -1,0 +1,14 @@
+{
+  "targets": {
+    "rocket-7a65d": {
+      "hosting": {
+        "Rocket": [
+          "rocket-7a65d"
+        ]
+      }
+    }
+  },
+  "projects": {
+    "default": "rocket-7a65d"
+  }
+}
