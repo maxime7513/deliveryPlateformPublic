@@ -21,6 +21,8 @@ import { getAuth, provideAuth } from '@angular/fire/auth';
 import { RegisterLivreurComponent } from './components/register-livreur/register-livreur.component';
 import { HeaderComponent } from './components/header/header.component';
 import { RegisterComponent } from './components/register-livreur/register/register.component';
+import { SignUpComponent } from './components/sign-up/sign-up.component';
+import { getFirestore, provideFirestore } from '@angular/fire/firestore';
 
 @NgModule({
   declarations: [
@@ -28,7 +30,8 @@ import { RegisterComponent } from './components/register-livreur/register/regist
     LoginComponent,
     RegisterLivreurComponent,
     HeaderComponent,
-    RegisterComponent
+    RegisterComponent,
+    SignUpComponent
   ],
   imports: [
     BrowserModule,
@@ -43,6 +46,8 @@ import { RegisterComponent } from './components/register-livreur/register/regist
     MatMenuModule,
     provideFirebaseApp(() => initializeApp(environment.firebaseConfig)),
     provideAuth(() => getAuth()),
+    provideFirestore(() => getFirestore()),
+    // provideStorage(() => getStorage()),
     HotToastModule.forRoot(),
   ],
   providers: [],

@@ -1,12 +1,24 @@
 <mat-toolbar color="primary">
-  <span>Rocket</span>
-  <button mat-button [matMenuTriggerFor]="menu">
+  <ng-container *ngIf="authService.currentUser$ | async as user">
+    <span>Rocket</span>
+      <button mat-button [matMenuTriggerFor]="userMenu">
+        <mat-icon>account_circle</mat-icon>
+        {{ user.displayName }}
+        <mat-icon>expand_more</mat-icon>
+      </button>
+  </ng-container> 
+  <!--<button mat-button [matMenuTriggerFor]="menu">
     <mat-icon>more_vert</mat-icon>
-  </button>
-  <mat-menu #menu="matMenu">
+  </button>-->
+  
+  <mat-menu #userMenu>
+    <button mat-menu-item routerLink="/signup">
+      <mat-icon>group_add</mat-icon>
+      <span>Inscription</span>
+    </button> 
     <button mat-menu-item (click)="logout()">
-    <mat-icon>logout</mat-icon>
-    <span>Logout</span>
+      <mat-icon>power_settings_new</mat-icon>
+      <span>Logout</span>
     </button>  
   </mat-menu>
 </mat-toolbar>

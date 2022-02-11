@@ -3,7 +3,6 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { AuthService } from 'src/app/services/auth.service';
 import { Router } from '@angular/router';
 import { HotToastService } from '@ngneat/hot-toast';
-import { authState } from 'rxfire/auth';
 
 @Component({
   selector: 'app-login',
@@ -11,8 +10,8 @@ import { authState } from 'rxfire/auth';
   styleUrls: ['./login.component.scss']
 })
 export class LoginComponent implements OnInit {
+  
   loginForm: FormGroup;
-  f: any;
   
   constructor(private authService: AuthService, private router: Router, private toast: HotToastService) { }
 
@@ -22,11 +21,11 @@ export class LoginComponent implements OnInit {
 
   // init validator
   validateform() {
-    this.loginForm = new FormGroup({
-      email: new FormControl("", [Validators.required, Validators.email]),
-      password: new FormControl("", [Validators.required, Validators.minLength(2),]),
-    });
-    this.f = this.loginForm.controls;
+    this.loginForm = new FormGroup(
+      {
+        email: new FormControl("", [Validators.required, Validators.email]),
+        password: new FormControl("", [Validators.required, Validators.minLength(6)]),
+      });
   }
 
   submit() {
@@ -45,6 +44,13 @@ export class LoginComponent implements OnInit {
       this.router.navigate(['/register']);
     });
 
+  }
+
+  get email() {
+    return this.loginForm.get('email');
+  }
+  get password() {
+    return this.loginForm.get('password');
   }
 
 }

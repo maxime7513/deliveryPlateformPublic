@@ -7,7 +7,7 @@ import { AuthService } from 'src/app/services/auth.service';
   styleUrls: ['./register.component.scss']
 })
 export class RegisterComponent implements OnInit {
-  user$ = this.usersService.currentUserProfile$;
+  user$ = this.authService.currentUser$;
   
   constructor(private authService: AuthService) { }
 

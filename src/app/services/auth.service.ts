@@ -1,15 +1,21 @@
 import { Injectable } from '@angular/core';
 import { Auth, authState, signInWithEmailAndPassword } from '@angular/fire/auth'
-import { from } from 'rxjs';
+import { createUserWithEmailAndPassword, updateProfile } from 'firebase/auth';
+import { from, switchMap } from 'rxjs';
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
   
   currentUser$ = authState(this.auth);
-  currentUserProfile$: any;
+  // currentUserProfile$: any;
 
   constructor(private auth: Auth) { }
+
+  signUp(name: string, email: string, password: string){
+    return from(createUserWithEmailAndPassword(this.auth, email, password)
+    ).pipe(switchMap(({ user }) => updateProfile(user, {displayName: name})))
+  }
 
   login(email: string, password: string){
     return from(signInWithEmailAndPassword(this.auth, email, password));
