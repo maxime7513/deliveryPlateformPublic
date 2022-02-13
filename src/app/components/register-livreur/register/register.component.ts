@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { AuthService } from 'src/app/services/auth.service';
+import { UsersService } from 'src/app/services/users.service';
 
 @Component({
   selector: 'app-register',
@@ -7,9 +7,9 @@ import { AuthService } from 'src/app/services/auth.service';
   styleUrls: ['./register.component.scss']
 })
 export class RegisterComponent implements OnInit {
-  user$ = this.authService.currentUser$;
+  user$ = this.usersService.currentUserProfile$;
   
-  constructor(private authService: AuthService) { }
+  constructor(private usersService: UsersService) { }
 
   ngOnInit(): void {
   }
