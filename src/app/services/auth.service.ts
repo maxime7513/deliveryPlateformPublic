@@ -12,9 +12,9 @@ export class AuthService {
 
   constructor(private auth: Auth) { }
 
-  signUp(name: string, email: string, password: string){
-    return from(createUserWithEmailAndPassword(this.auth, email, password)
-    ).pipe(switchMap(({ user }) => updateProfile(user, {displayName: name})))
+  signUp(email: string, password: string){
+    return from(createUserWithEmailAndPassword(this.auth, email, password))
+    // ).pipe(switchMap(({ user }) => updateProfile(user, {displayName: name})))
   }
 
   login(email: string, password: string){

@@ -1,8 +1,9 @@
 <mat-toolbar color="primary">
-  <ng-container *ngIf="authService.currentUser$ | async as user">
+  <ng-container *ngIf="user$ | async as user">
     <span>Rocket</span>
       <button mat-button [matMenuTriggerFor]="userMenu">
-        <mat-icon>account_circle</mat-icon>
+        <mat-icon *ngIf="!user.photoURL">account_circle</mat-icon>
+        <img *ngIf="user.photoURL" [src]="user.photoURL" class="profil_photo"/>
         {{ user.displayName }}
         <mat-icon>expand_more</mat-icon>
       </button>

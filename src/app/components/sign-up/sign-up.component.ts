@@ -4,6 +4,7 @@ import { Router } from '@angular/router';
 import { HotToastService } from '@ngneat/hot-toast';
 import { switchMap } from 'rxjs';
 import { AuthService } from 'src/app/services/auth.service';
+import { UsersService } from 'src/app/services/users.service';
 
 
 
@@ -17,7 +18,7 @@ export class SignUpComponent implements OnInit {
   
   signUpForm: FormGroup;
   
-  constructor(private authService: AuthService, private router: Router, private toast: HotToastService) { }
+  constructor(private authService: AuthService, private usersService: UsersService, private router: Router, private toast: HotToastService) { }
 
   ngOnInit(): void {
     this.validateform();
@@ -73,8 +74,11 @@ export class SignUpComponent implements OnInit {
       return;
     }
 
-    const { name, email, password } = this.signUpForm.value;
-    this.authService.signUp(name, email, password).pipe(
+    const {name, email, password } = this.signUpForm.value;
+    this.authService.signUp(email, password).pipe(
+      switchMap(({ user: { uid }})=> 
+        this.usersService.addUser({ uid, email, displayName: name})
+        ),
         this.toast.observe({
           success: 'Congrats! You are all signed up',
           loading: 'Signing up...',
