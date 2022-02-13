@@ -37,26 +37,22 @@
           formControlName="displayName"
           placeholder="Display Name"
         />
+      <mat-error *ngIf="displayName.hasError('required')">
+        Pseudo obligatoire
+      </mat-error>
       </mat-form-field>
+
       <mat-form-field>
         <input
-          type="number"
+          type="tel"
           matInput
           formControlName="phone"
           placeholder="Phone"
         />
       </mat-form-field>
     </div>
-    <mat-form-field>
-      <input
-        type="text"
-        matInput
-        formControlName="address"
-        placeholder="Address"
-      />
-    </mat-form-field>
 
-    <button type="submit" class="margin-top" mat-raised-button color="primary">
+    <button type="submit" mat-raised-button color="primary">
       Save
     </button>
   </form>
