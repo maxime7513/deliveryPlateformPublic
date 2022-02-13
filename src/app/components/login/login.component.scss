@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@500;600;700&display=swap');
+
 form{
     // width: 40%;
     padding: 20px 40px;
@@ -5,6 +7,7 @@ form{
     flex-direction: column;
     align-items: center;
     background: white;
+    font-family: "Poppins";
     border: 1px solid gray;
     border-radius: 13px;
 }
@@ -15,8 +18,21 @@ form{
     justify-content: center;
     align-items: center;
     min-height: 100vh;
-    background: gray;
+    background: orangered;
 }
 mat-form-field{
     margin-bottom: 10px;
+}
+.btn{
+    background-color: orangered;
+    font-family: "Poppins";
+    width: 100px;
+    height: 40px;
+    border-radius: 15px;
+    border: none;
+    color: antiquewhite;
+}
+.img{
+    height: 40px;
+    width: 100px;
 }
