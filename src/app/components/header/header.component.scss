@@ -1,9 +1,11 @@
-@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@500;600;700&display=swap');
 mat-toolbar {
     justify-content: space-between;
-}
-.mat{
-    background-color: orangered;
-    color: white;
-    font-family: "Poppins";
+    background-color: orangered !important;
+    .profil_photo{
+        width: 25px;
+        height: 25px;
+        border-radius: 100%;
+        object-fit: cover;
+        object-position: center;
+    }
 }
