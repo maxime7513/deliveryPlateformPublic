@@ -1,7 +1,6 @@
 <mat-toolbar color="primary">
   <ng-container *ngIf="user$ | async as user">
     <span>Rocket</span>
-      updateprofil
       <button mat-button [matMenuTriggerFor]="userMenu">
         <mat-icon *ngIf="!user.photoURL">account_circle</mat-icon>
         <img *ngIf="user.photoURL" [src]="user.photoURL" class="profil_photo"/>
