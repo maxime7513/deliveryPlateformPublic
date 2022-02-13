@@ -1,6 +1,6 @@
-<mat-toolbar color="primary">
+<mat-toolbar class="mat">
   <ng-container *ngIf="authService.currentUser$ | async as user">
-    <span>Rocket</span>
+    <span>ROCKET</span>
       <button mat-button [matMenuTriggerFor]="userMenu">
         <mat-icon>account_circle</mat-icon>
         {{ user.displayName }}

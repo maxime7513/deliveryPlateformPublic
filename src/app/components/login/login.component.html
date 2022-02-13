@@ -1,5 +1,7 @@
 <div class="background">
+
   <form [formGroup]="loginForm" (ngSubmit)="submit()">
+    <h3>ROCKET</h3>
     <mat-form-field>
       <mat-label>Email</mat-label>
       <input matInput placeholder="Adresse email" formControlName="email" type="email"/>
@@ -16,7 +18,7 @@
       </mat-error>
     </mat-form-field>
     <div>
-        <button type="submit" mat-raised-button color="primary">Login</button>
+        <button type="submit" class="btn" >Login</button>
     </div>
   </form>
 </div>
