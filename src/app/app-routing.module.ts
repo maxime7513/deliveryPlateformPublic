@@ -4,6 +4,7 @@ import { AppComponent } from './app.component';
 import { LoginComponent } from './components/login/login.component';
 import { SignUpComponent } from './components/sign-up/sign-up.component';
 import { RegisterLivreurComponent } from './components/register-livreur/register-livreur.component';
+import { ProfileComponent } from './components/profile/profile.component';
 import {
   canActivate,
   redirectLoggedInTo,
@@ -18,6 +19,7 @@ const routes: Routes = [
   { path: 'login', component: LoginComponent, ...canActivate(redirectLoggedInToHome)},
   { path: 'signup', component: SignUpComponent, ...canActivate(redirectUnauthorizedToLogin) },
   { path: 'register', component: RegisterLivreurComponent, ...canActivate(redirectUnauthorizedToLogin) },
+  { path: 'profil', component: ProfileComponent, ...canActivate(redirectUnauthorizedToLogin)},
 ];
 
 @NgModule({
