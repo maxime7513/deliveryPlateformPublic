@@ -1,0 +1,21 @@
+<h1>PLANNING</h1>
+<table>
+  <thead>
+   <tr>
+     <th scope="col">date</th>
+     <th scope="col">heure</th>
+     <th scope="col">inscit</th>
+     <th scope="col">inscrit max</th>
+     <th scope="col">inscrit users</th>
+   </tr>
+  </thead>
+  <tbody *ngIf="crenaux">
+    <tr *ngFor="let crenau of crenaux">
+      <td>{{ crenau.date }}</td>
+      <td>{{ crenau.heureDebut }}h à {{ crenau.heureFin }}h</td>
+      <td>{{ crenau.inscrit }}</td>
+      <td>{{ crenau.inscritMax }}</td>
+      <td>{{ crenau.users }}</td>
+    </tr>
+   </tbody>
+</table>

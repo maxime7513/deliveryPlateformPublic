@@ -1,4 +1,3 @@
-<app-header></app-header>
 <div class="background">
 <form [formGroup]="signUpForm" (ngSubmit)="submit()">
     <mat-form-field>
@@ -41,7 +40,9 @@
     </mat-error>
     
     <div>
-        <button class="btn" type="submit" mat-raised-button color="primary">Sign Up!</button>
+        <button type="submit" mat-raised-button color="primary">
+          S'inscrire !
+        </button>
     </div>
 </form>
 </div>

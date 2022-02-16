@@ -13,9 +13,21 @@
   </button>-->
   
   <mat-menu #userMenu>
+    <button mat-menu-item routerLink="/dashboardlivreur">
+      <mat-icon>date_range</mat-icon>
+      <span>Mes créneaux</span>
+    </button> 
+    <button mat-menu-item routerLink="/planning">
+      <mat-icon>today</mat-icon>
+      <span>Planning</span>
+    </button> 
+    <button mat-menu-item routerLink="/crenau">
+      <mat-icon>more_time</mat-icon>
+      <span>Ajouter Créneau</span>
+    </button> 
     <button mat-menu-item routerLink="/register">
-      <mat-icon>schedule</mat-icon>
-      <span>Crénaux</span>
+      <mat-icon>pending_actions</mat-icon>
+      <span>Réserver créneau</span>
     </button> 
     <button mat-menu-item routerLink="/signup">
       <mat-icon>group_add</mat-icon>
@@ -23,7 +35,11 @@
     </button> 
     <button mat-menu-item routerLink="/profil">
       <mat-icon>manage_accounts</mat-icon>
-      <span>profil</span>
+      <span>Profil</span>
+    </button> 
+    <button mat-menu-item routerLink="/profil">
+      <mat-icon>contacts</mat-icon>
+      <span>Livreur</span>
     </button> 
     <button mat-menu-item (click)="logout()">
       <mat-icon>power_settings_new</mat-icon>

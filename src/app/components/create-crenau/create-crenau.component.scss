@@ -1,0 +1,71 @@
+h3{
+    margin: 5px;
+    color: orangered;
+    font-size: 1.2rem;
+}
+
+.create{
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: space-around;
+    margin: 50px;
+}
+
+form{
+    margin: 0 10px;
+    width: max-content;
+    height: max-content;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 15px 50px;
+    background: white;
+    border-radius: 13px;
+    box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
+    mat-form-field{
+        width: 100%;
+    }
+    .hidden{
+        display: none;
+    }
+}
+
+#list_crenau{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 0 10px;
+    h3{
+        font-size: 1.5rem;
+    }
+    mat-form-field{
+        margin: 10px 0;
+    }
+    .crenau{
+        width: max-content;
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        margin: 0 10px 25px 0;
+        padding: 13px;
+        background: white;
+        border-radius: 13px;
+        box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
+        p{
+            margin: 0 20px;
+            text-align: center;
+        }
+        button{
+            background: orangered;
+            color: #fff;
+        }
+    }
+}
+
+.nocrenau{
+    text-align: center;
+    margin-top: 20px;
+    font-size: 1.3rem;
+    color: orangered;
+}

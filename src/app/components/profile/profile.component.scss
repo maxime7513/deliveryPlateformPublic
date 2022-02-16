@@ -1,24 +1,22 @@
 .profil-container{
-    box-shadow: 0px 3px 5px -1px rgba(0, 0, 0, 0.2), 0px 5px 8px 0px rgba(0, 0, 0, 0.14), 0px 1px 14px 0px rgba(0, 0, 0, 0.12);
+    box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
     width: max-content;
     display: flex;
     flex-direction: column;
     align-items: center;
-    margin: 20px auto;
+    margin: 50px auto;
     padding: 20px 50px;
     border-radius: 13px;
-    h1{
-        margin: 5px;
-    }
     > p{
+        color: orangered;
         font-size: 1.5rem;
-        margin: 0 5px 13px 5px;
+        margin: 0 5px 10px 5px;
         text-transform: uppercase;
         font-weight: 500;
     }
     .profile-image{
         position: relative;
-        margin-bottom: 20px;
+        margin-bottom: 13px;
         img {
             width: 120px;
             height: 120px;
@@ -32,12 +30,18 @@
             right: 0;
         }
     }
-    .email{
-        display: flex;
-        align-items: center;
-        margin: 13px 5px 0 5px;
-        p{
-            margin: 0 5px;
+    form{
+        div{
+            display: flex;
+            flex-direction: row;
+            justify-content: space-between;
+            mat-form-field{
+                width: 45%;
+            }
+        }
+        button{
+            display: block;
+            margin: 13px auto 0 auto;
         }
     }
 }

@@ -1,0 +1,79 @@
+h1{
+    text-align: center;
+    color: orangered;
+    font-size: 1.8rem;
+    font-weight: 400;
+}
+
+.date-picker{
+    display: flex;
+    justify-content: center;
+}
+
+table{
+    margin: 20px auto;
+    border-radius: 13px;
+    box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
+    border-collapse: collapse;
+    thead{
+        th{
+            background: orangered;
+            color: #fff;
+            padding: 10px 30px;
+            &:not(:last-of-type){
+                border-right: 1px solid white;
+            }
+            &:first-of-type{
+                border-top-left-radius: 13px
+            }
+            &:last-of-type{
+                border-top-right-radius: 13px
+            }
+        }
+    }
+    tbody{
+        tr{
+            &:not(:last-of-type){
+                border-bottom: 1px solid #ccc;
+            }
+        }
+        td{
+            padding: 10px 20px;
+            text-align: center;
+        }
+        button{
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+            background: #3f51b5;
+            color: #fff;
+            padding: 4px 7px;
+            border-radius: 5px;
+            border: none;
+            cursor: pointer;
+            mat-icon{
+                font-size: 17px;
+                height: 17px;
+                width: 17px;
+                margin-right: 5px;
+            }
+        }
+        .annule{
+            background: orangered;
+        }
+        .complet{
+            background: #fff;
+            color: red;
+            border: 1px solid red;
+            cursor: default;
+        }
+    }
+}
+
+.nocrenau{
+    text-align: center;
+    margin-top: 50px;
+    font-size: 1.3rem;
+    color: orangered;
+}

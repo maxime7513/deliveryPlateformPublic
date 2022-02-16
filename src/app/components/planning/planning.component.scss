@@ -1,0 +1,22 @@
+h1{
+    color: orangered;
+    text-align: center;
+}
+table{
+    margin: 50px auto;
+    border-radius: 13px;
+    box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
+    thead{
+        background: orangered;
+        color: #fff;
+        th{
+            padding: 10px 30px;
+        }
+    }
+    tbody{
+        td{
+            padding: 10px 20px;
+            text-align: center;
+        }
+    }
+}

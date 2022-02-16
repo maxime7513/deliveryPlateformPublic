@@ -67,6 +67,7 @@ export class ProfileComponent implements OnInit {
   }
 
   saveProfile() {
+    this.toast.close();
     if (!this.profileForm.valid) {
       console.log('formulaire invalid');
       return;

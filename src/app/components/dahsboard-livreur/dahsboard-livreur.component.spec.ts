@@ -1,20 +1,20 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { RegisterComponent } from './register.component';
+import { DahsboardLivreurComponent } from './dahsboard-livreur.component';
 
-describe('RegisterComponent', () => {
-  let component: RegisterComponent;
-  let fixture: ComponentFixture<RegisterComponent>;
+describe('DahsboardLivreurComponent', () => {
+  let component: DahsboardLivreurComponent;
+  let fixture: ComponentFixture<DahsboardLivreurComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ RegisterComponent ]
+      declarations: [ DahsboardLivreurComponent ]
     })
     .compileComponents();
   });
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(RegisterComponent);
+    fixture = TestBed.createComponent(DahsboardLivreurComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

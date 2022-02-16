@@ -1,2 +1,49 @@
-<app-header></app-header>
-<app-register></app-register>
+<ng-container *ngIf="user$ | async as user">
+  <h1>Vous pouvez reserver vos créneaux {{user.displayName}} !</h1>
+
+  <div class="date-picker">
+    <mat-form-field>
+      <mat-label>Choisi une date</mat-label>
+      <input readonly matInput [matDatepicker]="picker" (dateChange)="afficherCrenauParDate()" [(ngModel)]="defaultDatePicker">
+      <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+      <mat-datepicker #picker></mat-datepicker>
+    </mat-form-field>
+  </div>
+
+  <p *ngIf="crenaux.length == 0" class="nocrenau">Pas encore de crénaux disponible pour cette date ...</p>
+
+  <table *ngIf="crenaux.length != 0">
+    <thead>
+     <tr>
+       <th scope="col">Date</th>
+       <th scope="col">Heure</th>
+       <th scope="col">Place restante</th>
+       <th></th>
+     </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let crenau of crenaux">
+        <td>{{ crenau.date }}</td>
+        <td>{{ crenau.heureDebut }}h à {{ crenau.heureFin }}h</td>
+        <td>{{ getPlaceRestante(crenau.inscritMax, crenau.inscrit) }}</td>
+        <!--<div *ngFor="let use of crenau.users;index as indexOfelement;">
+            <p>index=> {{indexOfelement}}</p>
+            <p>{{use}}</p>
+        </div>-->
+        <td>
+          <button *ngIf="(crenau.inscrit < crenau.inscritMax) && !verifierUserInscrit(crenau, user.uid)" (click)="inscriptionLivreur(crenau, user.uid)">
+            <mat-icon>more_time</mat-icon>
+            Je prends
+          </button>
+          <button *ngIf="verifierUserInscrit(crenau, user.uid)" (click)="desinscriptionLivreur(crenau, user.uid)" class="annule">
+            <mat-icon>event_busy</mat-icon>
+            Annuler
+          </button>
+          <button *ngIf="crenau.inscritMax == crenau.inscrit && !verifierUserInscrit(crenau, user.uid)" class="complet">
+            Complet !
+          </button>
+        </td>
+      </tr>
+     </tbody>
+  </table>
+</ng-container>

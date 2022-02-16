@@ -1,0 +1,31 @@
+<h1>Mes créneaux réservés</h1>
+<div class="date">
+  <mat-form-field>
+    <mat-label>Choisi une date</mat-label>
+    <input readonly matInput [matDatepicker]="picker" (dateChange)="afficherCrenauParDate()" [(ngModel)]="defaultDatePicker">
+    <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+    <mat-datepicker #picker></mat-datepicker>
+  </mat-form-field>
+</div>
+
+<p *ngIf = "crenaux.length == 0" class="nocrenau">Vous n'avez aucun créneau de reservée pour le {{dateAfficher}}</p>
+
+<table *ngIf="crenaux.length != 0">
+    <thead>
+     <tr>
+       <th scope="col">Heure</th>
+       <th>Annuler</th>
+     </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let crenau of crenaux">
+        <td>{{ crenau.heureDebut }}h à {{ crenau.heureFin }}h</td>
+        <td>
+          <button (click)="desinscriptionLivreur(crenau)" mat-raised-button color="primary">
+            <mat-icon>event_busy</mat-icon>
+            Annuler
+          </button>
+        </td>
+      </tr>
+    </tbody>
+</table>

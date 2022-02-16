@@ -8,13 +8,11 @@ import { concatMap, from, Observable, of, switchMap } from 'rxjs';
 export class AuthService {
   
   currentUser$ = authState(this.auth);
-  // currentUserProfile$: any;
 
   constructor(private auth: Auth) { }
 
   signUp(email: string, password: string){
     return from(createUserWithEmailAndPassword(this.auth, email, password))
-    // ).pipe(switchMap(({ user }) => updateProfile(user, {displayName: name})))
   }
 
   login(email: string, password: string){
