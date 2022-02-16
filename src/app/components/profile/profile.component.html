@@ -1,7 +1,7 @@
 <div class="profil-container" *ngIf=" user$ | async as user">
   <p>{{ user.displayName }}</p>
   <div class="profile-image">
-    <img [src]="user.photoURL ?? '/assets/images/profil.jpg'"/>
+    <img [src]="user.photoURL ?? '/assets/images/avatar.svg'"/>
     <button mat-mini-fab (click)="inputField.click()">
       <mat-icon>edit</mat-icon>
     </button>

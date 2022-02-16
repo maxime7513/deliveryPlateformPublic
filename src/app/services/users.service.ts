@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { doc, docData, Firestore, setDoc, updateDoc } from '@angular/fire/firestore';
+import { collection, collectionData, doc, docData, Firestore, setDoc, updateDoc } from '@angular/fire/firestore';
 import { from, Observable, of, switchMap } from 'rxjs';
 import { ProfileUser } from '../models/user.profil';
 import { AuthService } from './auth.service';
@@ -32,6 +32,12 @@ export class UsersService {
   updateUser(user: ProfileUser): Observable<void> {
     const ref = doc(this.firestore, 'users', user.uid);
     return from(updateDoc(ref, { ...user }));
+  }
+
+  // retourner tous les users
+  getUsers(): Observable<ProfileUser[]> {
+    const booksRef = collection(this.firestore, 'users');
+    return collectionData(booksRef, { idField: 'id' }) as Observable<ProfileUser[]>;
   }
 
   getUserByID(id: string){

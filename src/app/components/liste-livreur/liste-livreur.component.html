@@ -1,0 +1,21 @@
+<h1>Livreurs</h1>
+<table>
+  <thead>
+   <tr>
+        <th scope="col"><mat-icon>image</mat-icon></th>
+        <th scope="col">Nom</th>
+        <th scope="col">Prenom</th>
+        <th scope="col"><mat-icon>email</mat-icon></th>
+        <th scope="col"><mat-icon>phone</mat-icon></th>
+   </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let user of users">
+        <td><img [src]="user.photoURL ?? '/assets/images/avatar.svg'"/></td>
+        <td>{{ user.firstName }}</td>
+        <td>{{ user.lastName }}</td>
+        <td>{{ user.email }}</td>
+        <td>{{ user.phone }}</td>
+    </tr>
+   </tbody>
+</table>

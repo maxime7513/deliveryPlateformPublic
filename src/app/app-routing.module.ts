@@ -8,6 +8,8 @@ import { ProfileComponent } from './components/profile/profile.component';
 import { CreateCrenauComponent } from './components/create-crenau/create-crenau.component';
 import { PlanningComponent } from './components/planning/planning.component';
 import { DahsboardLivreurComponent } from './components/dahsboard-livreur/dahsboard-livreur.component';
+import { ListeLivreurComponent } from './components/liste-livreur/liste-livreur.component';
+
 import {
   canActivate,
   redirectLoggedInTo,
@@ -27,6 +29,7 @@ const routes: Routes = [
   { path: 'crenau', component: CreateCrenauComponent, ...canActivate(redirectUnauthorizedToLogin)},
   { path: 'planning', component: PlanningComponent, ...canActivate(redirectUnauthorizedToLogin)},
   { path: 'dashboardlivreur', component: DahsboardLivreurComponent, ...canActivate(redirectUnauthorizedToLogin)},
+  { path: 'listLivreur', component: ListeLivreurComponent, ...canActivate(redirectUnauthorizedToLogin)},
 ];
 
 @NgModule({

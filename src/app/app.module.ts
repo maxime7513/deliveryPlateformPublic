@@ -33,6 +33,7 @@ import { provideFirebaseApp, initializeApp } from '@angular/fire/app';
 import { getAuth, provideAuth } from '@angular/fire/auth';
 import { getFirestore, provideFirestore } from '@angular/fire/firestore';
 import { getStorage, provideStorage } from '@angular/fire/storage';
+import { ListeLivreurComponent } from './components/liste-livreur/liste-livreur.component';
 
 @NgModule({
   declarations: [
@@ -45,6 +46,7 @@ import { getStorage, provideStorage } from '@angular/fire/storage';
     CreateCrenauComponent,
     PlanningComponent,
     DahsboardLivreurComponent,
+    ListeLivreurComponent,
   ],
   imports: [
     BrowserModule,

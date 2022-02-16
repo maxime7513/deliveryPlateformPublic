@@ -1,0 +1,51 @@
+h1{
+    color: orangered;
+    text-align: center;
+}
+
+table{
+    margin: 30px auto;
+    border-radius: 13px;
+    box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
+    border-collapse: collapse;
+    thead{
+        th{
+            background: orangered;
+            color: #fff;
+            padding: 10px 50px;
+            &:not(:last-of-type){
+                border-right: 1px solid white;
+            }
+            &:first-of-type{
+                border-top-left-radius: 13px
+            }
+            &:last-of-type{
+                border-top-right-radius: 13px
+            }
+            mat-icon{
+                display: block;
+                margin: auto;
+            }
+        }
+    }
+    tbody{
+        tr{
+            &:not(:last-of-type){
+                border-bottom: 1px solid #ccc;
+            }
+        }
+        td{
+            padding: 10px 20px;
+            text-align: center;
+            img {
+                display: block;
+                margin: auto;
+                width: 40px;
+                height: 40px;
+                border-radius: 100%;
+                object-fit: cover;
+                object-position: center;
+            }
+        }
+    }
+}
