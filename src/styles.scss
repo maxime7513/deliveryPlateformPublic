@@ -34,14 +34,16 @@ $Rocket-theme: mat.define-light-theme((
 @include mat.all-component-themes($Rocket-theme);
 
 /* You can add global styles to this file, and also import other style files */
-
+:root {
+  --primary: #2a2e43;
+  --ion-color-secondary: #c840e9;
+  --ion-color-tertiary: #353a50;
+  --ion-color-blue3: #454f63;
+  --button: #665eff;
+}
 *{ font-family: "Poppins"; }
 html, body { height: 100%; }
 body { margin: 0;}
-
-// font family
-@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@500;600;700&display=swap');
-
 
 .mat-raised-button {
   .mat-button-wrapper{
@@ -54,4 +56,10 @@ body { margin: 0;}
       margin-right: 5px;
     }
   }
+}
+
+// mat dialog
+.mat-dialog-container{
+  background: var(--primary);
+  color: #fff;
 }
