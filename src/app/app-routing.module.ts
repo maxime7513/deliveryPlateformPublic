@@ -10,12 +10,14 @@ import { PlanningComponent } from './components/planning/planning.component';
 import { DahsboardLivreurComponent } from './components/dahsboard-livreur/dahsboard-livreur.component';
 import { ListeLivreurComponent } from './components/liste-livreur/liste-livreur.component';
 
+import { RoleWoozooGuard } from './shared/role-woozoo.guard';
+import { RoleLivreurGuard } from './shared/role-livreur.guard';
+import { RoleRocketGuard } from './shared/role-rocket.guard';
 import {
   canActivate,
   redirectLoggedInTo,
   redirectUnauthorizedTo,
 } from '@angular/fire/auth-guard';
-
 
 const redirectUnauthorizedToLogin = () => redirectUnauthorizedTo(['login']);
 const redirectLoggedInToHome = () => redirectLoggedInTo(['register']);
@@ -23,13 +25,13 @@ const redirectLoggedInToHome = () => redirectLoggedInTo(['register']);
 const routes: Routes = [
   {path: '', redirectTo: 'login', pathMatch: 'full'},
   { path: 'login', component: LoginComponent, ...canActivate(redirectLoggedInToHome)},
-  { path: 'signup', component: SignUpComponent, ...canActivate(redirectUnauthorizedToLogin) },
-  { path: 'register', component: RegisterLivreurComponent, ...canActivate(redirectUnauthorizedToLogin) },
+  { path: 'signup', component: SignUpComponent, ...canActivate(redirectUnauthorizedToLogin), canActivate:[RoleWoozooGuard] },
+  { path: 'register', component: RegisterLivreurComponent, ...canActivate(redirectUnauthorizedToLogin), canActivate:[RoleLivreurGuard] },
   { path: 'profil', component: ProfileComponent, ...canActivate(redirectUnauthorizedToLogin)},
-  { path: 'crenau', component: CreateCrenauComponent, ...canActivate(redirectUnauthorizedToLogin)},
-  { path: 'planning', component: PlanningComponent, ...canActivate(redirectUnauthorizedToLogin)},
-  { path: 'dashboardlivreur', component: DahsboardLivreurComponent, ...canActivate(redirectUnauthorizedToLogin)},
-  { path: 'listLivreur', component: ListeLivreurComponent, ...canActivate(redirectUnauthorizedToLogin)},
+  { path: 'crenau', component: CreateCrenauComponent, ...canActivate(redirectUnauthorizedToLogin), canActivate:[RoleRocketGuard]},
+  { path: 'planning', component: PlanningComponent, ...canActivate(redirectUnauthorizedToLogin), canActivate:[RoleRocketGuard] },
+  { path: 'dashboardlivreur', component: DahsboardLivreurComponent, ...canActivate(redirectUnauthorizedToLogin), canActivate:[RoleLivreurGuard] },
+  { path: 'listLivreur', component: ListeLivreurComponent, ...canActivate(redirectUnauthorizedToLogin), canActivate:[RoleWoozooGuard]},
 ];
 
 @NgModule({

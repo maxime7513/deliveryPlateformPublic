@@ -6,4 +6,5 @@ export interface ProfileUser {
     phone?: string;
     photoURL?: string;
     crenauInscrit?: string[];
+    role?: string;
   }

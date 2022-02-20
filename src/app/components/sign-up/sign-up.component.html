@@ -1,6 +1,6 @@
 <div class="background">
-<form [formGroup]="signUpForm" (ngSubmit)="submit()">
-  <div>
+  <form [formGroup]="signUpForm" (ngSubmit)="submit()">
+    <div>
       <mat-form-field>
           <mat-label>Nom</mat-label>
           <input matInput placeholder="Nom" formControlName="lastName" type="text"/>
@@ -8,7 +8,6 @@
             Le nom est obligatoire
           </mat-error>
       </mat-form-field>
-
       <mat-form-field>
           <mat-label>Prénom</mat-label>
           <input matInput placeholder="Prénom" formControlName="firstName"/>
@@ -16,8 +15,8 @@
             Le prénom est obligatoire
           </mat-error>
       </mat-form-field>
-  </div>
-  <div>
+    </div>
+    <div>
       <mat-form-field>
           <mat-label>Téléphone</mat-label>
           <input matInput placeholder="0612758492" formControlName="phone"/>
@@ -25,7 +24,6 @@
             Numéro de téléphone obligatoire
           </mat-error>
       </mat-form-field>
-
       <mat-form-field>
           <mat-label>Email</mat-label>
           <input matInput placeholder="nom@mail.com" formControlName="email" type="email"/>
@@ -36,7 +34,8 @@
             L'email est obligatoire
           </mat-error>
       </mat-form-field>
-  </div>
+    </div>
+    <div>
       <mat-form-field>
           <mat-label>Mot de passe</mat-label>
           <input matInput type="password" placeholder="Password" formControlName="password"/>
@@ -47,22 +46,35 @@
             Le mot de passe doit comporter au moins 6 caractères
           </mat-error>
       </mat-form-field>
-
       <mat-form-field>
           <mat-label>Confirmer mot de passe</mat-label>
-          <input matInput type="password" placeholder="Confirm Password"formControlName="confirmPassword"/>
+          <input matInput type="password" placeholder="Confirm Password" formControlName="confirmPassword"/>
           <mat-error *ngIf="signUpFormSend && password.hasError('required')">
             Confirmation du mot de passe obligatoire
           </mat-error>
       </mat-form-field>
-
-      <mat-error *ngIf="signUpFormSend && signUpForm.hasError('passwordsDontMatch')" class="dontmatch">
-        Les deux mots de passe doivent correspondre
-      </mat-error>
-    <div>
-        <button type="submit" mat-raised-button color="primary">
-          S'inscrire !
-        </button>
     </div>
-</form>
+
+    <mat-form-field>
+      <mat-label>Rôle</mat-label>
+      <mat-select formControlName="role">
+        <mat-option *ngFor="let role of roles" [value]="role.value">
+          {{role.viewValue}}
+        </mat-option>
+      </mat-select>
+      <mat-error *ngIf="signUpFormSend && role.hasError('required')">
+        Le rôle est obligatoire
+      </mat-error>
+    </mat-form-field>
+
+    <mat-error *ngIf="signUpFormSend && signUpForm.hasError('passwordsDontMatch')" class="dontmatch">
+      Les deux mots de passe doivent correspondre
+    </mat-error>
+
+    <div>
+      <button type="submit" mat-raised-button color="primary">
+        S'inscrire !
+      </button>
+    </div>
+  </form>
 </div>

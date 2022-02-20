@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { arrayUnion, collection, collectionData, doc, docData, Firestore, query, setDoc, updateDoc, where } from '@angular/fire/firestore';
+import { user } from 'rxfire/auth';
 import { from, Observable, of, switchMap } from 'rxjs';
 import { ProfileUser } from '../models/user.profil';
 import { AuthService } from './auth.service';
@@ -22,6 +23,15 @@ export class UsersService {
         return docData(ref) as Observable<ProfileUser>;
       })
     );
+  }
+  
+  // return userRole (Promise for use await un guard)
+  canAccess(){
+    return new Promise(resolve => {
+      this.currentUserProfile$.subscribe((res) => {
+        resolve(res.role);
+      })
+    });
   }
 
   addUser(user: ProfileUser): Observable<void> {

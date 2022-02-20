@@ -7,6 +7,10 @@ import { AuthService } from 'src/app/services/auth.service';
 import { UsersService } from 'src/app/services/users.service';
 
 
+interface Role {
+  value: string;
+  viewValue: string;
+}
 
 @Component({
   selector: 'app-sign-up',
@@ -18,6 +22,11 @@ export class SignUpComponent implements OnInit {
   
   signUpForm: FormGroup;
   signUpFormSend: boolean;
+  roles: Role[] = [
+    {value: 'livreur', viewValue: 'Livreur'},
+    {value: 'woozoo', viewValue: 'WooZoo'},
+    {value: 'rocket', viewValue: 'Rocket'},
+  ];
   constructor(private authService: AuthService, private usersService: UsersService, private router: Router, private toast: HotToastService) { }
 
   ngOnInit(): void {
@@ -35,6 +44,7 @@ export class SignUpComponent implements OnInit {
         email: new FormControl("", [Validators.required, Validators.email]),
         password: new FormControl("", [Validators.required, Validators.minLength(6)]),
         confirmPassword: new FormControl('', Validators.required),
+        role: new FormControl('', Validators.required),
       },
       { validators: this.passwordsMatchValidator() 
       }
@@ -54,7 +64,7 @@ export class SignUpComponent implements OnInit {
     };
   }
 
-  // getter
+  // getter for mat-error
   get lastName() {
     return this.signUpForm.get('lastName');
   }
@@ -67,13 +77,14 @@ export class SignUpComponent implements OnInit {
   get email() {
     return this.signUpForm.get('email');
   }
-
   get password() {
     return this.signUpForm.get('password');
   }
-
   get confirmPassword() {
     return this.signUpForm.get('confirmPassword');
+  }
+  get role() {
+    return this.signUpForm.get('role');
   }
 
   submit() {
@@ -83,10 +94,10 @@ export class SignUpComponent implements OnInit {
       return;
     }
 
-    const {lastName, firstName, phone, email, password } = this.signUpForm.value;
+    const {lastName, firstName, phone, email, password, role } = this.signUpForm.value;
     this.authService.signUp(email, password).pipe(
       switchMap(({ user: { uid }})=> 
-        this.usersService.addUser({ uid, email, lastName: lastName, firstName: firstName, phone: phone})
+        this.usersService.addUser({ uid, email, lastName, firstName, phone, role})
         ),
         this.toast.observe({
           success: 'Votre inscription est validée',
