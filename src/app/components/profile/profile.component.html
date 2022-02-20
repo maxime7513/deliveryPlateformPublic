@@ -1,5 +1,5 @@
 <div class="profil-container" *ngIf=" user$ | async as user">
-  <p>{{ user.displayName }}</p>
+  <p>{{ user.firstName }}</p>
   <div class="profile-image">
     <img [src]="user.photoURL ?? '/assets/images/avatar.svg'"/>
     <button mat-mini-fab (click)="inputField.click()">
@@ -11,43 +11,34 @@
     <form [formGroup]="profileForm" (ngSubmit)="saveProfile()">
     <div>
       <mat-form-field>
-        <input
-          type="text"
-          matInput
-          formControlName="firstName"
-          placeholder="First Name"
-        />
+        <input type="text" matInput formControlName="lastName" placeholder="Nom"/>
+          <mat-error *ngIf="profileFormSend && lastName.hasError('required')">
+            Nom obligatoire
+          </mat-error>
       </mat-form-field>
       <mat-form-field>
-        <input
-          type="text"
-          matInput
-          formControlName="lastName"
-          placeholder="Last Name"
-        />
+        <input type="text" matInput formControlName="firstName" placeholder="Prénom"/>
+          <mat-error *ngIf="profileFormSend && firstName.hasError('required')">
+            Prénom obligatoire
+          </mat-error>
       </mat-form-field>
     </div>
 
     <div>
       <mat-form-field>
-        <input
-          type="text"
-          matInput
-          formControlName="displayName"
-          placeholder="Display Name"
-        />
-      <mat-error *ngIf="displayName.hasError('required')">
-        Pseudo obligatoire
-      </mat-error>
+        <input type="tel" matInput formControlName="phone" placeholder="Téléphone"/>
+          <mat-error *ngIf="profileFormSend && phone.hasError('required')">
+            Numéro de téléphone obligatoire
+          </mat-error>
       </mat-form-field>
-
       <mat-form-field>
-        <input
-          type="tel"
-          matInput
-          formControlName="phone"
-          placeholder="Phone"
-        />
+        <input type="text" matInput formControlName="email" placeholder="email"/>
+          <mat-error *ngIf="profileFormSend && email.hasError('email') && !email.hasError('required')">
+            Merci de renseignez une adresse mail valide
+          </mat-error>
+          <mat-error *ngIf="profileFormSend && email.hasError('required')">
+            L'email est obligatoire
+          </mat-error>
       </mat-form-field>
     </div>
 

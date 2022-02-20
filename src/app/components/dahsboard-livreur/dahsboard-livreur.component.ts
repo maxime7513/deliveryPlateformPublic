@@ -20,7 +20,6 @@ export class DahsboardLivreurComponent implements OnInit {
 
   constructor(private crenauservice: CrenauService, private auth: Auth, private toast: HotToastService, public datePipe : DatePipe) {
     this.defaultDatePicker = this.datePicker;
-    this.dateAfficher = this.datePipe.transform(this.defaultDatePicker, 'dd/MM/yyyy');
   }
 
   ngOnInit(): void {
@@ -30,7 +29,7 @@ export class DahsboardLivreurComponent implements OnInit {
   
   // crenaux par date (datepicker)
   afficherCrenauParDate(){
-    this.dateAfficher = this.datePipe.transform(this.defaultDatePicker, 'dd/MM/yyyy');
+    this.dateAfficher = this.datePipe.transform(this.defaultDatePicker, 'dd MMMM');
     let date = this.datePipe.transform(this.defaultDatePicker, 'dd/MM/yyyy');
     this.crenauservice.getCrenauxInscritCurrentUserByDate(this.userUid, date).subscribe((res: Crenau[]) => {
       // trier par heure
@@ -48,4 +47,10 @@ export class DahsboardLivreurComponent implements OnInit {
     this.toast.success('Crénau retiré de votre planning', {duration: 3000});
   }
 
+  calculDifferenceDate(date1: any, date2: any){
+    var diff_temps = date1.getTime() - date2.getTime();
+    var diff_hour = diff_temps / (1000 * 3600 / 60);
+    return Math.round(diff_hour);
+  }
+  
 }

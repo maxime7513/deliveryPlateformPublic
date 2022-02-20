@@ -1,4 +1,8 @@
-<h1>Mes créneaux réservés</h1>
+<div class="presentation">
+  <h1>Mon planning</h1>
+  <p>pour le {{dateAfficher}}</p>
+</div>
+
 <div class="date">
   <mat-form-field>
     <mat-label>Choisi une date</mat-label>
@@ -14,16 +18,27 @@
     <thead>
      <tr>
        <th scope="col">Heure</th>
-       <th>Annuler</th>
+       <th></th>
      </tr>
     </thead>
     <tbody>
       <tr *ngFor="let crenau of crenaux">
         <td>{{ crenau.heureDebut }}h à {{ crenau.heureFin }}h</td>
         <td>
-          <button (click)="desinscriptionLivreur(crenau)" mat-raised-button color="primary">
+          <button *ngIf="60 < calculDifferenceDate(crenau.date.toDate(), datePicker)" (click)="desinscriptionLivreur(crenau)" mat-raised-button color="primary">
             <mat-icon>event_busy</mat-icon>
             Annuler
+          </button>
+          <button *ngIf="calculDifferenceDate(crenau.date.toDate(), datePicker) <= -60" mat-raised-button class="effectue">
+            <mat-icon>event_available</mat-icon>
+            Effectué
+          </button>
+          <button *ngIf="-60 < calculDifferenceDate(crenau.date.toDate(), datePicker) && calculDifferenceDate(crenau.date.toDate(), datePicker) <= 0" mat-raised-button class="encours">
+            <mat-icon>hourglass_bottom</mat-icon>
+            en cours
+          </button>
+          <button *ngIf="0 < calculDifferenceDate(crenau.date.toDate(), datePicker) && calculDifferenceDate(crenau.date.toDate(), datePicker) <= 60" mat-raised-button class="dansmin">
+            Dans<span>{{ calculDifferenceDate(crenau.date.toDate(), datePicker) }}</span>minutes
           </button>
         </td>
       </tr>

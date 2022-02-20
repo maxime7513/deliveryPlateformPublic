@@ -26,6 +26,7 @@ export class CreateCrenauComponent implements OnInit {
   submitCrenauForm : boolean;
   datePicker = new Date;
   defaultDatePicker: Date;
+  showCrenaux: boolean;
   heures: Heure[] = [
     {value: 12, viewValue: '12h'},
     {value: 13, viewValue: '13h'},
@@ -52,7 +53,8 @@ export class CreateCrenauComponent implements OnInit {
   ];
 
   constructor(private crenauservice: CrenauService, private toast: HotToastService, private router: Router, public datePipe : DatePipe) {
-    this.defaultDatePicker = this.datePicker
+    this.defaultDatePicker = this.datePicker;
+    this.showCrenaux = true;
   }
 
   crenaux: Crenau[] = [];
@@ -103,6 +105,11 @@ export class CreateCrenauComponent implements OnInit {
     })
   }
 
+  calculDifferenceHeure(heureDebut: number, heureFin: number){
+    var diff_temps = heureFin - heureDebut;
+    return Math.round(diff_temps);
+  }
+
   // envoi du formulaire
   onSubmit() {
     this.toast.close();
@@ -113,13 +120,25 @@ export class CreateCrenauComponent implements OnInit {
       this.toast.error('Formulaire invalide');
       return;
     }
-    // formatter la date
-    const date = this.datePipe.transform(this.crenauForm.value.date, 'dd/MM/yyyy');
-    this.crenauForm.value.date = date;
 
-    const crenauData = this.crenauForm.value;
-    this.crenauservice.addCrenau(crenauData);
-    // toastLoading.close();
+    // date au format string
+    this.crenauForm.value.dateString = this.datePipe.transform(this.crenauForm.value.date, 'dd/MM/yyyy');
+
+    const nombreCrenau = this.calculDifferenceHeure(this.crenauForm.value.heureDebut, this.crenauForm.value.heureFin);
+    const heureDebutStorage = this.crenauForm.value.heureDebut;
+    for(let i = 0; i < nombreCrenau; i++){
+      this.crenauForm.value.heureDebut = heureDebutStorage + i;
+      this.crenauForm.value.heureFin = this.crenauForm.value.heureDebut + 1;
+      
+      // setHours de la date avec la valeur de heureDebut du formulaire
+      this.crenauForm.value.date.setHours(this.crenauForm.value.heureDebut);
+      
+      // ajouter creneau(x) à firebase
+      this.crenauservice.addCrenau(this.crenauForm.value);
+    }
+    
+    // this.crenauservice.addCrenau(this.crenauForm.value);
+
     const toastValid = this.toast.success('Crénau ajouter',
       {
         // dismissible: true,

@@ -7,9 +7,26 @@ form{
     background: white;
     border: 1px solid gray;
     border-radius: 13px;
+    mat-form-field{
+        width: 100%;
+    }
+    .mat-error{
+        padding-bottom: 3px;
+    }
+    > div{
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        mat-form-field{
+            width: 45%;
+        }
+    }
     .dontmatch{
         font-size: 75%;
         margin-bottom: 15px;
+    }
+    button{
+        margin-top: 10px;
     }
 }
 

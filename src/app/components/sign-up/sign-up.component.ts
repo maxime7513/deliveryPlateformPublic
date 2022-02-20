@@ -17,10 +17,11 @@ import { UsersService } from 'src/app/services/users.service';
 export class SignUpComponent implements OnInit {
   
   signUpForm: FormGroup;
-  
+  signUpFormSend: boolean;
   constructor(private authService: AuthService, private usersService: UsersService, private router: Router, private toast: HotToastService) { }
 
   ngOnInit(): void {
+    this.signUpFormSend = false;
     this.validateform();
   }
 
@@ -28,7 +29,9 @@ export class SignUpComponent implements OnInit {
   validateform() {
     this.signUpForm = new FormGroup(
       {
-        name: new FormControl('', Validators.required),
+        lastName: new FormControl('', Validators.required),
+        firstName: new FormControl('', Validators.required),
+        phone: new FormControl('', Validators.required),
         email: new FormControl("", [Validators.required, Validators.email]),
         password: new FormControl("", [Validators.required, Validators.minLength(6)]),
         confirmPassword: new FormControl('', Validators.required),
@@ -52,10 +55,15 @@ export class SignUpComponent implements OnInit {
   }
 
   // getter
-  get name() {
-    return this.signUpForm.get('name');
+  get lastName() {
+    return this.signUpForm.get('lastName');
   }
-
+  get firstName() {
+    return this.signUpForm.get('firstName');
+  }
+  get phone() {
+    return this.signUpForm.get('phone');
+  }
   get email() {
     return this.signUpForm.get('email');
   }
@@ -69,19 +77,20 @@ export class SignUpComponent implements OnInit {
   }
 
   submit() {
+    this.signUpFormSend = true;
     if (!this.signUpForm.valid) {
-      console.log('formulaire invalid');
+      this.toast.error('Formulaire invalide');
       return;
     }
 
-    const {name, email, password } = this.signUpForm.value;
+    const {lastName, firstName, phone, email, password } = this.signUpForm.value;
     this.authService.signUp(email, password).pipe(
       switchMap(({ user: { uid }})=> 
-        this.usersService.addUser({ uid, email, displayName: name})
+        this.usersService.addUser({ uid, email, lastName: lastName, firstName: firstName, phone: phone})
         ),
         this.toast.observe({
-          success: 'Congrats! You are all signed up',
-          loading: 'Signing up...',
+          success: 'Votre inscription est validée',
+          loading: 'Inscription ...',
           error: ({ message }) => `${message}`,
         })
       ).subscribe(() => {

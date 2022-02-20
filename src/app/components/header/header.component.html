@@ -1,10 +1,11 @@
-<mat-toolbar color="primary">
+<mat-toolbar>
   <ng-container *ngIf="user$ | async as user">
-    <span>Rocket</span>
+    <!--<span>Rocket</span>-->
+    <img class="logo" src="./assets/images/logo-woozoo_blanc.png" alt="woozoo">
       <button mat-button [matMenuTriggerFor]="userMenu">
         <mat-icon *ngIf="!user.photoURL">account_circle</mat-icon>
         <img *ngIf="user.photoURL" [src]="user.photoURL" class="profil_photo"/>
-        {{ user.displayName }}
+        {{ user.firstName }}
         <mat-icon>expand_more</mat-icon>
       </button>
   </ng-container> 

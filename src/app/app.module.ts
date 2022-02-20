@@ -1,10 +1,13 @@
-import { NgModule } from '@angular/core';
+import { LOCALE_ID, NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { DatePipe } from '@angular/common';
+// heure en francais
+import { registerLocaleData } from '@angular/common';
+import localeFr from '@angular/common/locales/fr';
 
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatIconModule } from '@angular/material/icon';
@@ -13,8 +16,9 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatDatepickerModule } from '@angular/material/datepicker'; 
-import { MatNativeDateModule, MAT_DATE_LOCALE } from '@angular/material/core';
-import {MatSelectModule} from '@angular/material/select';
+import { MatNativeDateModule } from '@angular/material/core';
+import { MatSelectModule } from '@angular/material/select';
+import { MatDialogModule } from '@angular/material/dialog'; 
 import { ReactiveFormsModule } from '@angular/forms';
 import { LoginComponent } from './components/login/login.component';
 import { environment } from 'src/environments/environment';
@@ -34,6 +38,9 @@ import { getAuth, provideAuth } from '@angular/fire/auth';
 import { getFirestore, provideFirestore } from '@angular/fire/firestore';
 import { getStorage, provideStorage } from '@angular/fire/storage';
 import { ListeLivreurComponent } from './components/liste-livreur/liste-livreur.component';
+import { ModalUserInscritComponent } from './components/modal-user-inscrit/modal-user-inscrit.component';
+
+registerLocaleData(localeFr, 'fr');
 
 @NgModule({
   declarations: [
@@ -47,6 +54,7 @@ import { ListeLivreurComponent } from './components/liste-livreur/liste-livreur.
     PlanningComponent,
     DahsboardLivreurComponent,
     ListeLivreurComponent,
+    ModalUserInscritComponent,
   ],
   imports: [
     BrowserModule,
@@ -62,6 +70,7 @@ import { ListeLivreurComponent } from './components/liste-livreur/liste-livreur.
     MatSelectModule,
     ReactiveFormsModule,
     MatMenuModule,
+    MatDialogModule,
     provideFirebaseApp(() => initializeApp(environment.firebaseConfig)),
     provideAuth(() => getAuth()),
     provideFirestore(() => getFirestore()),
@@ -69,7 +78,7 @@ import { ListeLivreurComponent } from './components/liste-livreur/liste-livreur.
     HotToastModule.forRoot(),
     FormsModule,
   ],
-  providers: [{ provide: MAT_DATE_LOCALE, useValue: 'fr-FR' }, DatePipe],
+  providers: [{provide: LOCALE_ID, useValue: 'fr'}, DatePipe],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

@@ -67,14 +67,14 @@ export class CrenauService {
 
   // retourner les crenaux par date
   getCrenauxByDate(date: string): Observable<Crenau[]> {
-    const crenauxRef = query(collection(this.firestore, 'crenau'), where("date", "==", date));
+    const crenauxRef = query(collection(this.firestore, 'crenau'), where("dateString", "==", date));
     return collectionData(crenauxRef, { idField: 'id' }) as Observable<Crenau[]>;
   }
 
   // retourner les crenaux que l'user connecté à réservé et afficher par date
   getCrenauxInscritCurrentUserByDate(userid: string, date: string): Observable<Crenau[]> {
-    const crenauxRef = query(collection(this.firestore, 'crenau'), where("users", "array-contains", userid), where("date", "==", date));
+    const crenauxRef = query(collection(this.firestore, 'crenau'), where("users", "array-contains", userid), where("dateString", "==", date));
     return collectionData(crenauxRef, { idField: 'id' }) as Observable<Crenau[]>;
   }
-  
+
 }

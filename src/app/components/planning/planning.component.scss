@@ -2,22 +2,93 @@ h1{
     color: orangered;
     text-align: center;
 }
-table{
-    margin: 50px auto;
-    border-radius: 13px;
-    box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
-    border-collapse: collapse;
-    thead{
-        background: orangered;
-        color: #fff;
-        th{
-            padding: 10px 30px;
+
+.date-picker{
+    display: flex;
+    justify-content: center;
+}
+
+
+.contain-table{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+
+.table-planning{
+    padding-bottom: 13px;
+    @media screen and (max-width: 460px){
+        table:first-of-type{
+            margin-top: 0;
         }
     }
-    tbody{
-        td{
-            padding: 10px 20px;
-            text-align: center;
+    table{
+        width: 85%;
+        margin: 25px auto;
+        border-radius: 13px;
+        box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
+        border-collapse: collapse;
+        padding-bottom: 50px;
+        @media screen and (max-width: 460px){
+            width: 90%;
+        }
+        thead{
+            color: #fff;
+            th{
+                background: orangered;
+                padding: 15px 20px;
+                &:not(:last-of-type){
+                    border-right: 1px solid #fff;
+                }
+                &:first-of-type{
+                    border-top-left-radius: 13px
+                }
+                &:last-of-type{
+                    border-top-right-radius: 13px
+                }
+            }
+        }
+        tbody{
+            td{
+                position: relative;
+                padding: 15px 20px;
+                text-align: center;
+                &:not(:last-of-type){
+                    border-right: 1px solid orangered;
+                }
+                &:first-of-type{
+                    border-bottom-left-radius: 13px
+                }
+                &:last-of-type{
+                    border-bottom-right-radius: 13px
+                }
+                &.active{
+                    background: rgba(40,167,69,.3);
+                    color: rgb(40,167,69);
+                }
+                mat-icon{
+                    font-size: 27px;
+                    height: 27px;
+                    width: 27px;
+                    &.complet{
+                        vertical-align: text-bottom;
+                    }
+                    &.voir_livreur{
+                        position: absolute;
+                        bottom: 0;
+                        right: 0;
+                        opacity: .7;
+                        transition: .4s;
+                        cursor: pointer;
+                        &:hover{
+                            opacity: 1;
+                        }
+                    }
+                }
+                
+            }
         }
     }
 }

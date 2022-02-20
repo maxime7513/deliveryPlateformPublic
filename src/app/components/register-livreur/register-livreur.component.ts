@@ -1,5 +1,5 @@
 import { DatePipe } from '@angular/common';
-import { Component, ElementRef, EventEmitter, OnInit, Output, ViewChild } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { HotToastService } from '@ngneat/hot-toast';
 import { Crenau } from 'src/app/models/crenau.model';
 import { CrenauService } from 'src/app/services/crenau.service';
@@ -16,11 +16,12 @@ export class RegisterLivreurComponent implements OnInit {
   crenaux: Crenau[] = [];
   datePicker = new Date;
   defaultDatePicker: Date;
-
+  
   constructor(private usersService: UsersService, private crenauservice: CrenauService, public datePipe : DatePipe, private toast: HotToastService) {
     this.defaultDatePicker = this.datePicker;
   }
   ngOnInit(): void {
+
     // tous les crenaux
     // this.crenauservice.getCrenaux().subscribe((res: Crenau[]) => {
     //   this.crenaux = res;
@@ -50,7 +51,10 @@ export class RegisterLivreurComponent implements OnInit {
 
   inscriptionLivreur(crenau: Crenau, userUid: string){
     this.toast.close();
+    // ajouter user id au crenau
     this.crenauservice.addLivreur(crenau, userUid)
+    // ajouter crenau id au user
+    this.usersService.addCrenauToUser(userUid, crenau.id)
     // ajouter 1 au inscrit
     this.crenauservice.incrementInscrit(crenau)
     this.toast.success('Crénau reservé', {duration: 3000});
@@ -76,12 +80,6 @@ export class RegisterLivreurComponent implements OnInit {
   //   return this.usersService.getUid(id);
   //   // console.log('object is '+ use)
   // }
-
-  // petr(){
-  //   console.log('go');
-  //   return this.crenauservice.geti();
-  // }
-
 
 }
 

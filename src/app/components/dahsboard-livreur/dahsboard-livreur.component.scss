@@ -1,6 +1,17 @@
-h1{
-    color: orangered;
-    text-align: center;
+.presentation{
+    margin-bottom: 25px;
+    h1{
+        color: orangered;
+        text-align: center;
+        margin-bottom: 0;
+    }
+    p{
+        text-align: center;
+        color: orangered;
+        font-size: 1.3rem;
+        margin: 0;
+    }
+
 }
 
 .nocrenau{
@@ -17,7 +28,7 @@ h1{
 }
 
 table{
-    margin: 20px auto;
+    margin: 0 auto 30px auto;
     border-radius: 13px;
     box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
     border-collapse: collapse;
@@ -46,6 +57,26 @@ table{
         td{
             padding: 10px 20px;
             text-align: center;
+        }
+        .encours{
+            border: 1px solid orangered;
+            color: orangered;
+            box-shadow: none;
+            cursor: default;
+        }
+        .effectue{
+            border: 1px solid green;
+            color: green;
+            box-shadow: none;
+            cursor: default;
+        }
+        .dansmin{
+            box-shadow: none;
+            span{
+                color: orangered;
+                font-size: 1.1rem;
+                margin: 0 3px;
+            }
         }
     }
 }

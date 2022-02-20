@@ -19,10 +19,12 @@ export class ProfileComponent implements OnInit {
 
   user$ = this.usersService.currentUserProfile$;
   profileForm: FormGroup;
+  profileFormSend: boolean;
   
   constructor(private authService: AuthService, private imageUploadService: ImageUploadService, private usersService: UsersService, private toast: HotToastService,) { }
 
   ngOnInit(): void {
+    this.profileFormSend = false;
     this.usersService.currentUserProfile$
       .pipe(untilDestroyed(this))
       .subscribe((user) => {
@@ -35,19 +37,31 @@ export class ProfileComponent implements OnInit {
 
   // init validator
   validateform() {
+    this.profileFormSend = true;
+
     this.profileForm = new FormGroup(
       {
         uid: new FormControl(''),
-        displayName: new FormControl("", Validators.required),
-        firstName: new FormControl(""),
-        lastName: new FormControl(''),
-        phone: new FormControl(''),
+        firstName: new FormControl('', Validators.required),
+        lastName: new FormControl('', Validators.required),
+        phone: new FormControl('', Validators.required),
+        email: new FormControl('', [Validators.required, Validators.email]),
       }
     );
   }
 
-  get displayName() {
-    return this.profileForm.get('displayName');
+  // getter for mat-error
+  get firstName() {
+    return this.profileForm.get('firstName');
+  }
+  get lastName() {
+    return this.profileForm.get('lastName');
+  }
+  get phone() {
+    return this.profileForm.get('phone');
+  }
+  get email() {
+    return this.profileForm.get('email');
   }
 
   uploadImage(event: any, user: ProfileUser) {
@@ -69,7 +83,7 @@ export class ProfileComponent implements OnInit {
   saveProfile() {
     this.toast.close();
     if (!this.profileForm.valid) {
-      console.log('formulaire invalid');
+      this.toast.error('Formulaire invalide');
       return;
     }
 

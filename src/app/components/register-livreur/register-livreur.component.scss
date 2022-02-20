@@ -17,11 +17,11 @@ table{
     border-collapse: collapse;
     thead{
         th{
-            background: orangered;
+            background: var(--primary);
             color: #fff;
             padding: 10px 30px;
             &:not(:last-of-type){
-                border-right: 1px solid white;
+                border-right: 1px solid #fff;
             }
             &:first-of-type{
                 border-top-left-radius: 13px
@@ -46,7 +46,7 @@ table{
             align-items: center;
             justify-content: center;
             width: 100%;
-            background: #3f51b5;
+            background: var(--button);
             color: #fff;
             padding: 4px 7px;
             border-radius: 5px;
@@ -76,4 +76,41 @@ table{
     margin-top: 50px;
     font-size: 1.3rem;
     color: orangered;
+}
+
+.t{
+    width: max-content;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    margin: 25px auto;
+    border-radius: 13px;
+    box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
+    > div{
+        display: flex;
+        flex-direction: column;
+        padding: 13px;
+        text-align: center;
+    }
+    span{
+        padding: 10px;
+    }
+    button{
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 100%;
+        background: var(--button);
+        color: #fff;
+        padding: 4px 7px;
+        border-radius: 5px;
+        border: none;
+        cursor: pointer;
+        mat-icon{
+            font-size: 17px;
+            height: 17px;
+            width: 17px;
+            margin-right: 5px;
+        }
+    }
 }
