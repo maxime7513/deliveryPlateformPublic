@@ -12,7 +12,7 @@ h1{
 .table-wrapper{
     max-width: 1600px;
     margin: auto;
-    padding: 20px;
+    padding: 20px 20px 40px;
 }
 
 table{
@@ -22,16 +22,16 @@ table{
     max-width: 100%;
     white-space: nowrap;
     border-radius: 13px;
-    box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
+    box-shadow: rgba(0, 0, 0, 0.11) 0px 20px 25px -3px, rgba(0, 0, 0, 0.04) 0px 10px 10px -5px;
     background-color: white;
     thead{
         font-weight: 600;
         th{
             color: #ffffff;
-            background: #4FC3A1;
+            background: var(--secondary);
             padding: 10px 50px;
             &:nth-child(odd) {
-                background: #324960;
+                background: var(--primary);
             }
             &:first-of-type{
                 position: relative;
@@ -78,7 +78,7 @@ table{
             padding: 13px 20px;
             text-align: center;
             &:first-of-type{
-                background: #324960;
+                background: var(--primary);
                 color: #fff;
                 font-weight: 500;
             }
@@ -137,13 +137,11 @@ table{
 
 @media (max-width: 1200px) {
     .table-wrapper{
-        padding: 10px;
+        padding: 10px 10px 40px;
         &:before{
             content: url("/assets/images/swipe.svg");
             display: block;
             text-align: right;
-            font-size: 11px;
-            color: red;
             padding: 0 0 5px;
             animation: 2s swipeRight;
             animation-iteration-count: 5;

@@ -13,21 +13,25 @@
   </button>-->
   
   <mat-menu #userMenu>
+    <button *ngIf="user.role == 'livreur'" mat-menu-item routerLink="/register">
+      <mat-icon>pending_actions</mat-icon>
+      <span>Réserver créneau</span>
+    </button> 
     <button *ngIf="user.role == 'livreur'" mat-menu-item routerLink="/dashboardlivreur">
       <mat-icon>calendar_month</mat-icon>
       <span>Mon planning</span>
     </button> 
-    <button *ngIf="user.role == 'woozoo' || user.role == 'rocket'" mat-menu-item routerLink="/planning">
-      <mat-icon>date_range</mat-icon>
-      <span>Planning</span>
-    </button> 
     <button *ngIf="user.role == 'woozoo' || user.role == 'rocket'" mat-menu-item routerLink="/crenau">
       <mat-icon>more_time</mat-icon>
       <span>Ajouter Créneau</span>
-    </button> 
-    <button *ngIf="user.role == 'livreur'" mat-menu-item routerLink="/register">
-      <mat-icon>pending_actions</mat-icon>
-      <span>Réserver créneau</span>
+    </button>
+    <button *ngIf="user.role == 'woozoo' || user.role == 'rocket'" mat-menu-item routerLink="/planning">
+      <mat-icon>date_range</mat-icon>
+      <span>Planning</span>
+    </button>
+    <button *ngIf="user.role == 'woozoo'" mat-menu-item routerLink="/listLivreur">
+      <mat-icon>contacts</mat-icon>
+      <span>Livreurs</span>
     </button> 
     <button *ngIf="user.role == 'woozoo'" mat-menu-item routerLink="/signup">
       <mat-icon>group_add</mat-icon>
@@ -36,10 +40,6 @@
     <button mat-menu-item routerLink="/profil">
       <mat-icon>manage_accounts</mat-icon>
       <span>Profil</span>
-    </button> 
-    <button *ngIf="user.role == 'woozoo'" mat-menu-item routerLink="/listLivreur">
-      <mat-icon>contacts</mat-icon>
-      <span>Livreurs</span>
     </button> 
     <button mat-menu-item (click)="logout()">
       <mat-icon>power_settings_new</mat-icon>

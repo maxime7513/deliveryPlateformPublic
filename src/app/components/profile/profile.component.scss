@@ -1,5 +1,4 @@
 .profil-container{
-    box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
     width: max-content;
     display: flex;
     flex-direction: column;
@@ -7,6 +6,7 @@
     margin: 50px auto;
     padding: 20px 50px;
     border-radius: 13px;
+    box-shadow: rgba(0, 0, 0, 0.115) 0px 20px 25px -3px, rgba(0, 0, 0, 0.04) 0px 10px 10px -5px;
     > p{
         color: var(--primary);
         font-size: 1.5rem;
