@@ -6,7 +6,7 @@ import { Auth } from '@angular/fire/auth';
 import { Crenau } from 'src/app/models/crenau.model';
 import { CrenauService } from 'src/app/services/crenau.service';
 import { UsersService } from 'src/app/services/users.service';
-import { ModalDeleteCrenauComponent } from '../modal/modal-delete-crenau/modal-delete-crenau.component';
+import { ModalDeleteCrenauComponent } from '../modal-delete-crenau/modal-delete-crenau.component';
 
 @Component({
   selector: 'app-register-livreur',

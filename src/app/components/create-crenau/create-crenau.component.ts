@@ -6,7 +6,7 @@ import { Router } from '@angular/router';
 import { HotToastService } from '@ngneat/hot-toast';
 import { Crenau } from 'src/app/models/crenau.model';
 import { CrenauService } from 'src/app/services/crenau.service';
-import { ModalDeleteCrenauComponent } from '../modal/modal-delete-crenau/modal-delete-crenau.component';
+import { ModalDeleteCrenauComponent } from '../modal-delete-crenau/modal-delete-crenau.component';
 
 interface Heure {
   value: number;

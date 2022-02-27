@@ -22,7 +22,7 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatDialogModule } from '@angular/material/dialog'; 
 import { ReactiveFormsModule } from '@angular/forms';
 import { FormsModule } from '@angular/forms';
-import { ModalUserInscritComponent } from './components/modal/modal-user-inscrit/modal-user-inscrit.component';
+import { ModalUserInscritComponent } from './components/modal-user-inscrit/modal-user-inscrit.component';
 import { LoginComponent } from './components/login/login.component';
 import { environment } from 'src/environments/environment';
 import { HotToastModule } from '@ngneat/hot-toast';
@@ -34,7 +34,7 @@ import { CreateCrenauComponent } from './components/create-crenau/create-crenau.
 import { PlanningComponent } from './components/planning/planning.component';
 import { DahsboardLivreurComponent } from './components/dahsboard-livreur/dahsboard-livreur.component';
 import { ListeLivreurComponent } from './components/liste-livreur/liste-livreur.component';
-import { ModalDeleteCrenauComponent } from './components/modal/modal-delete-crenau/modal-delete-crenau.component';
+import { ModalDeleteCrenauComponent } from './components/modal-delete-crenau/modal-delete-crenau.component';
 
 // firebase
 import { provideFirebaseApp, initializeApp } from '@angular/fire/app';

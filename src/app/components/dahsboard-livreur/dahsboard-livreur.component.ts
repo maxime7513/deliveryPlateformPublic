@@ -5,7 +5,7 @@ import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { HotToastService } from '@ngneat/hot-toast';
 import { Crenau } from 'src/app/models/crenau.model';
 import { CrenauService } from 'src/app/services/crenau.service';
-import { ModalDeleteCrenauComponent } from '../modal/modal-delete-crenau/modal-delete-crenau.component';
+import { ModalDeleteCrenauComponent } from '../modal-delete-crenau/modal-delete-crenau.component';
 
 @Component({
   selector: 'app-dahsboard-livreur',
