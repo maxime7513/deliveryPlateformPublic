@@ -1,94 +1,234 @@
 h1{
-    color: orangered;
+    color: var(--primary);
     text-align: center;
+    margin-bottom: 25px;
 }
 
-.date-picker{
-    display: flex;
-    justify-content: center;
+.date{
+    width: max-content;
+    margin: auto;
 }
 
-
-.contain-table{
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
+.table-wrapper{
+    max-width: 1600px;
+    margin: auto;
+    padding: 20px;
 }
 
-
-.table-planning{
-    padding-bottom: 13px;
-    @media screen and (max-width: 460px){
-        table:first-of-type{
-            margin-top: 0;
+table{
+    border-collapse: collapse;
+    font-size: 0.85rem;
+    width: 100%;
+    max-width: 100%;
+    white-space: nowrap;
+    border-radius: 13px;
+    box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
+    background-color: white;
+    thead{
+        font-weight: 600;
+        th{
+            color: #ffffff;
+            background: #4FC3A1;
+            padding: 10px 50px;
+            &:nth-child(odd) {
+                background: #324960;
+            }
+            &:first-of-type{
+                position: relative;
+                border-top-left-radius: 13px;
+                &::after{
+                    content: "";
+                    position: absolute;
+                    bottom: 0;
+                    left: 0;
+                    width: 100%;
+                    height: 1px;
+                    background: #ccc;
+                }
+            }
+            &:last-of-type{
+                border-top-right-radius: 13px;
+            }
         }
     }
-    table{
-        width: 85%;
-        margin: 25px auto;
-        border-radius: 13px;
-        box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
-        border-collapse: collapse;
-        padding-bottom: 50px;
-        @media screen and (max-width: 460px){
-            width: 90%;
-        }
-        thead{
-            color: #fff;
-            th{
-                background: orangered;
-                padding: 15px 20px;
-                &:not(:last-of-type){
-                    border-right: 1px solid #fff;
+    tbody{
+        tr{
+            &:nth-child(odd) {
+                background: #F8F8F8;
+            }
+            &:last-of-type{
+                td:first-of-type{
+                    border-bottom-left-radius: 13px;
                 }
-                &:first-of-type{
-                    border-top-left-radius: 13px
-                }
-                &:last-of-type{
-                    border-top-right-radius: 13px
+            }
+            &:not(:last-of-type){
+                td:first-of-type::after{
+                    content: "";
+                    position: absolute;
+                    bottom: 0px;
+                    left: 0;
+                    width: 100%;
+                    height: 1px;
+                    background: #ccc;
                 }
             }
         }
-        tbody{
-            td{
+        td{
+            position: relative;
+            padding: 13px 20px;
+            text-align: center;
+            &:first-of-type{
+                background: #324960;
+                color: #fff;
+                font-weight: 500;
+            }
+            &:not(:last-of-type){
+                border-right: 1px solid #ccc;
+            }
+            &.active{
+                // background: rgba(40,167,69,.3) !important;
+                background: rgba(79,195,161,.45) !important;
+            }
+            &.dateselectionne{
+                border-left: 2px solid var(--primary);
+                border-right: 2px solid var(--primary);
+            }
+            &:hover .voir_livreur{
+                opacity: 0.8;
+            }
+            span{
                 position: relative;
-                padding: 15px 20px;
-                text-align: center;
-                &:not(:last-of-type){
-                    border-right: 1px solid orangered;
+                color: #324960;
+                mat-icon{
+                    position: absolute;
+                    bottom: -2px;
                 }
-                &:first-of-type{
-                    border-bottom-left-radius: 13px
+            }
+            mat-icon{
+                font-size: 27px;
+                height: 27px;
+                width: 27px;
+                &.voir_livreur{
+                    position: absolute;
+                    bottom: 0;
+                    right: 0;
+                    color: var(--secondary);
+                    opacity: 0;
+                    transition: .4s;
+                    cursor: pointer;
+                    &:hover{
+                        opacity: 1;
+                    }
+                }
+            }
+        }
+    }
+}
+
+
+@keyframes swipeRight{
+    0% {transform: translateX(0);}
+    15% {transform: translateX(-30px);}
+    30% {transform: translateX(0);}
+    100% {transform: translateX(0);}
+}
+
+/* Responsive */
+
+@media (max-width: 1200px) {
+    .table-wrapper{
+        padding: 10px;
+        &:before{
+            content: url("/assets/images/swipe.svg");
+            display: block;
+            text-align: right;
+            font-size: 11px;
+            color: red;
+            padding: 0 0 5px;
+            animation: 2s swipeRight;
+            animation-iteration-count: 5;
+        }
+    }
+
+    table {
+        display: block;
+        width: 100%;
+        thead, tbody, thead th {
+            display: block;
+        }
+        thead {
+            float: left;
+            tr{
+                th{
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    padding: 10px;
+                    height: 60px;
+                    box-sizing: border-box;
+                    overflow-x: hidden;
+                    overflow-y: auto;
+                    width: 120px;
+                    font-size: 13px;
+                    text-overflow: ellipsis;
+                }
+                th{
+                    &:first-of-type{
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                        border-right: 1px solid #ccc;
+                    }
+                    &:last-of-type{
+                        border-radius: 0 0 0 13px;
+                    }
+                }
+            }
+        }
+        tbody {
+            width: auto;
+            position: relative;
+            overflow-x: auto;
+            tr{
+                display: table-cell;
+                &:nth-child(odd) {
+                    background: none;
+                }
+                &:nth-child(even) {
+                    background: transparent;
+                }
+                td{
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    padding: 10px;
+                    height: 60px;
+                    box-sizing: border-box;
+                    overflow-x: hidden;
+                    overflow-y: auto;
+                    width: 120px;
+                    font-size: 13px;
+                    &:nth-child(odd) {
+                        background: #F8F8F8;
+                        border-right: 1px solid #E6E4E4;
+                    }
+                    &:nth-child(even) {
+                        border-right: 1px solid #E6E4E4;
+                    }
+                    &:first-of-type{
+                        background: var(--primary);
+                    }
                 }
                 &:last-of-type{
-                    border-bottom-right-radius: 13px
-                }
-                &.active{
-                    background: rgba(40,167,69,.3);
-                    color: rgb(40,167,69);
-                }
-                mat-icon{
-                    font-size: 27px;
-                    height: 27px;
-                    width: 27px;
-                    &.complet{
-                        vertical-align: text-bottom;
-                    }
-                    &.voir_livreur{
-                        position: absolute;
-                        bottom: 0;
-                        right: 0;
-                        opacity: .7;
-                        transition: .4s;
-                        cursor: pointer;
-                        &:hover{
-                            opacity: 1;
+                    td{
+                        border-right: none;
+                        &:first-of-type{
+                            border-radius: 0 13px 0 0;
                         }
                     }
                 }
-                
             }
         }
     }
+   
 }

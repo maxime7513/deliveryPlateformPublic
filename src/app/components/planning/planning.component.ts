@@ -1,11 +1,12 @@
 import { DatePipe } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { Crenau } from 'src/app/models/crenau.model';
-import { ProfileUser } from 'src/app/models/user.profil';
 import { CrenauService } from 'src/app/services/crenau.service';
-import {MatDialog} from '@angular/material/dialog';
+import { MatDialog } from '@angular/material/dialog';
+import { ModalUserInscritComponent } from '../modal/modal-user-inscrit/modal-user-inscrit.component';
 import { UsersService } from 'src/app/services/users.service';
-import { ModalUserInscritComponent } from '../modal-user-inscrit/modal-user-inscrit.component';
+import { ProfileUser } from 'src/app/models/user.profil';
+import { HotToastService } from '@ngneat/hot-toast';
 
 @Component({
   selector: 'app-planning',
@@ -17,44 +18,48 @@ export class PlanningComponent implements OnInit {
   crenaux: Crenau[] = [];
   datePicker = new Date;
   defaultDatePicker: Date;
-  getScreenWidth: any;
-  valeurSlice: number;
-  valeurSlice2: number;
-  responsive: string;
+  heures: number[] = [12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23];
+  jours: number[]= [1, 2, 3, 4, 5, 6, 0];
 
-  constructor(private crenauservice: CrenauService, public datePipe : DatePipe, public dialog: MatDialog) {
-    this.getScreenWidth = window.innerWidth;
-    console.log(this.getScreenWidth );
+  constructor(private crenauservice: CrenauService, private userservice: UsersService, public datePipe : DatePipe, public dialog: MatDialog, private toast: HotToastService) {
     this.defaultDatePicker = this.datePicker;
   }
 
   ngOnInit(): void {
-    // responsive table
-    if(this.getScreenWidth < 760){
-      this.responsive = "petit";
-      this.valeurSlice = 4;
-      this.valeurSlice2 = 8;
-    }else if(this.getScreenWidth < 1400){
-      this.responsive = "moyen";
-      this.valeurSlice = 6;
-      this.valeurSlice2 = 12;
-    }else {
-      this.responsive = "grand";
-      this.valeurSlice = 12;
-    }
-    // this.crenauservice.getCrenaux().subscribe((res: Crenau[]) => {
-    //   this.crenaux = res;
-    // })
-
-    // crenaux par date
-    this.afficherCrenauParDate();
+    // crenaux par semaine
+    this.afficherCrenauParSemaine();
   }
 
-  // crenaux par date (datepicker)
-  afficherCrenauParDate(){
-    let date = this.datePipe.transform(this.defaultDatePicker, 'dd/MM/yyyy');
-    this.crenauservice.getCrenauxByDate(date).subscribe((res: Crenau[]) => {
-      // this.crenaux = res;
+  // retourner le lundi de chaque semaine séléctionnée(datepicker)
+  setToMonday(date: any) {
+    var day = date.getDay() || 7;
+    if( day !== 1 )
+    date.setHours(-24 * (day - 1));
+    return date;
+  }
+
+  createSemaineTab(date: any){
+    let currentDateString = this.datePipe.transform(date, 'dd/MM/yyyy');
+    let tab = [currentDateString];
+    for(let i = 0; i < 6; i++){
+      date.setHours(+24);
+      let dateString = this.datePipe.transform(date, 'dd/MM/yyyy');
+      tab.push(dateString);
+    }
+    return tab
+  }
+
+  getDay(day: any){
+    var date = day.toDate();
+    var day = date.getDay();
+    return day
+  }
+
+  // crenaux par semaine (datepicker)
+  afficherCrenauParSemaine(){
+    let dateLundi = this.setToMonday(this.defaultDatePicker);
+    let tab = this.createSemaineTab(dateLundi);
+    this.crenauservice.getCrenauxrBySemaine(tab).subscribe((res: Crenau[]) => {
       // trier par heure
       this.crenaux = res.sort(function (a:any, b:any) {
       return a.heureDebut - b.heureDebut
@@ -62,10 +67,68 @@ export class PlanningComponent implements OnInit {
     })
   }
 
-  // ouvrir popup avec livreur pour chaque créneaux
-  openDialogModal(crenau: Crenau) {
-    const activeModal = this.dialog.open(ModalUserInscritComponent);
-    activeModal.componentInstance.crenau = crenau;
+  returnPlanning(jour: number, heure: number){
+    let res = false;
+    for(let i = 0; i < this.crenaux.length; i++){
+      if(jour == this.getDay(this.crenaux[i].date) && this.heures[heure] == this.crenaux[i].heureDebut ){
+        res = true;
+      }
+    }
+    return res
   }
+  returnPlanningInscrit(jour: number, heure: number){
+    let res;
+    for(let i = 0; i < this.crenaux.length; i++){
+      if(jour == this.getDay(this.crenaux[i].date) && this.heures[heure] == this.crenaux[i].heureDebut ){
+        res = this.crenaux[i].inscrit;
+      }
+    }
+    return res
+  }
+  returnPlanningInscritMax(jour: number, heure: number){
+    let res;
+    for(let i = 0; i < this.crenaux.length; i++){
+      if(jour == this.getDay(this.crenaux[i].date) && this.heures[heure] == this.crenaux[i].heureDebut ){
+        res = this.crenaux[i].inscritMax;
+      }
+    }
+    return res
+  }
+  returnCrenau(jour: number, heure: number){
+    let res;
+    for(let i = 0; i < this.crenaux.length; i++){
+      if(jour == this.getDay(this.crenaux[i].date) && this.heures[heure] == this.crenaux[i].heureDebut ){
+        res = this.crenaux[i];
+      }
+    }
+    return res
+  }
+
+  // return users(Promise pour attendre les données users avant d'ouvrir la popup 'modal-user-inscrit')
+  usersInscrit(crenauId: string){
+    return new Promise<ProfileUser[]>(resolve => {
+      this.userservice.getUserInscritByCrenau(crenauId).subscribe((res) => {
+        resolve(res);
+      })
+    });
+  }
+
+  // ouvrir popup avec info livreur pour chaque créneaux
+  async openDialogModal(crenau: Crenau) {
+    this.toast.loading('Chargement');
+
+    const users = await this.usersInscrit(crenau.id);
+    this.toast.close();
+
+    const dialogRef = this.dialog.open(ModalUserInscritComponent);
+    dialogRef.componentInstance.users = users;
+    // dialogRef.componentInstance.crenau = crenau;
+  }
+
+  // ouvrir popup avec livreur pour chaque créneaux
+  // openDialogModal(crenau: Crenau) {
+  //   const activeModal = this.dialog.open(ModalUserInscritComponent);
+  //   activeModal.componentInstance.crenau = crenau;
+  // }
 
 }

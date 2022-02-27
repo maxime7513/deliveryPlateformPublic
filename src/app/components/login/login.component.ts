@@ -12,11 +12,12 @@ import { HotToastService } from '@ngneat/hot-toast';
 export class LoginComponent implements OnInit {
   
   loginForm: FormGroup;
-  
+  loginFormSend: boolean;
   constructor(private authService: AuthService, private router: Router, private toast: HotToastService) { }
 
   ngOnInit(): void {
     this.validateform();
+    this.loginFormSend = false;
   }
 
   // init validator
@@ -29,15 +30,18 @@ export class LoginComponent implements OnInit {
   }
 
   submit() {
+    this.toast.close();
+    this.loginFormSend = true;
     if (!this.loginForm.valid) {
+      this.toast.error('Formulaire invalide');
       return;
     }
 
     const { email, password } = this.loginForm.value;
     this.authService.login(email, password).pipe(
       this.toast.observe({
-        success: 'Logged in successfully',
-        loading: 'Logging in...',
+        success: 'Connexion réussie',
+        loading: 'Connexion...',
         error: ({ message }) => `There was an error: ${message} `
       })
     ).subscribe(() => {
@@ -46,6 +50,7 @@ export class LoginComponent implements OnInit {
 
   }
 
+  // getter for mat-error
   get email() {
     return this.loginForm.get('email');
   }

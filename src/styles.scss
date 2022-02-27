@@ -35,8 +35,8 @@ $Rocket-theme: mat.define-light-theme((
 
 /* You can add global styles to this file, and also import other style files */
 :root {
-  --primary: #2a2e43;
-  --ion-color-secondary: #c840e9;
+  --primary: #324960;
+  --secondary: #4FC3A1;
   --ion-color-tertiary: #353a50;
   --ion-color-blue3: #454f63;
   --button: #665eff;
@@ -50,9 +50,6 @@ body { margin: 0;}
     display: flex;
     align-items: center;
     mat-icon{
-      font-size: 20px;
-      width: 20px;
-      height: 20px;
       margin-right: 5px;
     }
   }
@@ -62,4 +59,10 @@ body { margin: 0;}
 .mat-dialog-container{
   background: var(--primary);
   color: #fff;
+}
+
+form{
+  mat-error{
+    padding-bottom: 3px;
+  }
 }

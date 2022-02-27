@@ -88,6 +88,7 @@ export class SignUpComponent implements OnInit {
   }
 
   submit() {
+    this.toast.close();
     this.signUpFormSend = true;
     if (!this.signUpForm.valid) {
       this.toast.error('Formulaire invalide');
@@ -101,7 +102,7 @@ export class SignUpComponent implements OnInit {
         ),
         this.toast.observe({
           success: 'Votre inscription est validée',
-          loading: 'Inscription ...',
+          loading: 'Inscription...',
           error: ({ message }) => `${message}`,
         })
       ).subscribe(() => {

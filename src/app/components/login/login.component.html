@@ -1,24 +1,34 @@
 <div class="background">
+  <video autoplay muted loop playsinline>
+      <source src="assets/video/background_video.mov" type="video/mp4">
+  </video>
 
+  <div class="blur"></div>
+  
   <form [formGroup]="loginForm" (ngSubmit)="submit()">
-    <h3>connexion</h3>
+    <h2>connexion</h2>
     <mat-form-field>
       <mat-label>Email</mat-label>
       <input matInput placeholder="Adresse email" formControlName="email" type="email"/>
+      <mat-error *ngIf="loginFormSend && email.hasError('required')">
+        Email obligatoire
+      </mat-error>
+      <mat-error *ngIf="loginFormSend && email.hasError('email') && !email.hasError('required')">
+        Merci de renseignez une adresse mail valide
+      </mat-error>
     </mat-form-field>
 
     <mat-form-field>
       <mat-label>Mot de passe</mat-label>
       <input matInput type="password" placeholder="Mot de passe" formControlName="password" />
-      <mat-error *ngIf="password.hasError('required')">
+      <mat-error *ngIf="loginFormSend && password.hasError('required')">
         Mot de passe obligatoire
       </mat-error>
-      <mat-error *ngIf="password.hasError('minlength')">
-        Le mot de passe doit comporter au moins 6 caractères
+      <mat-error *ngIf="loginFormSend && password.hasError('minlength')">
+        Doit comporter au minimum 6 caractères
       </mat-error>
     </mat-form-field>
-    <div>
-        <button type="submit" mat-raised-button color="primary">Login</button>
-    </div>
+
+    <button type="submit" mat-raised-button>Connexion</button>
   </form>
 </div>

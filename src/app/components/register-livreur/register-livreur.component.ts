@@ -1,9 +1,12 @@
 import { DatePipe } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
+import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { HotToastService } from '@ngneat/hot-toast';
+import { Auth } from '@angular/fire/auth';
 import { Crenau } from 'src/app/models/crenau.model';
 import { CrenauService } from 'src/app/services/crenau.service';
 import { UsersService } from 'src/app/services/users.service';
+import { ModalDeleteCrenauComponent } from '../modal/modal-delete-crenau/modal-delete-crenau.component';
 
 @Component({
   selector: 'app-register-livreur',
@@ -13,11 +16,12 @@ import { UsersService } from 'src/app/services/users.service';
 export class RegisterLivreurComponent implements OnInit {
 
   user$ = this.usersService.currentUserProfile$;
+  userUid = this.auth.currentUser.uid;
   crenaux: Crenau[] = [];
   datePicker = new Date;
   defaultDatePicker: Date;
-  
-  constructor(private usersService: UsersService, private crenauservice: CrenauService, public datePipe : DatePipe, private toast: HotToastService) {
+
+  constructor(private usersService: UsersService, private crenauservice: CrenauService, private auth: Auth, public datePipe : DatePipe, private toast: HotToastService, public dialog: MatDialog) {
     this.defaultDatePicker = this.datePicker;
   }
   ngOnInit(): void {
@@ -60,9 +64,9 @@ export class RegisterLivreurComponent implements OnInit {
     this.toast.success('Crénau reservé', {duration: 3000});
   }
 
-  desinscriptionLivreur(crenau: Crenau, userUid: string){
+  desinscriptionLivreur(crenau: Crenau){
     this.toast.close();
-    this.crenauservice.removeLivreur(crenau, userUid)
+    this.crenauservice.removeLivreur(crenau, this.userUid)
     // retirer 1 au inscrit
     this.crenauservice.decrementInscrit(crenau)
     this.toast.success('Crénau retiré de votre planning', {duration: 3000});
@@ -76,10 +80,16 @@ export class RegisterLivreurComponent implements OnInit {
     }
   }
 
-  // aj(id: string){
-  //   return this.usersService.getUid(id);
-  //   // console.log('object is '+ use)
-  // }
+    // ouvrir popup confirmation suppression du créneaux
+    openDialogModal(crenau: Crenau) {
+      const dialogRef = this.dialog.open(ModalDeleteCrenauComponent);
+      dialogRef.componentInstance.confirmMessage = "Êtes-vous sûr de vouloir enlever ce créneau de votre planning ?"
+      dialogRef.afterClosed().subscribe(result => {
+        if(result == true) {
+          this.desinscriptionLivreur(crenau);      
+        }    
+      });
+    }
 
 }
 

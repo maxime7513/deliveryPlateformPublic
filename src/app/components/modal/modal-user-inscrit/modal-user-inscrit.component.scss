@@ -1,0 +1,41 @@
+h1{
+    font-size: 1.5rem;
+    text-align: center;
+    margin-bottom: 10px;
+}
+
+.user{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    flex-wrap: wrap;
+    margin: 13px 0;
+    img{
+        width: 30px;
+        height: 30px;
+        border-radius: 100%;
+        object-fit: cover;
+        object-position: center;
+        margin-right: 10px;
+    }
+    span{
+        margin-right: 3px;
+    }
+    div{
+        display: flex;
+        align-items: center;
+        mat-icon{
+            font-size: 18px;
+            width: 18px;
+            height: 18px;
+        }
+        @media (max-width: 400px){
+            margin-left: 38px;
+        }
+    }
+}
+
+button{
+    background: var(--button);
+    margin: auto;
+}

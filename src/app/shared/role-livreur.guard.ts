@@ -12,7 +12,7 @@ export class RoleLivreurGuard implements CanActivate {
   constructor(private userservice: UsersService, private router: Router) { }
 
   async canActivate(){
-    const userRole = await this.userservice.canAccess();
+    const userRole = await this.userservice.canAccess$;
     console.log(userRole);
     if( userRole == 'livreur'){
       console.log('canAcces => accept');

@@ -1,9 +1,9 @@
 <div class="create">
-  <form class="margin-top" [formGroup]="crenauForm" (ngSubmit)="onSubmit()">
+  <form [formGroup]="crenauForm" (ngSubmit)="onSubmit()">
     <h3>Ajouter un créneau</h3>
     <mat-form-field>
       <mat-label>Choisir une date</mat-label>
-      <input matInput [matDatepicker]="picker" formControlName="date">
+      <input matInput [min]="datePicker" [matDatepicker]="picker" formControlName="date">
       <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
       <mat-datepicker #picker></mat-datepicker>
       <mat-error *ngIf="submitCrenauForm && date.hasError('required')">
@@ -53,26 +53,26 @@
       </mat-error>
     </mat-form-field>
 
-    <button type="submit" mat-raised-button color="primary">
+    <button type="submit" mat-raised-button>
       <mat-icon>more_time</mat-icon>
       Ajouter
     </button>
   </form>
 
   <div>
+    <mat-form-field>
+      <mat-label>Choisi une date</mat-label>
+      <input readonly matInput [matDatepicker]="picker2" (dateChange)="afficherCrenauParDate(); showCrenaux = true" [(ngModel)]="defaultDatePicker">
+      <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
+      <mat-datepicker #picker2></mat-datepicker>
+    </mat-form-field>
+    
     <h3 (click)="showCrenaux = !showCrenaux">
       Liste des crénaux
       <mat-icon [class.active]="showCrenaux">expand_more</mat-icon>
     </h3>
 
     <div *ngIf="showCrenaux" class="list-crenau">
-      <mat-form-field>
-        <mat-label>Choisi une date</mat-label>
-        <input readonly matInput [matDatepicker]="picker" (dateChange)="afficherCrenauParDate()" [(ngModel)]="defaultDatePicker">
-        <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
-        <mat-datepicker #picker></mat-datepicker>
-      </mat-form-field>
-
       <p *ngIf="crenaux.length == 0" class="nocrenau">Pas encore de créneau crée ...</p>
 
       <div *ngFor="let crenau of crenaux" class="crenau">
@@ -85,7 +85,7 @@
           <p>inscrit max</p>
           <p>{{ crenau.inscritMax }}</p>
         </div>
-        <button (click)="deleteCrenau(crenau)" mat-raised-button>
+        <button (click)="openDialogModal(crenau)" mat-raised-button>
           <mat-icon>event_busy</mat-icon>
           Supprimer
         </button>

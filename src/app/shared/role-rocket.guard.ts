@@ -11,7 +11,7 @@ export class RoleRocketGuard implements CanActivate {
   constructor(private userservice: UsersService, private router: Router) { }
 
   async canActivate(){
-    const userRole = await this.userservice.canAccess();
+    const userRole = await this.userservice.canAccess$;
     console.log(userRole);
     if( userRole == 'rocket' || userRole == 'woozoo'){
       console.log('canAcces => accept');

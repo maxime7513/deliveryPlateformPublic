@@ -11,43 +11,29 @@
   </div>
 
   <p *ngIf="crenaux.length == 0" class="nocrenau">Pas encore de crénaux disponible pour cette date ...</p>
-
-  <div class="t">
-    <div *ngFor="let crenau of crenaux">
-      <span  *ngIf="datePicker < crenau.date.toDate()">{{ crenau.heureDebut }}-{{ crenau.heureFin }}h</span>
-      <div>
-            <button *ngIf="(crenau.inscrit < crenau.inscritMax) && !verifierUserInscrit(crenau, user.uid)" (click)="inscriptionLivreur(crenau, user.uid)">
-              <mat-icon>more_time</mat-icon>
-            </button>
-            <button *ngIf="verifierUserInscrit(crenau, user.uid)" (click)="desinscriptionLivreur(crenau, user.uid)" class="annule">
-              <mat-icon>event_busy</mat-icon>
-              Annuler
-            </button>
-            <button *ngIf="crenau.inscritMax == crenau.inscrit && !verifierUserInscrit(crenau, user.uid)" class="complet">
-              Complet !
-            </button>
-      </div>
-    </div>
-  </div>
   
   <table *ngIf="crenaux.length != 0">
     <thead>
      <tr>
-       <th scope="col">Heure</th>
+       <th scope="col"><mat-icon>schedule</mat-icon></th>
        <th scope="col">Place restante</th>
        <th></th>
      </tr>
     </thead>
     <tbody>
       <tr *ngFor="let crenau of crenaux">
-        <td  *ngIf="datePicker < crenau.date.toDate()">{{ crenau.heureDebut }}h à {{ crenau.heureFin }}h</td>
+        <td *ngIf="datePicker < crenau.date.toDate()">{{ crenau.heureDebut }}h à {{ crenau.heureFin }}h</td>
         <td *ngIf="datePicker < crenau.date.toDate()">{{ getPlaceRestante(crenau.inscritMax, crenau.inscrit) }}</td>
         <td *ngIf="datePicker < crenau.date.toDate()">
           <button *ngIf="(crenau.inscrit < crenau.inscritMax) && !verifierUserInscrit(crenau, user.uid)" (click)="inscriptionLivreur(crenau, user.uid)">
             <mat-icon>more_time</mat-icon>
-            Je prends
+            Réserver
           </button>
-          <button *ngIf="verifierUserInscrit(crenau, user.uid)" (click)="desinscriptionLivreur(crenau, user.uid)" class="annule">
+          <!--<button *ngIf="verifierUserInscrit(crenau, user.uid)" (click)="desinscriptionLivreur(crenau, user.uid)" class="annule">
+            <mat-icon>event_busy</mat-icon>
+            Annuler
+          </button>-->
+          <button *ngIf="verifierUserInscrit(crenau, user.uid)" (click)="openDialogModal(crenau)" class="annule">
             <mat-icon>event_busy</mat-icon>
             Annuler
           </button>

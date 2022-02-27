@@ -1,10 +1,12 @@
 import { DatePipe } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { Router } from '@angular/router';
 import { HotToastService } from '@ngneat/hot-toast';
 import { Crenau } from 'src/app/models/crenau.model';
 import { CrenauService } from 'src/app/services/crenau.service';
+import { ModalDeleteCrenauComponent } from '../modal/modal-delete-crenau/modal-delete-crenau.component';
 
 interface Heure {
   value: number;
@@ -40,6 +42,7 @@ export class CreateCrenauComponent implements OnInit {
     {value: 21, viewValue: '21h'},
     {value: 22, viewValue: '22h'},
     {value: 23, viewValue: '23h'},
+    {value: 24, viewValue: '24h'},
   ];
   inscritsMax: inscritMax[] = [
     {value: 1, viewValue: '1 livreur'},
@@ -52,9 +55,9 @@ export class CreateCrenauComponent implements OnInit {
     {value: 8, viewValue: '8 livreur'},
   ];
 
-  constructor(private crenauservice: CrenauService, private toast: HotToastService, private router: Router, public datePipe : DatePipe) {
+  constructor(private crenauservice: CrenauService, private toast: HotToastService, private router: Router, public datePipe : DatePipe,  public dialog: MatDialog) {
     this.defaultDatePicker = this.datePicker;
-    this.showCrenaux = true;
+    this.showCrenaux = false;
   }
 
   crenaux: Crenau[] = [];
@@ -145,19 +148,22 @@ export class CreateCrenauComponent implements OnInit {
         duration: 2500
       }
     );
-    toastValid.afterClosed.subscribe((e) => {
-      // this.router.navigate(['/planning']);
-    });
+    // toastValid.afterClosed.subscribe((e) => {
+    //   this.router.navigate(['/planning']);
+    // });
   }
 
-  // delete crenau
-  deleteCrenau(crenau: Crenau) {
-    this.toast.close();
-    if (confirm('Are you sure to delete this record ?') == true) {
-      this.crenauservice.deleteCrenau(crenau).then(() => 
-       this.toast.success('Crénau supprimé',{duration: 2500})
-      );
-    }
+  // ouvrir popup confirmation suppression du créneaux
+  openDialogModal(crenau: Crenau) {
+    const dialogRef = this.dialog.open(ModalDeleteCrenauComponent);
+    dialogRef.componentInstance.confirmMessage = "Êtes-vous sûr de vouloir supprimer ce créneau ?"
+    dialogRef.afterClosed().subscribe(result => {
+      if(result == true) {
+        this.crenauservice.deleteCrenau(crenau).then(() => 
+          this.toast.success('Crénau supprimé',{duration: 2500})
+        );
+      }    
+    });
   }
 
 }

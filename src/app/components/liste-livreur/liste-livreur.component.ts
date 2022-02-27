@@ -9,14 +9,23 @@ import { UsersService } from 'src/app/services/users.service';
 })
 export class ListeLivreurComponent implements OnInit {
 
-  users: ProfileUser[] = [];
+  adminUsers: ProfileUser[] = [];
+  livreurs: ProfileUser[] = [];
 
   constructor(private userservice: UsersService) { }
 
   ngOnInit(): void {
-    this.userservice.getUsers().subscribe((res: ProfileUser[]) => {
-      this.users = res;
+    this.userservice.getUsersByRole('livreur').subscribe((res: ProfileUser[]) => {
+      this.livreurs = res;
     })
+
+    this.userservice.getUsersAdmin().subscribe((res: ProfileUser[]) => {
+      this.adminUsers = res;
+    })
+  }
+
+  formatPhone(phone: string){
+    return phone.replace(/(.{2})(?=.)/g,"$1 ")
   }
 
 }

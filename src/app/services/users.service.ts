@@ -26,7 +26,7 @@ export class UsersService {
   }
   
   // return userRole (Promise for use await un guard)
-  canAccess(){
+  get canAccess$(){
     return new Promise(resolve => {
       this.currentUserProfile$.subscribe((res) => {
         resolve(res.role);
@@ -47,7 +47,6 @@ export class UsersService {
   // ajouter crenauInscrit au profil user
   addCrenauToUser(userId: string, crenauId: string) {
     const crenauDocRef = doc(this.firestore, `users/${userId}`);
-    // arrayRemove for remove
     return updateDoc(crenauDocRef, { crenauInscrit: arrayUnion(crenauId) });
   }
 
@@ -65,6 +64,18 @@ export class UsersService {
   // retourner les users inscrit à chaque créneau
   getUserInscritByCrenau(crenauId: string): Observable<ProfileUser[]> {
     const userxRef = query(collection(this.firestore, 'users'), where("crenauInscrit", "array-contains", crenauId));
+    return collectionData(userxRef, { idField: 'id' }) as Observable<ProfileUser[]>;
+  }
+
+  // retourner tous les livreurs (role => livreur)
+  getUsersByRole(role: string): Observable<ProfileUser[]> {
+    const userxRef = query(collection(this.firestore, 'users'), where("role", "==" , role));
+    return collectionData(userxRef, { idField: 'id' }) as Observable<ProfileUser[]>;
+  }
+
+  // retourner tous les admins (role => woozoo et rocket)
+  getUsersAdmin(): Observable<ProfileUser[]> {
+    const userxRef = query(collection(this.firestore, 'users'), where('role', 'in', ['woozoo', 'rocket']));
     return collectionData(userxRef, { idField: 'id' }) as Observable<ProfileUser[]>;
   }
 

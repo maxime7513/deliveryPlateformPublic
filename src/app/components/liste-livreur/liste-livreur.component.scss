@@ -1,16 +1,27 @@
 h1{
-    color: orangered;
     text-align: center;
+    margin-bottom: 0;
+    &:first-of-type{
+        color: var(--secondary);
+    }
+    &:last-of-type{
+        color: var(--primary);
+    }
 }
 
 table{
-    margin: 30px auto;
+    margin: 10px auto 50px auto;
     border-radius: 13px;
     box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
     border-collapse: collapse;
+    &:first-of-type th{
+        background: var(--secondary);
+    }
+    &:last-of-type th{
+        background: var(--primary);
+    }
     thead{
         th{
-            background: orangered;
             color: #fff;
             padding: 10px 50px;
             &:not(:last-of-type){

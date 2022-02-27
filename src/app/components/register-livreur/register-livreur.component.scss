@@ -1,6 +1,6 @@
 h1{
     text-align: center;
-    color: orangered;
+    color: var(--primary);
     font-size: 1.8rem;
     font-weight: 400;
 }
@@ -46,21 +46,21 @@ table{
             align-items: center;
             justify-content: center;
             width: 100%;
-            background: var(--button);
+            background: var(--secondary);
             color: #fff;
             padding: 4px 7px;
             border-radius: 5px;
             border: none;
             cursor: pointer;
             mat-icon{
-                font-size: 17px;
-                height: 17px;
-                width: 17px;
+                // font-size: 17px;
+                // height: 17px;
+                // width: 17px;
                 margin-right: 5px;
             }
         }
         .annule{
-            background: orangered;
+            background: var(--primary);
         }
         .complet{
             background: #fff;
@@ -75,42 +75,5 @@ table{
     text-align: center;
     margin-top: 50px;
     font-size: 1.3rem;
-    color: orangered;
-}
-
-.t{
-    width: max-content;
-    display: flex;
-    flex-direction: row;
-    flex-wrap: wrap;
-    margin: 25px auto;
-    border-radius: 13px;
-    box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
-    > div{
-        display: flex;
-        flex-direction: column;
-        padding: 13px;
-        text-align: center;
-    }
-    span{
-        padding: 10px;
-    }
-    button{
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        width: 100%;
-        background: var(--button);
-        color: #fff;
-        padding: 4px 7px;
-        border-radius: 5px;
-        border: none;
-        cursor: pointer;
-        mat-icon{
-            font-size: 17px;
-            height: 17px;
-            width: 17px;
-            margin-right: 5px;
-        }
-    }
+    color: var(--secondary);
 }

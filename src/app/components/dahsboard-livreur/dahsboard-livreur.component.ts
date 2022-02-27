@@ -1,9 +1,11 @@
 import { DatePipe } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { Auth } from '@angular/fire/auth';
+import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { HotToastService } from '@ngneat/hot-toast';
 import { Crenau } from 'src/app/models/crenau.model';
 import { CrenauService } from 'src/app/services/crenau.service';
+import { ModalDeleteCrenauComponent } from '../modal/modal-delete-crenau/modal-delete-crenau.component';
 
 @Component({
   selector: 'app-dahsboard-livreur',
@@ -16,22 +18,68 @@ export class DahsboardLivreurComponent implements OnInit {
   crenaux: Crenau[] = [];
   datePicker = new Date;
   defaultDatePicker: Date;
-  dateAfficher : string;
-
-  constructor(private crenauservice: CrenauService, private auth: Auth, private toast: HotToastService, public datePipe : DatePipe) {
+  heures: number[] = [12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23];
+  jours: number[]= [1, 2, 3, 4, 5, 6, 0];
+  constructor(private crenauservice: CrenauService, private auth: Auth, private toast: HotToastService, public datePipe : DatePipe, public dialog: MatDialog) {
     this.defaultDatePicker = this.datePicker;
   }
 
   ngOnInit(): void {
-    // crenaux par date
-    this.afficherCrenauParDate();
+    // crenaux par semaine
+    this.afficherCrenauParSemaine();
+  }
+
+  // retourner le lundi de chaque semaine séléctionnée(datepicker)
+  setToMonday(date: any) {
+     var day = date.getDay() || 7;
+     if( day !== 1 )
+     date.setHours(-24 * (day - 1));
+     return date;
+  }
+
+
+  createSemaineTab(date: any){
+    let currentDateString = this.datePipe.transform(date, 'dd/MM/yyyy');
+    let tab = [currentDateString];
+    for(let i = 0; i < 6; i++){
+      date.setHours(+24);
+      let dateString = this.datePipe.transform(date, 'dd/MM/yyyy');
+      tab.push(dateString);
+    }
+    return tab
   }
   
-  // crenaux par date (datepicker)
-  afficherCrenauParDate(){
-    this.dateAfficher = this.datePipe.transform(this.defaultDatePicker, 'dd MMMM');
-    let date = this.datePipe.transform(this.defaultDatePicker, 'dd/MM/yyyy');
-    this.crenauservice.getCrenauxInscritCurrentUserByDate(this.userUid, date).subscribe((res: Crenau[]) => {
+  getDay(day: any){
+    var date = day.toDate();
+    var day = date.getDay();
+    return day
+  }
+
+  returnPlanning(jour: number, heure: number){
+    // console.log(this.datePicker);
+    let res= 'pas pris';
+    for(let i = 0; i < this.crenaux.length; i++){
+      if(jour == this.getDay(this.crenaux[i].date) && this.heures[heure] == this.crenaux[i].heureDebut ){
+        if(60 < this.calculDifferenceDate(this.crenaux[i].date.toDate(), new Date)){
+          res = this.crenaux[i].id;
+        }else if(this.calculDifferenceDate(this.crenaux[i].date.toDate(), new Date) <= -60){
+          res ="effectue";
+        }else if(-60 < this.calculDifferenceDate(this.crenaux[i].date.toDate(), new Date) && this.calculDifferenceDate(this.crenaux[i].date.toDate(), new Date) <= 0){
+          res = "en cours";
+        }else if(0 < this.calculDifferenceDate(this.crenaux[i].date.toDate(), new Date) && this.calculDifferenceDate(this.crenaux[i].date.toDate(), new Date) <= 60){
+          let minutesRestante = this.calculDifferenceDate(this.crenaux[i].date.toDate(), new Date);
+          res = "" + minutesRestante;
+        }
+      }
+    }
+    return res
+  }
+
+  // crenaux par semaine (datepicker)
+  afficherCrenauParSemaine(){
+    let dateLundi = this.setToMonday(this.defaultDatePicker);
+    let tab = this.createSemaineTab(dateLundi);
+    this.crenauservice.getCrenauxInscritCurrentUserBySemaine(this.userUid, tab).subscribe((res: Crenau[]) => {
       // trier par heure
       this.crenaux = res.sort(function (a:any, b:any) {
       return a.heureDebut - b.heureDebut
@@ -39,11 +87,19 @@ export class DahsboardLivreurComponent implements OnInit {
     })
   }
 
-  desinscriptionLivreur(crenau: Crenau){
+  // desinscriptionLivreur(crenau: Crenau){
+  //   this.toast.close();
+  //   this.crenauservice.removeLivreur(crenau, this.userUid)
+  //   // retirer 1 au inscrit
+  //   this.crenauservice.decrementInscrit(crenau)
+  //   this.toast.success('Crénau retiré de votre planning', {duration: 3000});
+  // }
+
+  desinscriptionLivreur2(crenauId: string){
     this.toast.close();
-    this.crenauservice.removeLivreur(crenau, this.userUid)
+    this.crenauservice.removeLivreur2(crenauId, this.userUid)
     // retirer 1 au inscrit
-    this.crenauservice.decrementInscrit(crenau)
+    this.crenauservice.decrementInscrit2(crenauId)
     this.toast.success('Crénau retiré de votre planning', {duration: 3000});
   }
 
@@ -51,6 +107,17 @@ export class DahsboardLivreurComponent implements OnInit {
     var diff_temps = date1.getTime() - date2.getTime();
     var diff_hour = diff_temps / (1000 * 3600 / 60);
     return Math.round(diff_hour);
+  }
+
+  // ouvrir popup confirmation suppression du créneaux
+  openDialogModal(crenauId: string) {
+    const dialogRef = this.dialog.open(ModalDeleteCrenauComponent);
+    dialogRef.componentInstance.confirmMessage = "Êtes-vous sûr de vouloir enlever ce créneau de votre planning ?"
+    dialogRef.afterClosed().subscribe(result => {
+      if(result == true) {
+        this.desinscriptionLivreur2(crenauId);      
+      }    
+    });
   }
   
 }
