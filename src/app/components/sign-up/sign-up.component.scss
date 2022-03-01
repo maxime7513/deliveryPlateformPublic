@@ -1,6 +1,9 @@
 .background{
     background: url(/assets/images/woozoo-background.jpg);
     background-size: cover;
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
     background-position: top;
     background-attachment: fixed;
     width: 100%;

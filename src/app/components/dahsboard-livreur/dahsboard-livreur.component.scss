@@ -1,6 +1,9 @@
 .background{
     background: url(/assets/images/woozoo-background_light.jpg);
     background-size: cover;
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
     background-position: top;
     background-attachment: fixed;
     width: 100%;
@@ -157,7 +160,7 @@ table{
 
 /* Responsive */
 
-@media (max-width: 1200px) {
+@media (max-width: 1230px) {
     .background{
         padding: 64px 10px 30px 10px;
     }
