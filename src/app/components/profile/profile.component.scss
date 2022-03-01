@@ -9,7 +9,7 @@
     background-attachment: fixed;
     width: 100%;
     min-height: 100%;
-    padding: 64px 20px 40px 20px;
+    padding: 64px 30px 40px 30px;
 }
 
 .blur{
@@ -109,7 +109,7 @@
         padding: 20px 50px;
         form div{
             flex-direction: column;
-            ::ng-deep mat-form-field{
+            mat-form-field{
                 width: 100%;
             }
         }

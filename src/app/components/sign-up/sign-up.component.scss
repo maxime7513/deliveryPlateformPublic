@@ -1,4 +1,5 @@
 .background{
+    position: relative;
     background: url(/assets/images/woozoo-background.jpg);
     background-size: cover;
     -webkit-background-size: cover;
@@ -8,7 +9,7 @@
     background-attachment: fixed;
     width: 100%;
     min-height: 100%;
-    padding: 64px 20px 40px 20px;
+    padding: 64px 30px 40px 30px;
 }
 
 .blur{
@@ -46,6 +47,7 @@ form{
         display: flex;
         flex-direction: row;
         justify-content: space-between;
+        width: 100%;
         mat-form-field{
             width: 45%;
         }
@@ -58,5 +60,37 @@ form{
         background: var(--secondary);
         color: #fff;
         margin-top: 10px;
+    }
+}
+
+/* Responsive */
+
+@media (max-width: 500px) {
+    .background{
+        background: none;
+        &:before {
+            content: "";
+            position: fixed;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -10;
+            background: url(/assets/images/woozoo-background.jpg) no-repeat;
+            -webkit-background-size: cover;
+            -moz-background-size: cover;
+            -o-background-size: cover;
+            background-size: cover;
+        }
+    }
+    form{
+        width: 100%;
+        padding: 20px 50px;
+        > div{
+            flex-direction: column;
+            mat-form-field{
+                width: 100%;
+            }
+        }
     }
 }
