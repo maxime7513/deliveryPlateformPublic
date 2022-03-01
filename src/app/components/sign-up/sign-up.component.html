@@ -55,7 +55,6 @@
           </mat-error>
       </mat-form-field>
     </div>
-
     <mat-form-field>
       <mat-label>Rôle</mat-label>
       <mat-select formControlName="role">
@@ -67,15 +66,15 @@
         Le rôle est obligatoire
       </mat-error>
     </mat-form-field>
-
     <mat-error *ngIf="signUpFormSend && signUpForm.hasError('passwordsDontMatch')" class="dontmatch">
       Les deux mots de passe doivent correspondre
     </mat-error>
-
     <div>
       <button type="submit" mat-raised-button>
         S'inscrire
       </button>
     </div>
   </form>
+
+  <div class="blur"></div>
 </div>

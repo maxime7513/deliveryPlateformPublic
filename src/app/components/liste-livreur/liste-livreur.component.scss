@@ -1,5 +1,16 @@
+.background{
+    background: url(/assets/images/woozoo-background_light.jpg);
+    background-size: cover;
+    background-position: top;
+    background-attachment: fixed;
+    width: 100%;
+    min-height: 100%;
+    padding: 64px 20px 40px 20px;
+}
+
 h1{
     text-align: center;
+    margin-top: 50px;
     margin-bottom: 0;
     &:first-of-type{
         color: var(--secondary);
@@ -10,7 +21,9 @@ h1{
 }
 
 table{
-    margin: 10px auto 50px auto;
+    margin: 10px auto 0 auto;
+    background: #fff;
+    background: rgba(255,255,255,.8);
     border-radius: 13px;
     box-shadow: rgba(0, 0, 0, 0.1) 0px 20px 25px -5px, rgba(0, 0, 0, 0.04) 0px 10px 10px -5px;
     border-collapse: collapse;

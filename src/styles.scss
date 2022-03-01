@@ -41,9 +41,9 @@ $Rocket-theme: mat.define-light-theme((
   --ion-color-blue3: #454f63;
   --button: #665eff;
 }
-*{ font-family: "Poppins"; }
-html, body { height: 100%; }
-body { margin: 0;}
+*{ font-family: "Poppins"; box-sizing: border-box; }
+html, body{ height: 100%; }
+body {margin: 0;}
 
 .mat-raised-button {
   .mat-button-wrapper{

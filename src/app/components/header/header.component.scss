@@ -1,9 +1,11 @@
 mat-toolbar {
-    position: relative;
+    position: fixed;
+    top: 0;
+    left: 0;
     justify-content: space-between;
     background: var(--primary);
     color: #fff;
-    z-index: 1;
+    z-index: 100;
     .logo{
         height: 25px;
     }

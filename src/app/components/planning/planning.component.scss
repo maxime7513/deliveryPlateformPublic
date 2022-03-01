@@ -1,3 +1,13 @@
+.background{
+    background: url(/assets/images/woozoo-background_light.jpg);
+    background-size: cover;
+    background-position: top;
+    background-attachment: fixed;
+    width: 100%;
+    min-height: 100%;
+    padding: 64px 20px 40px 20px;
+}
+
 h1{
     color: var(--primary);
     text-align: center;
@@ -11,8 +21,7 @@ h1{
 
 .table-wrapper{
     max-width: 1600px;
-    margin: auto;
-    padding: 20px 20px 40px;
+    margin: 20px auto auto;
 }
 
 table{
@@ -136,8 +145,10 @@ table{
 /* Responsive */
 
 @media (max-width: 1200px) {
+    .background{
+        padding: 64px 10px 40px 10px;
+    }
     .table-wrapper{
-        padding: 10px 10px 40px;
         &:before{
             content: url("/assets/images/swipe.svg");
             display: block;

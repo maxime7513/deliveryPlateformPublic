@@ -1,10 +1,4 @@
 <div class="background">
-  <video autoplay muted loop playsinline>
-      <source src="assets/video/background_video.mov" type="video/mp4">
-  </video>
-
-  <div class="blur"></div>
-
   <div class="profil-container" *ngIf=" user$ | async as user">
     <p>{{ user.firstName }}</p>
     <div class="profile-image">
@@ -14,7 +8,6 @@
       </button>
     </div>
     <input #inputField hidden type="file" (change)="uploadImage($event, user)" />
-
       <form [formGroup]="profileForm" (ngSubmit)="saveProfile()">
       <div>
         <mat-form-field>
@@ -30,7 +23,6 @@
             </mat-error>
         </mat-form-field>
       </div>
-
       <div>
         <mat-form-field>
           <input type="tel" matInput formControlName="phone" placeholder="Téléphone"/>
@@ -48,11 +40,12 @@
             </mat-error>
         </mat-form-field>
       </div>
-
       <button type="submit" mat-raised-button>
         <mat-icon>how_to_reg</mat-icon>
         Enregistrer
       </button>
     </form>
   </div>
+
+  <div class="blur"></div>
 </div>

@@ -1,60 +1,62 @@
-<h1>Mon planning</h1>
+<div class="background">
+  <h1>Mon planning</h1>
 
-<div class="date">
-  <mat-form-field>
-    <mat-label>Choisir une date</mat-label>
-    <input readonly matInput [matDatepicker]="picker" (dateChange)="afficherCrenauParSemaine()" [(ngModel)]="defaultDatePicker">
-    <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
-    <mat-datepicker #picker></mat-datepicker>
-  </mat-form-field>
-</div>
+  <div class="date">
+    <mat-form-field>
+      <mat-label>Choisir une date</mat-label>
+      <input readonly matInput [matDatepicker]="picker" (dateChange)="afficherCrenauParSemaine()" [(ngModel)]="defaultDatePicker">
+      <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+      <mat-datepicker #picker></mat-datepicker>
+    </mat-form-field>
+  </div>
 
-<div class="table-wrapper">
-    <table class="fl-table">
-        <thead>
-          <tr>
-            <th><mat-icon>schedule</mat-icon></th>
-            <th>Lundi</th>
-            <th>Mardi</th>
-            <th>Mercredi</th>
-            <th>Jeudi</th>
-            <th>Vendredi</th>
-            <th>Samedi</th>
-            <th>Dimanche</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr *ngFor="let heure of heures; index as i">
-            <td>{{heure}}/{{heure + 1}}h</td>
-            <td *ngFor="let jour of jours">
-              <button *ngIf="returnPlanning(jour,i).length == 20 " matTooltip="annuler ce créneau" (click)="openDialogModal(returnPlanning(jour,i))" class="annule">
-                <mat-icon>free_cancellation</mat-icon>
-              </button>
-              <span *ngIf="returnPlanning(jour,i).length < 4 ">Dans <strong>{{ returnPlanning(jour,i) }}</strong> min</span>         
-              <button *ngIf="returnPlanning(jour,i) == 'en cours'" class="encours">
-                <mat-icon>hourglass_bottom</mat-icon>
-              </button>
-              <button *ngIf="returnPlanning(jour,i) == 'effectue'">
-                <mat-icon>assignment_turned_in</mat-icon>
-              </button>
-              <span *ngIf="returnPlanning(jour,i) == 'pas pris'"> </span>
-            </td>
-          </tr>
-        <tbody>
-    </table>
-</div>
+  <div class="table-wrapper">
+      <table class="fl-table">
+          <thead>
+            <tr>
+              <th><mat-icon>schedule</mat-icon></th>
+              <th>Lundi</th>
+              <th>Mardi</th>
+              <th>Mercredi</th>
+              <th>Jeudi</th>
+              <th>Vendredi</th>
+              <th>Samedi</th>
+              <th>Dimanche</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let heure of heures; index as i">
+              <td>{{heure}}/{{heure + 1}}h</td>
+              <td *ngFor="let jour of jours">
+                <button *ngIf="returnPlanning(jour,i).length == 20 " matTooltip="annuler ce créneau" (click)="openDialogModal(returnPlanning(jour,i))" class="annule">
+                  <mat-icon>free_cancellation</mat-icon>
+                </button>
+                <span *ngIf="returnPlanning(jour,i).length < 4 ">Dans <strong>{{ returnPlanning(jour,i) }}</strong> min</span>         
+                <button *ngIf="returnPlanning(jour,i) == 'en cours'" class="encours">
+                  <mat-icon>hourglass_bottom</mat-icon>
+                </button>
+                <button *ngIf="returnPlanning(jour,i) == 'effectue'">
+                  <mat-icon>assignment_turned_in</mat-icon>
+                </button>
+                <span *ngIf="returnPlanning(jour,i) == 'pas pris'"> </span>
+              </td>
+            </tr>
+          <tbody>
+      </table>
+  </div>
 
-<div class="explic">
-  <span>
-    <mat-icon>assignment_turned_in</mat-icon>
-    Effectué
-  </span>
-  <span>
-    <mat-icon class="reserve">free_cancellation</mat-icon>
-    Réservé(cliquez pour annuler)
-  </span>
-  <span>
-    <mat-icon>hourglass_bottom</mat-icon>
-    En cours
-  </span>
+  <div class="explic">
+    <span>
+      <mat-icon>assignment_turned_in</mat-icon>
+      Effectué
+    </span>
+    <span>
+      <mat-icon class="reserve">free_cancellation</mat-icon>
+      Réservé(cliquez pour annuler)
+    </span>
+    <span>
+      <mat-icon>hourglass_bottom</mat-icon>
+      En cours
+    </span>
+  </div>
 </div>

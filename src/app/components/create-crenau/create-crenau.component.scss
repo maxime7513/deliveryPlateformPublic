@@ -1,15 +1,15 @@
-h3{
-    margin: 5px;
-    color: var(--primary);
-    font-size: 1.2rem;
-}
-
 .create{
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
     justify-content: space-around;
-    margin: 50px;
+    background: url(/assets/images/woozoo-background_light.jpg);
+    background-size: cover;
+    background-position: top;
+    background-attachment: fixed;
+    width: 100%;
+    min-height: 100%;
+    padding: 115px 20px 40px 20px;
 }
 
 form{
@@ -43,6 +43,7 @@ form{
 h3{
     font-size: 1.5rem;
     margin: 0 0 20px 0;
+    color: var(--primary);
     text-align: center;
     cursor: pointer;
     mat-icon{
@@ -75,6 +76,9 @@ h3{
         padding: 13px;
         background: white;
         border-radius: 13px;
+        // background: rgba(50, 73, 96, 0.85);
+        // color: #fff;
+        font-weight: 500;
         box-shadow: rgba(0, 0, 0, 0.115) 0px 20px 20px -5px, rgba(0, 0, 0, 0.05) 0px 10px 10px -5px;
         p{
             margin: 0 20px;
@@ -83,6 +87,11 @@ h3{
         button{
             background: var(--primary);
             color: #fff;
+            min-width: 0;
+            padding: 5px 10px;
+            mat-icon{
+                margin: 0;
+            }
         }
     }
 }
@@ -92,5 +101,5 @@ h3{
     text-align: center;
     margin-top: 20px;
     font-size: 1.1rem;
-    color: #ccc;
+    color: var(--primary);
 }

@@ -1,3 +1,13 @@
+.background{
+    background: url(/assets/images/woozoo-background_light.jpg);
+    background-size: cover;
+    background-position: top;
+    background-attachment: fixed;
+    width: 100%;
+    min-height: 100%;
+    padding: 64px 30px 40px 30px;
+}
+
 h1{
     color: var(--primary);
     text-align: center;
@@ -12,7 +22,7 @@ h1{
 .table-wrapper{
     max-width: 1600px;
     margin: auto;
-    padding: 20px;
+    padding: 20px 0;
 }
 
 table{
@@ -117,7 +127,6 @@ table{
 .explic{
     display: flex;
     flex-wrap: wrap;
-    padding: 0 20px 20px;
     span{
         display: flex;
         align-items: center;
@@ -130,6 +139,7 @@ table{
             padding: 5px 13px;
             border-radius: 5px;
             border: 1px solid var(--secondary);
+            box-sizing: initial;
             &.reserve{
                 background: var(--secondary);
                 color: #fff;
@@ -148,6 +158,9 @@ table{
 /* Responsive */
 
 @media (max-width: 1200px) {
+    .background{
+        padding: 64px 10px 30px 10px;
+    }
     .explic{
         padding: 7px 10px 10px;
         span{
@@ -156,7 +169,7 @@ table{
     }
     
     .table-wrapper{
-        padding: 10px;
+        padding: 10px 0;
         &:before{
             content: url("/assets/images/swipe.svg");
             display: block;

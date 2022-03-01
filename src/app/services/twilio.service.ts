@@ -11,7 +11,6 @@ export class TwilioService {
   constructor(private http: HttpClient) { }
 
   send_sms(req: any) {
-    console.log('gf');
     return this.http.post("http://localhost:3000/rappelsms", req , this.header).subscribe((resp: any) => {
       console.log(resp);
     });

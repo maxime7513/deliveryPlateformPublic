@@ -36,7 +36,7 @@ app.post('/rappelsms', (req, res) => {
 
   res.status(201).send({
     message: 'Envoie du sms programmé confirmée',
-    data: rappelCrenau
+    data: (rappelCrenau, message.sid)
   })
 });
 
