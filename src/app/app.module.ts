@@ -35,6 +35,7 @@ import { PlanningComponent } from './components/planning/planning.component';
 import { DahsboardLivreurComponent } from './components/dahsboard-livreur/dahsboard-livreur.component';
 import { ListeLivreurComponent } from './components/liste-livreur/liste-livreur.component';
 import { ModalDeleteCrenauComponent } from './components/modal-delete-crenau/modal-delete-crenau.component';
+import { HttpClientModule } from '@angular/common/http';
 
 // firebase
 import { provideFirebaseApp, initializeApp } from '@angular/fire/app';
@@ -61,6 +62,7 @@ registerLocaleData(localeFr, 'fr');
   ],
   imports: [
     BrowserModule,
+    HttpClientModule,
     AppRoutingModule,
     BrowserAnimationsModule,
     MatToolbarModule,

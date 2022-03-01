@@ -1,6 +1,5 @@
 import { Injectable } from '@angular/core';
 import { arrayUnion, collection, collectionData, doc, docData, Firestore, query, setDoc, updateDoc, where } from '@angular/fire/firestore';
-import { user } from 'rxfire/auth';
 import { from, Observable, of, switchMap } from 'rxjs';
 import { ProfileUser } from '../models/user.profil';
 import { AuthService } from './auth.service';

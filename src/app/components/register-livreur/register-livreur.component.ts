@@ -7,6 +7,8 @@ import { Crenau } from 'src/app/models/crenau.model';
 import { CrenauService } from 'src/app/services/crenau.service';
 import { UsersService } from 'src/app/services/users.service';
 import { ModalDeleteCrenauComponent } from '../modal-delete-crenau/modal-delete-crenau.component';
+import { TwilioService } from 'src/app/services/twilio.service';
+import { ProfileUser } from 'src/app/models/user.profil';
 
 @Component({
   selector: 'app-register-livreur',
@@ -20,12 +22,12 @@ export class RegisterLivreurComponent implements OnInit {
   crenaux: Crenau[] = [];
   datePicker = new Date;
   defaultDatePicker: Date;
+  ccE: string = "+33";
 
-  constructor(private usersService: UsersService, private crenauservice: CrenauService, private auth: Auth, public datePipe : DatePipe, private toast: HotToastService, public dialog: MatDialog) {
+  constructor(private usersService: UsersService, private crenauservice: CrenauService, private auth: Auth, public datePipe : DatePipe, private toast: HotToastService, public dialog: MatDialog, private twilioservice: TwilioService) {
     this.defaultDatePicker = this.datePicker;
   }
   ngOnInit(): void {
-
     // tous les crenaux
     // this.crenauservice.getCrenaux().subscribe((res: Crenau[]) => {
     //   this.crenaux = res;
@@ -91,5 +93,29 @@ export class RegisterLivreurComponent implements OnInit {
       });
     }
 
-}
+    send_sms_to(crenau: Crenau, user: ProfileUser) {
+      let crenauDate = new Date(crenau.date.seconds * 1000);
+      // 1h avant
+      let crenauDateRappel = new Date(crenauDate.getTime() - 60 * 60000);
+      
+      
+      let phoneFormat = user.phone.replace(/ /g, ""); // supprimer tous les espaces      
+      if(phoneFormat.indexOf("+330") == 0){ // enlever +330 ou +33 phone expediteur
+        phoneFormat = phoneFormat.substring(4);
+      }else if(phoneFormat.indexOf("+33") == 0){
+        phoneFormat = phoneFormat.substring(3);
+      }
+      phoneFormat = this.ccE + phoneFormat; // rajouter +33
 
+      let req = {
+        crenauDate: crenauDateRappel,
+        crenauHeureDebut: crenau.heureDebut,
+        crenauHeureFin: crenau.heureFin,
+        phone: phoneFormat,
+        nom: user.firstName
+      };
+
+      this.twilioservice.send_sms(req);
+    }
+
+}

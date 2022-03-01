@@ -109,14 +109,6 @@ table{
                     color: #4FC3A1;
                     font-size: 17px;
                 }
-                &.more{
-                    cursor: pointer;
-                    opacity: .7;
-                    transition: .4s;
-                    &:hover{
-                        opacity: 1;
-                    }
-                }
             }
         }
     }

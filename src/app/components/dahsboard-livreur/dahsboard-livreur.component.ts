@@ -16,17 +16,17 @@ export class DahsboardLivreurComponent implements OnInit {
 
   userUid = this.auth.currentUser.uid;
   crenaux: Crenau[] = [];
-  datePicker = new Date;
   defaultDatePicker: Date;
   heures: number[] = [12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23];
   jours: number[]= [1, 2, 3, 4, 5, 6, 0];
   constructor(private crenauservice: CrenauService, private auth: Auth, private toast: HotToastService, public datePipe : DatePipe, public dialog: MatDialog) {
-    this.defaultDatePicker = this.datePicker;
+    this.defaultDatePicker = new Date;
   }
 
   ngOnInit(): void {
     // crenaux par semaine
     this.afficherCrenauParSemaine();
+    this.defaultDatePicker = new Date;
   }
 
   // retourner le lundi de chaque semaine séléctionnée(datepicker)
@@ -56,7 +56,6 @@ export class DahsboardLivreurComponent implements OnInit {
   }
 
   returnPlanning(jour: number, heure: number){
-    // console.log(this.datePicker);
     let res= 'pas pris';
     for(let i = 0; i < this.crenaux.length; i++){
       if(jour == this.getDay(this.crenaux[i].date) && this.heures[heure] == this.crenaux[i].heureDebut ){

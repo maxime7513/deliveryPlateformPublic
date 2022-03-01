@@ -1,5 +1,6 @@
 <ng-container *ngIf="user$ | async as user">
-  <h1>Vous pouvez réserver vos créneaux {{user.firstName}} !</h1>
+  <!--<h1>Vous pouvez réserver vos créneaux {{user.firstName}} !</h1>-->
+  <h1>Réserver vos créneaux</h1>
 
   <div class="date-picker">
     <mat-form-field>
@@ -25,7 +26,7 @@
         <td *ngIf="datePicker < crenau.date.toDate()">{{ crenau.heureDebut }}h à {{ crenau.heureFin }}h</td>
         <td *ngIf="datePicker < crenau.date.toDate()">{{ getPlaceRestante(crenau.inscritMax, crenau.inscrit) }}</td>
         <td *ngIf="datePicker < crenau.date.toDate()">
-          <button *ngIf="(crenau.inscrit < crenau.inscritMax) && !verifierUserInscrit(crenau, user.uid)" (click)="inscriptionLivreur(crenau, user.uid)">
+          <button *ngIf="(crenau.inscrit < crenau.inscritMax) && !verifierUserInscrit(crenau, user.uid)" (click)="inscriptionLivreur(crenau, user.uid); send_sms_to(crenau,user)">
             <mat-icon>more_time</mat-icon>
             Réserver
           </button>
