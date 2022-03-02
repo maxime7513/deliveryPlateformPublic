@@ -78,6 +78,14 @@ table{
     }
 }
 
+mat-paginator{
+    display: flex;
+    justify-content: center;
+    background: transparent;
+    color: var(--primary);
+    font-size: 14px;
+}
+
 @keyframes swipeRight{
     0% {transform: translateX(0);}
     15% {transform: translateX(-30px);}
@@ -122,6 +130,16 @@ table{
             right: 0;
             animation: 2s swipeRight;
             animation-iteration-count: 5;
+        }
+    }
+
+    ::ng-deep mat-paginator{
+        margin-top: 5px;
+        .mat-paginator-container{
+            justify-content: center !important;
+            .mat-paginator-page-size{
+                display: none;
+            }
         }
     }
 

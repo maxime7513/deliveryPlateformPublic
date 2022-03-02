@@ -36,6 +36,7 @@ import { DahsboardLivreurComponent } from './components/dahsboard-livreur/dahsbo
 import { ListeLivreurComponent } from './components/liste-livreur/liste-livreur.component';
 import { ModalDeleteCrenauComponent } from './components/modal-delete-crenau/modal-delete-crenau.component';
 import { HttpClientModule } from '@angular/common/http';
+import { MatPaginatorModule } from '@angular/material/paginator'; 
 
 // firebase
 import { provideFirebaseApp, initializeApp } from '@angular/fire/app';
@@ -74,6 +75,7 @@ registerLocaleData(localeFr, 'fr');
     MatDatepickerModule,
     MatNativeDateModule,
     MatSelectModule,
+    MatPaginatorModule,
     ReactiveFormsModule,
     MatMenuModule,
     MatDialogModule,
