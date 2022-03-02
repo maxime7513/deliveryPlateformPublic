@@ -60,7 +60,7 @@
   </form>
 
   <div>
-    <mat-form-field class="date">
+    <mat-form-field>
       <mat-label>Choisi une date</mat-label>
       <input readonly matInput [matDatepicker]="picker2" (dateChange)="afficherCrenauParDate(); showCrenaux = true" [(ngModel)]="defaultDatePicker">
       <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
