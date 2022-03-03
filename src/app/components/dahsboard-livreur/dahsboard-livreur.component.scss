@@ -61,6 +61,9 @@ table{
             &:last-of-type{
                 border-top-right-radius: 13px;
             }
+            mat-icon{
+                vertical-align: middle;
+            }
         }
     }
     tbody{

@@ -4,13 +4,6 @@
     min-height: 100%;
     padding: 115px 20px 40px 20px;
     position: relative;
-}
-
-.blur{
-    background: rgba(255, 255, 255, 0.9);
-}
-
-.create{
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
@@ -18,12 +11,15 @@
     > div{
         display: flex;
         flex-direction: column;
-        align-items: center;
     }
 }
 
+.blur{
+    background: rgba(255, 255, 255, 0.9);
+}
+
 form{
-    margin: 0 10px;
+    margin: 0 20px;
     width: max-content;
     height: max-content;
     display: flex;
@@ -49,7 +45,6 @@ form{
     }
 }
 
-
 h3{
     font-size: 1.5rem;
     margin: 0 0 20px 0;
@@ -68,45 +63,6 @@ h3{
     }
 }
 
-
-.list-crenau{
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    color: var(--primary);
-    mat-form-field{
-        margin: 0;
-    }
-    .crenau{
-        width: 100%;
-        display: flex;
-        flex-direction: row;
-        align-items: center;
-        margin: 0 10px 25px 0;
-        padding: 13px;
-        background: white;
-        border-radius: 13px;
-        // background: rgba(50, 73, 96, 0.85);
-        // color: #fff;
-        font-weight: 500;
-        box-shadow: rgba(0, 0, 0, 0.115) 0px 20px 20px -5px, rgba(0, 0, 0, 0.05) 0px 10px 10px -5px;
-        p{
-            margin: 0 20px;
-            text-align: center;
-        }
-        button{
-            background: var(--primary);
-            color: #fff;
-            min-width: 42px;
-            padding: 5px 10px;
-            mat-icon{
-                margin: 0;
-            }
-        }
-    }
-}
-
-
 .nocrenau{
     text-align: center;
     margin-top: 20px;
@@ -114,6 +70,52 @@ h3{
     color: var(--primary);
 }
 
+table{
+    background: rgba(255,255,255,.8);
+    margin: 20px auto;
+    border-radius: 13px;
+    box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
+    border-collapse: collapse;
+    thead{
+        th{
+            background: var(--primary);
+            color: #fff;
+            padding: 10px 30px;
+            &:not(:last-of-type){
+                border-right: 1px solid #fff;
+            }
+            &:first-of-type{
+                border-top-left-radius: 13px
+            }
+            &:last-of-type{
+                border-top-right-radius: 13px
+            }
+            mat-icon{
+                vertical-align: middle;
+            }
+        }
+    }
+    tbody{
+        tr{
+            &:not(:last-of-type){
+                border-bottom: 1px solid #ccc;
+            }
+        }
+        td{
+            padding: 10px 20px;
+            text-align: center;
+            button{
+                background: var(--primary);
+                color: #fff;
+                min-width: 42px;
+                padding: 5px 10px;
+                mat-icon{
+                    margin: 0;
+                }
+            }
+        }
+    }
+}
 /* Responsive */
 
 @media (max-width: 802px) {
@@ -134,7 +136,7 @@ h3{
             -o-background-size: cover;
             background-size: cover;
         }
-        .create > div{
+        > div{
             margin-top: 30px;
         }
     }

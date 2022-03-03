@@ -16,18 +16,18 @@ import { HotToastService } from '@ngneat/hot-toast';
 export class PlanningComponent implements OnInit {
 
   crenaux: Crenau[] = [];
-  datePicker = new Date;
   defaultDatePicker: Date;
   heures: number[] = [12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23];
   jours: number[]= [1, 2, 3, 4, 5, 6, 0];
 
   constructor(private crenauservice: CrenauService, private userservice: UsersService, public datePipe : DatePipe, public dialog: MatDialog, private toast: HotToastService) {
-    this.defaultDatePicker = this.datePicker;
+    this.defaultDatePicker = new Date;
   }
 
   ngOnInit(): void {
     // crenaux par semaine
     this.afficherCrenauParSemaine();
+    this.defaultDatePicker = new Date;
   }
 
   // retourner le lundi de chaque semaine séléctionnée(datepicker)

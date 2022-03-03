@@ -1,96 +1,89 @@
-<div class="create">
-  <form [formGroup]="crenauForm" (ngSubmit)="onSubmit()">
-    <h3>Ajouter un créneau</h3>
-    <mat-form-field>
-      <mat-label>Choisir une date</mat-label>
-      <input matInput [min]="datePicker" [matDatepicker]="picker" formControlName="date">
-      <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
-      <mat-datepicker #picker></mat-datepicker>
-      <mat-error *ngIf="submitCrenauForm && date.hasError('required')">
-        La date est obligatoire
-      </mat-error>
-    </mat-form-field>
-
-    <mat-form-field>
-      <mat-label>Heure du début</mat-label>
-      <mat-select formControlName="heureDebut">
-        <mat-option *ngFor="let heure of heures" [value]="heure.value">
-          {{heure.viewValue}}
-        </mat-option>
-      </mat-select>
-      <mat-error *ngIf="submitCrenauForm && heureDebut.hasError('required')">
-        L'heure de début est obligatoire
-      </mat-error>
-    </mat-form-field>
-
-    <mat-form-field>
-      <mat-label>Heure de fin</mat-label>
-      <mat-select formControlName="heureFin">
-        <mat-option *ngFor="let heure of heures" [value]="heure.value">
-          {{heure.viewValue}}
-        </mat-option>
-      </mat-select>
-      <mat-error *ngIf="submitCrenauForm && heureFin.hasError('required')">
-        L'heure de fin est obligatoire
-      </mat-error>
-    </mat-form-field>
-
-    <mat-form-field class="hidden">
-      <mat-label>Inscrit</mat-label>
-      <input type="number" matInput formControlName="inscrit" placeholder="Inscrit"/>
-    </mat-form-field>
-
-
-    <mat-form-field>
-      <mat-label>Inscrit max</mat-label>
-      <mat-select formControlName="inscritMax">
-        <mat-option *ngFor="let inscritmax of inscritsMax" [value]="inscritmax.value">
-          {{inscritmax.viewValue}}
-        </mat-option>
-      </mat-select>
-      <mat-error *ngIf="submitCrenauForm && inscritMax.hasError('required')">
-        Inscrit max obligatoire
-      </mat-error>
-    </mat-form-field>
-
-    <button type="submit" mat-raised-button>
-      <mat-icon>more_time</mat-icon>
-      Ajouter
-    </button>
-  </form>
-
-  <div>
-    <mat-form-field>
-      <mat-label>Choisi une date</mat-label>
-      <input readonly matInput [matDatepicker]="picker2" (dateChange)="afficherCrenauParDate(); showCrenaux = true" [(ngModel)]="defaultDatePicker">
-      <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
-      <mat-datepicker #picker2></mat-datepicker>
-    </mat-form-field>
-    
-    <h3 (click)="showCrenaux = !showCrenaux">
-      Liste des crénaux
-      <mat-icon [class.active]="showCrenaux">expand_more</mat-icon>
-    </h3>
-
-    <div *ngIf="showCrenaux" class="list-crenau">
-      <p *ngIf="crenaux.length == 0" class="nocrenau">Pas encore de créneau crée ...</p>
-
-      <div *ngFor="let crenau of crenaux" class="crenau">
-        <p>{{ crenau.heureDebut }}h à {{ crenau.heureFin }}h</p>
-        <div>
-          <p>inscrit</p>
-          <p>{{ crenau.inscrit }}</p>
-        </div>
-        <div>
-          <p>inscrit max</p>
-          <p>{{ crenau.inscritMax }}</p>
-        </div>
-        <button (click)="openDialogModal(crenau)" mat-raised-button matTooltip="supprimer">
-          <mat-icon>event_busy</mat-icon>
-        </button>
-      </div>
-    </div>
-  </div>
+<form [formGroup]="crenauForm" (ngSubmit)="onSubmit()">
+  <h3>Ajouter un créneau</h3>
+  <mat-form-field>
+    <mat-label>Choisir une date</mat-label>
+    <input matInput [min]="datePicker" [matDatepicker]="picker" formControlName="date">
+    <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+    <mat-datepicker #picker></mat-datepicker>
+    <mat-error *ngIf="submitCrenauForm && date.hasError('required')">
+      La date est obligatoire
+    </mat-error>
+  </mat-form-field>
+  <mat-form-field>
+    <mat-label>Heure du début</mat-label>
+    <mat-select formControlName="heureDebut">
+      <mat-option *ngFor="let heure of heures" [value]="heure.value">
+        {{heure.viewValue}}
+      </mat-option>
+    </mat-select>
+    <mat-error *ngIf="submitCrenauForm && heureDebut.hasError('required')">
+      L'heure de début est obligatoire
+    </mat-error>
+  </mat-form-field>
+  <mat-form-field>
+    <mat-label>Heure de fin</mat-label>
+    <mat-select formControlName="heureFin">
+      <mat-option *ngFor="let heure of heures" [value]="heure.value">
+        {{heure.viewValue}}
+      </mat-option>
+    </mat-select>
+    <mat-error *ngIf="submitCrenauForm && heureFin.hasError('required')">
+      L'heure de fin est obligatoire
+    </mat-error>
+  </mat-form-field>
+  <mat-form-field class="hidden">
+    <mat-label>Inscrit</mat-label>
+    <input type="number" matInput formControlName="inscrit" placeholder="Inscrit"/>
+  </mat-form-field>
+  <mat-form-field>
+    <mat-label>Inscrit max</mat-label>
+    <mat-select formControlName="inscritMax">
+      <mat-option *ngFor="let inscritmax of inscritsMax" [value]="inscritmax.value">
+        {{inscritmax.viewValue}}
+      </mat-option>
+    </mat-select>
+    <mat-error *ngIf="submitCrenauForm && inscritMax.hasError('required')">
+      Inscrit max obligatoire
+    </mat-error>
+  </mat-form-field>
+  <button type="submit" mat-raised-button>
+    <mat-icon>more_time</mat-icon>
+    Ajouter
+  </button>
+</form>
+<div>
+  <mat-form-field>
+    <mat-label>Choisi une date</mat-label>
+    <input readonly matInput [matDatepicker]="picker2" (dateChange)="afficherCrenauParDate(); showCrenaux = true" [(ngModel)]="defaultDatePicker">
+    <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
+    <mat-datepicker #picker2></mat-datepicker>
+  </mat-form-field>
+  
+  <h3 (click)="showCrenaux = !showCrenaux">
+    Liste des crénaux
+    <mat-icon [class.active]="showCrenaux">expand_more</mat-icon>
+  </h3>
+  <div *ngIf="showCrenaux">
+    <p *ngIf="crenaux.length == 0" class="nocrenau">Pas encore de créneau crée ...</p>
+    <table *ngIf="crenaux.length != 0">
+      <thead>
+        <th><mat-icon>schedule</mat-icon></th>
+        <th><mat-icon>person</mat-icon></th>
+        <th><mat-icon>delete</mat-icon></th>
+      </thead>
+      <tbody>
+        <tr *ngFor="let crenau of crenaux">
+          <td>{{ crenau.heureDebut}}-{{ crenau.heureFin }}h</td>
+          <td>{{ crenau.inscritMax }}</td>
+          <td>
+            <button (click)="openDialogModal(crenau)" mat-raised-button matTooltip="supprimer">
+              <mat-icon>event_busy</mat-icon>
+            </button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>  
 </div>
 
 <div class="blur"></div>

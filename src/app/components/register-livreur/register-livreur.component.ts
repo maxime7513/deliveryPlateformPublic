@@ -116,7 +116,6 @@ export class RegisterLivreurComponent implements OnInit {
       };
 
       // this.twilioservice.send_sms(req);
-      console.log('demander')
     }
 
 }
