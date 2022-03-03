@@ -1,25 +1,13 @@
-.background{
-    position: relative;
-    background: url(/assets/images/woozoo-background.jpg);
-    background-size: cover;
-    -webkit-background-size: cover;
-    -moz-background-size: cover;
-    -o-background-size: cover;
-    background-position: top;
-    background-attachment: fixed;
+:host{
+    display: block;
     width: 100%;
     min-height: 100%;
     padding: 64px 30px 40px 30px;
+    position: relative;
 }
 
 .blur{
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    left: 0;
-    top: 0;
-    background: rgba(0,0,0,.1);
-    z-index: 0;
+    background: rgba(255, 255, 255, 0.5);
 }
 
 .profil-container{
@@ -83,11 +71,10 @@
     }
 }
 
-
 /* Responsive */
 
 @media (max-width: 500px) {
-    .background{
+    :host{
         background: none;
         &:before {
             content: "";

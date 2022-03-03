@@ -1,15 +1,13 @@
-.background{
-    background: url(/assets/images/woozoo-background_light.jpg);
-    background-size: cover;
-    -webkit-background-size: cover;
-    -moz-background-size: cover;
-    -o-background-size: cover;
-    background-position: top;
-    background-repeat: no-repeat;
-    background-attachment: fixed;
+:host{
+    display: block;
     width: 100%;
     min-height: 100%;
     padding: 64px 20px 40px 20px;
+    position: relative;
+}
+
+.blur{
+    background: rgba(255, 255, 255, 0.9);
 }
 
 h1{
@@ -96,7 +94,7 @@ mat-paginator{
 /* Responsive */
 
 @media (max-width: 815px) {
-    .background{
+    :host{
         padding: 64px 10px 40px 10px;
         background: none;
         &:before {
@@ -107,7 +105,7 @@ mat-paginator{
             width: 100%;
             height: 100%;
             z-index: -10;
-            background: url(/assets/images/woozoo-background_light.jpg) no-repeat;
+            background: url(/assets/images/woozoo-background.jpg) no-repeat;
             -webkit-background-size: cover;
             -moz-background-size: cover;
             -o-background-size: cover;

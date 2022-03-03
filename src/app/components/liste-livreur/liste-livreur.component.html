@@ -1,61 +1,59 @@
-<div class="background">
-  <h1>Livreurs</h1>
-  <table>
-    <thead>
-     <tr>
-          <th scope="col"><mat-icon>image</mat-icon></th>
-          <th scope="col">Nom</th>
-          <th scope="col">Prenom</th>
-          <th scope="col"><mat-icon>email</mat-icon></th>
-          <th scope="col"><mat-icon>phone</mat-icon></th>
-     </tr>
-    </thead>
-    <tbody>
-      <tr *ngFor="let livreur of livreurs | slice: lowValueSliceLivreur : highValueSliceLivreur">
-          <td><img [src]="livreur.photoURL ?? '/assets/images/avatar.svg'"/></td>
-          <td>{{ livreur.firstName }}</td>
-          <td>{{ livreur.lastName }}</td>
-          <td>{{ livreur.email }}</td>
-          <!--<td>{{ formatPhone(livreur.phone) }}</td>-->
-          <td>{{livreur.phone}}</td>
-      </tr>
-    </tbody>
+<h1>Livreurs</h1>
+<table>
+  <thead>
+   <tr>
+        <th scope="col"><mat-icon>image</mat-icon></th>
+        <th scope="col">Nom</th>
+        <th scope="col">Prenom</th>
+        <th scope="col"><mat-icon>email</mat-icon></th>
+        <th scope="col"><mat-icon>phone</mat-icon></th>
+   </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let livreur of livreurs | slice: lowValueSliceLivreur : highValueSliceLivreur">
+        <td><img [src]="livreur.photoURL ?? '/assets/images/avatar.svg'"/></td>
+        <td>{{ livreur.firstName }}</td>
+        <td>{{ livreur.lastName }}</td>
+        <td>{{ livreur.email }}</td>
+        <!--<td>{{ formatPhone(livreur.phone) }}</td>-->
+        <td>{{livreur.phone}}</td>
+    </tr>
+  </tbody>
+</table>
+<mat-paginator [length]="livreurs.length" pageSize=5
+               (page)="getPaginatorData($event, 'livreur')" [pageSizeOptions]="[5, 10, 30]"
+               showFirstLastButtons="false">
+</mat-paginator>
 
+<h1>Administrateur</h1>
+<table>
+  <thead>
+   <tr>
+        <th scope="col"><mat-icon>image</mat-icon></th>
+        <th scope="col">Nom</th>
+        <th scope="col">Prenom</th>
+        <th scope="col"><mat-icon>email</mat-icon></th>
+        <th scope="col"><mat-icon>phone</mat-icon></th>
+   </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let user of adminUsers | slice: lowValueSliceAdmin : highValueSliceAdmin">
+        <td *ngIf="user.role == 'woozoo'">
+          <img src="/assets/images/icone_woozoo.png" alt="woozoo">
+        </td>
+        <td *ngIf="user.role == 'rocket'">
+          <img src="/assets/images/icone_rocket.png" alt="rocket">
+        </td>
+        <td>{{ user.firstName }}</td>
+        <td>{{ user.lastName }}</td>
+        <td>{{ user.email }}</td>
+        <td>{{ formatPhone(user.phone) }}</td>
+    </tr>
+   </tbody>
+</table>
+<mat-paginator [length]="adminUsers.length" pageSize=5
+               (page)="getPaginatorData($event, 'admin')" [pageSizeOptions]="[5, 10, 30]"
+               showFirstLastButtons="false">
+</mat-paginator>
 
-  </table>
-  <mat-paginator [length]="livreurs.length" pageSize=5
-                 (page)="getPaginatorData($event, 'livreur')" [pageSizeOptions]="[5, 10, 30]"
-                 showFirstLastButtons="false">
-  </mat-paginator>
-  
-  <h1>Administrateur</h1>
-  <table>
-    <thead>
-     <tr>
-          <th scope="col"><mat-icon>image</mat-icon></th>
-          <th scope="col">Nom</th>
-          <th scope="col">Prenom</th>
-          <th scope="col"><mat-icon>email</mat-icon></th>
-          <th scope="col"><mat-icon>phone</mat-icon></th>
-     </tr>
-    </thead>
-    <tbody>
-      <tr *ngFor="let user of adminUsers | slice: lowValueSliceAdmin : highValueSliceAdmin">
-          <td *ngIf="user.role == 'woozoo'">
-            <img src="/assets/images/icone_woozoo.png" alt="woozoo">
-          </td>
-          <td *ngIf="user.role == 'rocket'">
-            <img src="/assets/images/icone_rocket.png" alt="rocket">
-          </td>
-          <td>{{ user.firstName }}</td>
-          <td>{{ user.lastName }}</td>
-          <td>{{ user.email }}</td>
-          <td>{{ formatPhone(user.phone) }}</td>
-      </tr>
-     </tbody>
-  </table>
-  <mat-paginator [length]="adminUsers.length" pageSize=5
-                 (page)="getPaginatorData($event, 'admin')" [pageSizeOptions]="[5, 10, 30]"
-                 showFirstLastButtons="false">
-  </mat-paginator>
-</div>
+<div class="blur"></div>

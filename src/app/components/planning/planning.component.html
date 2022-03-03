@@ -1,41 +1,39 @@
-<div class="background">
-  <h1>Planning</h1>
-
-  <div class="date">
-    <mat-form-field>
-      <mat-label>Choisir une date</mat-label>
-      <input readonly matInput [matDatepicker]="picker" (dateChange)="afficherCrenauParSemaine()" [(ngModel)]="defaultDatePicker">
-      <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
-      <mat-datepicker #picker></mat-datepicker>
-    </mat-form-field>
-  </div>
-
-  <div class="table-wrapper">
-      <table class="fl-table">
-          <thead>
-            <tr>
-              <th><mat-icon>schedule</mat-icon></th>
-              <th>Lundi</th>
-              <th>Mardi</th>
-              <th>Mercredi</th>
-              <th>Jeudi</th>
-              <th>Vendredi</th>
-              <th>Samedi</th>
-              <th>Dimanche</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr *ngFor="let heure of heures; index as i">
-              <td>{{heure}}/{{heure + 1}}h</td>
-              <td *ngFor="let jour of jours" [class.active]="returnPlanningInscritMax(jour,i) - returnPlanningInscrit(jour,i) == 0">
-                <span *ngIf="returnPlanning(jour,i)">
-                  {{returnPlanningInscrit(jour,i)}}/{{returnPlanningInscritMax(jour,i)}}
-                  <mat-icon *ngIf="returnPlanningInscritMax(jour,i) - returnPlanningInscrit(jour,i) == 0">how_to_reg</mat-icon>
-                </span>
-                <mat-icon *ngIf="0 < returnPlanningInscrit(jour,i)" matTooltip="voir livreurs" (click)="openDialogModal(returnCrenau(jour,i))" class="voir_livreur">person_search</mat-icon>
-              </td>
-            </tr>
-          <tbody>
-      </table>
-  </div>
+<h1>Planning</h1>
+<div class="date">
+  <mat-form-field>
+    <mat-label>Choisir une date</mat-label>
+    <input readonly matInput [matDatepicker]="picker" (dateChange)="afficherCrenauParSemaine()" [(ngModel)]="defaultDatePicker">
+    <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+    <mat-datepicker #picker></mat-datepicker>
+  </mat-form-field>
 </div>
+<div class="table-wrapper">
+    <table class="fl-table">
+        <thead>
+          <tr>
+            <th><mat-icon>schedule</mat-icon></th>
+            <th>Lundi</th>
+            <th>Mardi</th>
+            <th>Mercredi</th>
+            <th>Jeudi</th>
+            <th>Vendredi</th>
+            <th>Samedi</th>
+            <th>Dimanche</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let heure of heures; index as i">
+            <td>{{heure}}/{{heure + 1}}h</td>
+            <td *ngFor="let jour of jours" [class.active]="returnPlanningInscritMax(jour,i) - returnPlanningInscrit(jour,i) == 0">
+              <span *ngIf="returnPlanning(jour,i)">
+                {{returnPlanningInscrit(jour,i)}}/{{returnPlanningInscritMax(jour,i)}}
+                <mat-icon *ngIf="returnPlanningInscritMax(jour,i) - returnPlanningInscrit(jour,i) == 0">how_to_reg</mat-icon>
+              </span>
+              <mat-icon *ngIf="0 < returnPlanningInscrit(jour,i)" matTooltip="voir livreurs" (click)="openDialogModal(returnCrenau(jour,i))" class="voir_livreur">person_search</mat-icon>
+            </td>
+          </tr>
+        <tbody>
+    </table>
+</div>
+
+<div class="blur"></div>
