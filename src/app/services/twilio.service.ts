@@ -16,4 +16,10 @@ export class TwilioService {
     });
   }
 
+  send_smsGroupe(req: any) {
+    return this.http.post("http://localhost:3000/notificationCrenau", req , this.header).subscribe((resp: any) => {
+      console.log(resp);
+    });
+  }
+
 }

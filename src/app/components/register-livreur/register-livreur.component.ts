@@ -115,7 +115,8 @@ export class RegisterLivreurComponent implements OnInit {
         nom: user.firstName
       };
 
-      this.twilioservice.send_sms(req);
+      // this.twilioservice.send_sms(req);
+      console.log('demander')
     }
 
 }

@@ -4,8 +4,13 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { Router } from '@angular/router';
 import { HotToastService } from '@ngneat/hot-toast';
+import { table } from 'console';
+import { UserProfile } from 'firebase/auth';
 import { Crenau } from 'src/app/models/crenau.model';
+import { ProfileUser } from 'src/app/models/user.profil';
 import { CrenauService } from 'src/app/services/crenau.service';
+import { TwilioService } from 'src/app/services/twilio.service';
+import { UsersService } from 'src/app/services/users.service';
 import { ModalDeleteCrenauComponent } from '../modal-delete-crenau/modal-delete-crenau.component';
 
 interface Heure {
@@ -28,6 +33,7 @@ export class CreateCrenauComponent implements OnInit {
   submitCrenauForm : boolean;
   datePicker = new Date;
   defaultDatePicker: Date;
+  crenaux: Crenau[] = [];
   showCrenaux: boolean;
   heures: Heure[] = [
     {value: 12, viewValue: '12h'},
@@ -54,13 +60,13 @@ export class CreateCrenauComponent implements OnInit {
     {value: 7, viewValue: '7 livreur'},
     {value: 8, viewValue: '8 livreur'},
   ];
+  ccE: string = "+33";
 
-  constructor(private crenauservice: CrenauService, private toast: HotToastService, private router: Router, public datePipe : DatePipe,  public dialog: MatDialog) {
+  constructor(private crenauservice: CrenauService, private toast: HotToastService, private router: Router, public datePipe : DatePipe,  public dialog: MatDialog, private twilioservice: TwilioService, private usersservice: UsersService) {
     this.defaultDatePicker = this.datePicker;
     this.showCrenaux = false;
   }
 
-  crenaux: Crenau[] = [];
 
   ngOnInit(): void {
     // init formulaire
@@ -148,6 +154,10 @@ export class CreateCrenauComponent implements OnInit {
         duration: 2500
       }
     );
+
+    // envoyer sms à tous les livreurs pour informer creneau ajouter
+    this.send_smsGrouper(this.crenauForm.value.dateString);
+    // this.twilioservice.send_smsGroupe(req);
     // toastValid.afterClosed.subscribe((e) => {
     //   this.router.navigate(['/planning']);
     // });
@@ -164,6 +174,34 @@ export class CreateCrenauComponent implements OnInit {
         );
       }    
     });
+  }
+
+  // return array telephones des livreurs (Promise for use await dans la fonction send_smsGrouper())
+  get livreursPhone$(){
+    let tab: any = [];
+    return new Promise(resolve => {
+      this.usersservice.getUsersByRole('livreur').subscribe((res) => {
+        res.map(user => {
+          tab.push(this.ccE + user.phone)
+        })
+        resolve(tab);
+      })
+    });
+  }
+
+  // envoyer sms à tous les livreurs
+  async send_smsGrouper(dateCrenau: string) {
+    let userRole = await this.usersservice.canAccess$;
+    let tabPhones = await this.livreursPhone$;
+
+    let req = {
+      role: userRole,
+      date: dateCrenau,
+      phoneTab: tabPhones
+    }
+
+    // requete twilio
+    this.twilioservice.send_smsGroupe(req);
   }
 
 }
