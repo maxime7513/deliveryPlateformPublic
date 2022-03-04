@@ -53,6 +53,10 @@ body{
   -o-background-size: cover;
   background-position: top;
   background-attachment: fixed;
+  @media (max-width: 1230px) {
+    background-position: 20%;
+  }
+
 }
 
 .blur{
