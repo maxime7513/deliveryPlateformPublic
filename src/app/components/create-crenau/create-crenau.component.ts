@@ -156,7 +156,7 @@ export class CreateCrenauComponent implements OnInit {
     );
 
     // envoyer sms à tous les livreurs pour informer creneau ajouter
-    this.send_smsGrouper(this.crenauForm.value.dateString);
+    // this.send_smsGrouper(this.crenauForm.value.dateString);
     // this.twilioservice.send_smsGroupe(req);
     // toastValid.afterClosed.subscribe((e) => {
     //   this.router.navigate(['/planning']);

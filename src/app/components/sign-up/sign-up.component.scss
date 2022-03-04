@@ -7,7 +7,7 @@
 }
 
 .blur{
-    background: rgba(0,0,0,.15);
+    background: rgba(0,0,0,.5);
 }
 
 form{
@@ -18,7 +18,7 @@ form{
     width: max-content;
     margin: 50px auto auto;
     padding: 20px 40px;
-    background: rgba(255,255,255,.95);
+    background: rgba(255,255,255,.9);
     box-shadow: rgba(0, 0, 0, 0.115) 0px 20px 25px -3px, rgba(0, 0, 0, 0.04) 0px 10px 10px -5px;
     border-radius: 13px;
     z-index: 1;
@@ -74,11 +74,17 @@ form{
     form{
         width: 100%;
         padding: 20px 50px;
+        position: relative;
+        z-index: 1;
         > div{
             flex-direction: column;
             mat-form-field{
                 width: 100%;
             }
         }
+    }
+
+    .blur{
+        z-index: 0;
     }
 }

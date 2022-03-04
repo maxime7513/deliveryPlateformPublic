@@ -1,6 +1,7 @@
-<ng-container *ngIf="user$ | async as user" class="re">
+<ng-container *ngIf="user$ | async as user">
   <!--<h1>Vous pouvez réserver vos créneaux {{user.firstName}} !</h1>-->
   <h1>Réserver vos créneaux</h1>
+  <button (click)="send_sms_to2()">click</button>
   <div class="date-picker">
     <mat-form-field>
       <mat-label>Choisi une date</mat-label>
@@ -9,28 +10,27 @@
       <mat-datepicker #picker></mat-datepicker>
     </mat-form-field>
   </div>
-  <p *ngIf="crenaux.length == 0" class="nocrenau">Pas encore de crénaux disponible pour cette date ...</p>
+
+  <p *ngIf="crenaux.length == 0" class="nocrenau">Pas encore de crénau disponible pour le {{defaultDatePicker  | date: 'd MMMM y'}}</p>
+  
   <table *ngIf="crenaux.length != 0">
     <thead>
      <tr>
-       <th scope="col"><mat-icon>schedule</mat-icon></th>
-       <th scope="col">Place restante</th>
-       <th></th>
+       <th matTooltip="horaires"><mat-icon>schedule</mat-icon></th>
+       <th matTooltip="nombre de place encore disponible"><mat-icon>group_add</mat-icon></th>
+       <th matTooltip="réserver/annuler"><mat-icon>more_time</mat-icon><span>/</span><mat-icon>event_busy</mat-icon></th>
      </tr>
     </thead>
     <tbody>
       <tr *ngFor="let crenau of crenaux">
-        <td *ngIf="datePicker < crenau.date.toDate()">{{ crenau.heureDebut }}h à {{ crenau.heureFin }}h</td>
-        <td *ngIf="datePicker < crenau.date.toDate()">{{ getPlaceRestante(crenau.inscritMax, crenau.inscrit) }}</td>
+        <!--<td *ngIf="datePicker < crenau.date.toDate()">{{ crenau.heureDebut }}h à {{ crenau.heureFin }}h</td>-->
+        <td *ngIf="datePicker < crenau.date.toDate()">{{ crenau.heureDebut }}<mat-icon class="hour-arrow">arrow_right_alt</mat-icon>{{ crenau.heureFin }}h</td>
+        <td *ngIf="datePicker < crenau.date.toDate()" matTooltip="place encore disponible">{{ getPlaceRestante(crenau.inscritMax, crenau.inscrit) }}</td>
         <td *ngIf="datePicker < crenau.date.toDate()">
           <button *ngIf="(crenau.inscrit < crenau.inscritMax) && !verifierUserInscrit(crenau, user.uid)" (click)="inscriptionLivreur(crenau, user.uid); send_sms_to(crenau,user)">
             <mat-icon>more_time</mat-icon>
             Réserver
           </button>
-          <!--<button *ngIf="verifierUserInscrit(crenau, user.uid)" (click)="desinscriptionLivreur(crenau, user.uid)" class="annule">
-            <mat-icon>event_busy</mat-icon>
-            Annuler
-          </button>-->
           <button *ngIf="verifierUserInscrit(crenau, user.uid)" (click)="openDialogModal(crenau)" class="annule">
             <mat-icon>event_busy</mat-icon>
             Annuler

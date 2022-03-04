@@ -29,7 +29,7 @@
                 {{returnPlanningInscrit(jour,i)}}/{{returnPlanningInscritMax(jour,i)}}
                 <mat-icon *ngIf="returnPlanningInscritMax(jour,i) - returnPlanningInscrit(jour,i) == 0">how_to_reg</mat-icon>
               </span>
-              <mat-icon *ngIf="0 < returnPlanningInscrit(jour,i)" matTooltip="voir livreurs" (click)="openDialogModal(returnCrenau(jour,i))" class="voir_livreur">person_search</mat-icon>
+              <mat-icon *ngIf="0 < returnPlanningInscrit(jour,i)" matTooltip="voir livreurs sur ce créneau" (click)="openDialogModal(returnCrenau(jour,i))" class="voir_livreur">person_search</mat-icon>
             </td>
           </tr>
         <tbody>

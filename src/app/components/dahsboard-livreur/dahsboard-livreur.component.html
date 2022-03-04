@@ -29,10 +29,10 @@
                 <mat-icon>free_cancellation</mat-icon>
               </button>
               <span *ngIf="returnPlanning(jour,i).length < 4 ">Dans <strong>{{ returnPlanning(jour,i) }}</strong> min</span>         
-              <button *ngIf="returnPlanning(jour,i) == 'en cours'" class="encours">
+              <button *ngIf="returnPlanning(jour,i) == 'en cours'" matTooltip="en cours" class="encours">
                 <mat-icon>hourglass_bottom</mat-icon>
               </button>
-              <button *ngIf="returnPlanning(jour,i) == 'effectue'">
+              <button *ngIf="returnPlanning(jour,i) == 'effectue'" matTooltip="créneau effectué">
                 <mat-icon>assignment_turned_in</mat-icon>
               </button>
               <span *ngIf="returnPlanning(jour,i) == 'pas pris'"> </span>

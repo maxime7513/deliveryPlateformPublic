@@ -168,9 +168,13 @@ table{
             -o-background-size: cover;
             background-size: cover;
         }
+        > *:not(.blur){
+            position: relative;
+            z-index: 1;
+        }
     }
+
     .table-wrapper{
-        z-index: 1;
         margin: auto;
         &:before{
             content: url("/assets/images/swipe.svg");
@@ -261,6 +265,10 @@ table{
                 }
             }
         }
+    }
+
+    .blur{
+        z-index: 0;
     }
    
 }

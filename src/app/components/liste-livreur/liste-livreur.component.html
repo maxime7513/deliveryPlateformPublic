@@ -12,8 +12,8 @@
   <tbody>
     <tr *ngFor="let livreur of livreurs | slice: lowValueSliceLivreur : highValueSliceLivreur">
         <td><img [src]="livreur.photoURL ?? '/assets/images/avatar.svg'"/></td>
-        <td>{{ livreur.firstName }}</td>
         <td>{{ livreur.lastName }}</td>
+        <td>{{ livreur.firstName }}</td>
         <td>{{ livreur.email }}</td>
         <!--<td>{{ formatPhone(livreur.phone) }}</td>-->
         <td>{{livreur.phone}}</td>
@@ -44,8 +44,8 @@
         <td *ngIf="user.role == 'rocket'">
           <img src="/assets/images/icone_rocket.png" alt="rocket">
         </td>
-        <td>{{ user.firstName }}</td>
         <td>{{ user.lastName }}</td>
+        <td>{{ user.firstName }}</td>
         <td>{{ user.email }}</td>
         <td>{{ formatPhone(user.phone) }}</td>
     </tr>

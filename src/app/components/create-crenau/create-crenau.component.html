@@ -10,7 +10,7 @@
     </mat-error>
   </mat-form-field>
   <mat-form-field>
-    <mat-label>Heure du début</mat-label>
+    <mat-label>Heure de début</mat-label>
     <mat-select formControlName="heureDebut">
       <mat-option *ngFor="let heure of heures" [value]="heure.value">
         {{heure.viewValue}}
@@ -36,14 +36,14 @@
     <input type="number" matInput formControlName="inscrit" placeholder="Inscrit"/>
   </mat-form-field>
   <mat-form-field>
-    <mat-label>Inscrit max</mat-label>
+    <mat-label>Livreur max</mat-label>
     <mat-select formControlName="inscritMax">
       <mat-option *ngFor="let inscritmax of inscritsMax" [value]="inscritmax.value">
         {{inscritmax.viewValue}}
       </mat-option>
     </mat-select>
     <mat-error *ngIf="submitCrenauForm && inscritMax.hasError('required')">
-      Inscrit max obligatoire
+      Livreurs maximum obligatoire
     </mat-error>
   </mat-form-field>
   <button type="submit" mat-raised-button>
@@ -64,12 +64,12 @@
     <mat-icon [class.active]="showCrenaux">expand_more</mat-icon>
   </h3>
   <div *ngIf="showCrenaux">
-    <p *ngIf="crenaux.length == 0" class="nocrenau">Pas encore de créneau crée ...</p>
+    <p *ngIf="crenaux.length == 0" class="nocrenau">Aucun créneau pour le {{defaultDatePicker  | date: 'd MMMM y'}}</p>
     <table *ngIf="crenaux.length != 0">
       <thead>
         <th><mat-icon>schedule</mat-icon></th>
-        <th><mat-icon>person</mat-icon></th>
-        <th><mat-icon>delete</mat-icon></th>
+        <th matTooltip="livreurs max"><mat-icon>person</mat-icon></th>
+        <th matTooltip="supprimer créneau"><mat-icon>delete</mat-icon></th>
       </thead>
       <tbody>
         <tr *ngFor="let crenau of crenaux">

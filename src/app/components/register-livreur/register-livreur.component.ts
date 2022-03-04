@@ -93,6 +93,7 @@ export class RegisterLivreurComponent implements OnInit {
       });
     }
 
+    // envoyer sms au livreur quand il reserve
     send_sms_to(crenau: Crenau, user: ProfileUser) {
       let crenauDate = new Date(crenau.date.seconds * 1000);
       // 1h avant
@@ -115,7 +116,21 @@ export class RegisterLivreurComponent implements OnInit {
         nom: user.firstName
       };
 
+
       // this.twilioservice.send_sms(req);
     }
 
+    send_sms_to2() {
+
+      let req = {
+        crenauDate: "12/12/2020",
+        crenauHeureDebut: "12",
+        crenauHeureFin: "12",
+        phone: "+33687262395",
+        nom: "max"
+      };
+
+      
+      this.twilioservice.send_sms(req);
+    }
 }
