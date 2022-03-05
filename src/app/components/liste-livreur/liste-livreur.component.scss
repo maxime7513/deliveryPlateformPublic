@@ -62,15 +62,20 @@ table{
         }
         td{
             padding: 10px 20px;
-            text-align: center;
-            img {
-                display: block;
-                margin: auto;
-                width: 40px;
-                height: 40px;
-                border-radius: 100%;
-                object-fit: cover;
-                object-position: center;
+            &:first-of-type{
+                display: flex;
+                flex-direction: row;
+                align-items: center;
+                flex-wrap: wrap;
+                text-transform: capitalize;
+                img {
+                    width: 40px;
+                    height: 40px;
+                    margin-right: 10px;
+                    border-radius: 100%;
+                    object-fit: cover;
+                    object-position: center;
+                }
             }
         }
     }
@@ -121,6 +126,13 @@ mat-paginator{
         display: block;
         width: 100%;
         overflow-x: auto;
+        td:first-of-type{
+            justify-content: center;
+            text-align: center;
+            img{
+                margin-right: 0 !important;
+            }
+        }
     }
 
     h1:first-of-type{

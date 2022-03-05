@@ -24,7 +24,7 @@
         <tbody>
           <tr *ngFor="let heure of heures; index as i">
             <td>{{heure}}/{{heure + 1}}h</td>
-            <td *ngFor="let jour of jours">
+            <td *ngFor="let jour of jours" [ngClass]="{'effectue': returnPlanning(jour,i) == 'effectue'}">
               <button *ngIf="returnPlanning(jour,i).length == 20 " matTooltip="annuler ce créneau" (click)="openDialogModal(returnPlanning(jour,i))" class="annule">
                 <mat-icon>free_cancellation</mat-icon>
               </button>
