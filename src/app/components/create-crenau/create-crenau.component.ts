@@ -21,6 +21,10 @@ interface inscritMax {
   value: number;
   viewValue: string;
 }
+interface Societe {
+  value: string;
+  viewValue: string;
+}
 
 @Component({
   selector: 'app-create-crenau',
@@ -35,6 +39,7 @@ export class CreateCrenauComponent implements OnInit {
   defaultDatePicker: Date;
   crenaux: Crenau[] = [];
   showCrenaux: boolean;
+  userRole: any;
   heures: Heure[] = [
     {value: 12, viewValue: '12h'},
     {value: 13, viewValue: '13h'},
@@ -60,6 +65,11 @@ export class CreateCrenauComponent implements OnInit {
     {value: 7, viewValue: '7 livreur'},
     {value: 8, viewValue: '8 livreur'},
   ];
+  societes: Societe[] = [
+    {value: 'rocket', viewValue: 'Rocket'},
+    {value: 'rosebaie', viewValue: 'RoseBaie'},
+    {value: 'woozoo', viewValue: 'WooZoo'},
+  ];
   ccE: string = "+33";
 
   constructor(private crenauservice: CrenauService, private toast: HotToastService, private router: Router, public datePipe : DatePipe,  public dialog: MatDialog, private twilioservice: TwilioService, private usersservice: UsersService) {
@@ -67,14 +77,15 @@ export class CreateCrenauComponent implements OnInit {
     this.showCrenaux = false;
   }
 
-
-  ngOnInit(): void {
+  async ngOnInit(): Promise<void> {
     // init formulaire
     this.validateform();
     this.submitCrenauForm = false;
+    this.userRole =  await this.usersservice.canAccess$;
     // afficher crenaux par date
     this.afficherCrenauParDate();
   }
+
 
   // init validator
   validateform() {
@@ -83,8 +94,8 @@ export class CreateCrenauComponent implements OnInit {
         date: new FormControl('', Validators.required),
         heureDebut: new FormControl("", Validators.required),
         heureFin: new FormControl("", Validators.required),
-        inscrit: new FormControl(0),
         inscritMax: new FormControl('', Validators.required),
+        societe: new FormControl('')
       }
     );
   }
@@ -102,16 +113,28 @@ export class CreateCrenauComponent implements OnInit {
   get inscritMax() {
     return this.crenauForm.get('inscritMax');
   }
+  get societe() {
+    return this.crenauForm.get('role');
+  }
 
   // crenaux par date (datepicker)
-  afficherCrenauParDate(){
+  async afficherCrenauParDate(){
     let date = this.datePipe.transform(this.defaultDatePicker, 'dd/MM/yyyy');
-    this.crenauservice.getCrenauxByDate(date).subscribe((res: Crenau[]) => {
-      // trier par heure
-      this.crenaux = res.sort(function (a:any, b:any) {
-      return a.heureDebut - b.heureDebut
-      });
-    })
+    if(this.userRole != 'woozoo'){
+      this.crenauservice.getCrenauxByDateandSociete(this.userRole, date).subscribe((res: Crenau[]) => {
+        // trier par heure
+        this.crenaux = res.sort(function (a:any, b:any) {
+        return a.heureDebut - b.heureDebut
+        });
+      })
+    }else{
+      this.crenauservice.getCrenauxByDate(date).subscribe((res: Crenau[]) => {
+        this.crenaux = res.sort(function (a:any, b:any) {
+        return a.heureDebut - b.heureDebut
+        });
+      })
+    }
+
   }
 
   calculDifferenceHeure(heureDebut: number, heureFin: number){
@@ -120,7 +143,7 @@ export class CreateCrenauComponent implements OnInit {
   }
 
   // envoi du formulaire
-  onSubmit() {
+  async onSubmit() {
     this.toast.close();
     // this.toast.loading('Ajout du crénau ...');
     this.submitCrenauForm = true;
@@ -141,7 +164,13 @@ export class CreateCrenauComponent implements OnInit {
       
       // setHours de la date avec la valeur de heureDebut du formulaire
       this.crenauForm.value.date.setHours(this.crenauForm.value.heureDebut);
+      // inscrit => 0 à la création du créneau
+      this.crenauForm.value.inscrit = 0;
       
+      if(this.userRole != 'woozoo'){ // si role n'est pas woozoo
+        this.crenauForm.value.societe = this.userRole; // donner a societe la valeur du role de l'utilisateur connecté
+      }
+
       // ajouter creneau(x) à firebase
       this.crenauservice.addCrenau(this.crenauForm.value);
     }
@@ -157,7 +186,7 @@ export class CreateCrenauComponent implements OnInit {
 
     // envoyer sms à tous les livreurs pour informer creneau ajouter
     // this.send_smsGrouper(this.crenauForm.value.dateString);
-    // this.twilioservice.send_smsGroupe(req);
+    
     // toastValid.afterClosed.subscribe((e) => {
     //   this.router.navigate(['/planning']);
     // });

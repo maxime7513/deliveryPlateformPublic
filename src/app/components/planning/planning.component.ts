@@ -19,14 +19,24 @@ export class PlanningComponent implements OnInit {
   defaultDatePicker: Date;
   heures: number[] = [12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23];
   jours: number[]= [1, 2, 3, 4, 5, 6, 0];
+  userRole: any;
+  societeSelectionne: any;
+  defaultSociete : string;
+  societes: string[] = ['rocket','rosebaie'];
 
   constructor(private crenauservice: CrenauService, private userservice: UsersService, public datePipe : DatePipe, public dialog: MatDialog, private toast: HotToastService) {
     this.defaultDatePicker = new Date;
   }
 
-  ngOnInit(): void {
+  async ngOnInit(): Promise<void> {
+    this.defaultSociete = 'rocket';
+    this.userRole =  await this.userservice.canAccess$;
+    this.societeSelectionne = this.userRole;
+    if(this.userRole == 'woozoo'){
+      this.societeSelectionne = this.defaultSociete;
+    }
     // crenaux par semaine
-    this.afficherCrenauParSemaine();
+    this.afficherCrenauParSemaine(this.societeSelectionne);
     this.defaultDatePicker = new Date;
   }
 
@@ -55,11 +65,16 @@ export class PlanningComponent implements OnInit {
     return day
   }
 
+  chargerPlanningSociete(el: string){
+    this.societeSelectionne = el;
+    this.afficherCrenauParSemaine(el);
+  }
+
   // crenaux par semaine (datepicker)
-  afficherCrenauParSemaine(){
+  async afficherCrenauParSemaine(el: string){
     let dateLundi = this.setToMonday(this.defaultDatePicker);
     let tab = this.createSemaineTab(dateLundi);
-    this.crenauservice.getCrenauxrBySemaine(tab).subscribe((res: Crenau[]) => {
+    this.crenauservice.getCrenauxBySemaineAndSociete(el,tab).subscribe((res: Crenau[]) => {
       // trier par heure
       this.crenaux = res.sort(function (a:any, b:any) {
       return a.heureDebut - b.heureDebut

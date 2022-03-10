@@ -21,11 +21,15 @@
       <mat-icon>calendar_month</mat-icon>
       <span>Mon planning</span>
     </button> 
-    <button *ngIf="user.role == 'woozoo' || user.role == 'rocket'" mat-menu-item routerLink="/crenau">
+    <button *ngIf="user.role == 'woozoo' || user.role == 'rocket' || user.role == 'rosebaie'" mat-menu-item routerLink="/crenau">
       <mat-icon>more_time</mat-icon>
       <span>Ajouter Créneau</span>
     </button>
-    <button *ngIf="user.role == 'woozoo' || user.role == 'rocket'" mat-menu-item routerLink="/planning">
+    <button *ngIf="user.role == 'rosebaie'" mat-menu-item routerLink="/createRosebaie">
+      <mat-icon>more_time</mat-icon>
+      <span>Programmer livraison</span>
+    </button>
+    <button *ngIf="user.role == 'rocket' || user.role == 'rosebaie' || user.role == 'woozoo'" mat-menu-item routerLink="/planning">
       <mat-icon>date_range</mat-icon>
       <span>Planning</span>
     </button>

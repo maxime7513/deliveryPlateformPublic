@@ -1,0 +1,52 @@
+<h1>Programmer une livraison</h1>
+<form [formGroup]="rbForm" (ngSubmit)="onSubmit()">
+    <mat-form-field>
+        <mat-label>Date livraison</mat-label>
+        <input matInput [min]="datePicker" [matDatepicker]="picker" formControlName="date">
+        <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+        <mat-datepicker #picker></mat-datepicker>
+        <mat-error *ngIf="date.hasError('required')">
+          La date est obligatoire
+        </mat-error>
+    </mat-form-field>
+
+    <mat-form-field>
+        <mat-label>Heure d'enlévement</mat-label>
+        <mat-select formControlName="heureEnlevement">
+          <mat-option *ngFor="let heure of heures" [value]="heure.value">
+            {{heure.viewValue}}
+          </mat-option>
+        </mat-select>
+        <mat-error *ngIf="heureEnlevement.hasError('required')">
+          L'heure d'enlévement est obligatoire
+        </mat-error>
+    </mat-form-field>
+
+    <mat-form-field>
+        <mat-label>Adresse d'enlévement</mat-label>
+        <input matInput formControlName="adresseEnlevement"/>
+        <mat-error *ngIf="adresseEnlevement.hasError('required')">
+          Adresse d'enlévement obligatoire
+        </mat-error>
+    </mat-form-field>
+    
+    <ng-container formArrayName="adresseLivraison">
+        <mat-form-field *ngFor="let _ of arrayAdresseLivraison.controls; index as i">
+            <mat-label *ngIf="arrayAdresseLivraison.length == 1">Adresse de livraison</mat-label>
+            <mat-label *ngIf="1 < arrayAdresseLivraison.length">Adresse de livraison {{i + 1}}</mat-label>
+            <input matInput [formControlName]="i"/>
+            <span *ngIf="i != 0" (click)="removeAdresse(i)" matTooltip="supprimer"><mat-icon>clear</mat-icon></span>
+            <!--<mat-error *ngIf="arrayAdresseLivraison2.hasError('required')">
+              Adresse de livraison obligatoire
+            </mat-error>-->
+        </mat-form-field>
+    </ng-container>
+
+    <span (click)="addAdresse()"><mat-icon>add_circle</mat-icon>Ajouter adresse de livraison</span>
+
+    <button type="submit" mat-raised-button>
+      Valider
+    </button>
+</form>
+
+<div class="blur"></div>

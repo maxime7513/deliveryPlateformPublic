@@ -31,10 +31,6 @@
       L'heure de fin est obligatoire
     </mat-error>
   </mat-form-field>
-  <mat-form-field class="hidden">
-    <mat-label>Inscrit</mat-label>
-    <input type="number" matInput formControlName="inscrit" placeholder="Inscrit"/>
-  </mat-form-field>
   <mat-form-field>
     <mat-label>Livreur max</mat-label>
     <mat-select formControlName="inscritMax">
@@ -46,11 +42,25 @@
       Livreurs maximum obligatoire
     </mat-error>
   </mat-form-field>
+  
+  <mat-form-field *ngIf="userRole == 'woozoo'">
+    <mat-label>Société</mat-label>
+    <mat-select formControlName="societe">
+      <mat-option *ngFor="let societe of societes" [value]="societe.value">
+        {{societe.viewValue}}
+      </mat-option>
+    </mat-select>
+    <!--<mat-error *ngIf="submitCrenauForm && societe.hasError('required')">
+      La société est obligatoire
+    </mat-error>-->
+  </mat-form-field>
+
   <button type="submit" mat-raised-button>
     <mat-icon>more_time</mat-icon>
     Ajouter
   </button>
 </form>
+
 <div>
   <mat-form-field>
     <mat-label>Choisi une date</mat-label>
@@ -69,12 +79,16 @@
       <thead>
         <th><mat-icon>schedule</mat-icon></th>
         <th matTooltip="livreurs max"><mat-icon>person</mat-icon></th>
+        <th matTooltip="société" *ngIf="userRole == 'woozoo'"><mat-icon>store</mat-icon></th>
         <th matTooltip="supprimer créneau"><mat-icon>delete</mat-icon></th>
       </thead>
       <tbody>
         <tr *ngFor="let crenau of crenaux">
           <td>{{ crenau.heureDebut}}-{{ crenau.heureFin }}h</td>
           <td>{{ crenau.inscritMax }}</td>
+          <td *ngIf="userRole == 'woozoo'">
+            <img src="/assets/images/icone_{{crenau.societe}}.png" alt="{{crenau.societe}}">
+          </td>
           <td>
             <button (click)="openDialogModal(crenau)" mat-raised-button matTooltip="supprimer">
               <mat-icon>event_busy</mat-icon>

@@ -6,5 +6,6 @@ export interface Crenau {
     heureFin : Number;
     inscrit : number;
     inscritMax : number;
+    societe: string;
     users?: string[];
 }

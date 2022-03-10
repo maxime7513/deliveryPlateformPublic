@@ -26,6 +26,7 @@ export class SignUpComponent implements OnInit {
     {value: 'livreur', viewValue: 'Livreur'},
     {value: 'woozoo', viewValue: 'WooZoo'},
     {value: 'rocket', viewValue: 'Rocket'},
+    {value: 'rosebaie', viewValue: 'RoseBaie'},
   ];
   constructor(private authService: AuthService, private usersService: UsersService, private router: Router, private toast: HotToastService) { }
 

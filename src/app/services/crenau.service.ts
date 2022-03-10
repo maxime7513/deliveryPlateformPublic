@@ -81,10 +81,22 @@ export class CrenauService {
     const crenauxRef = query(collection(this.firestore, 'crenau'), where("dateString", "==", date));
     return collectionData(crenauxRef, { idField: 'id' }) as Observable<Crenau[]>;
   }
+
+  // retourner tous les crenaux par date (filtrer par societe)
+  getCrenauxByDateandSociete(Usersociete: any, date: string): Observable<Crenau[]> {
+    const crenauxRef = query(collection(this.firestore, 'crenau'), where("societe", "==" , Usersociete), where("dateString", "==", date));
+    return collectionData(crenauxRef, { idField: 'id' }) as Observable<Crenau[]>;
+  }
     
   // retourner tous les crenaux par semaine
-  getCrenauxrBySemaine(tabDate: string[]): Observable<Crenau[]> {
+  getCrenauxBySemaine(tabDate: string[]): Observable<Crenau[]> {
     const crenauxRef = query(collection(this.firestore, 'crenau'), where("dateString", 'in', [tabDate[0], tabDate[1], tabDate[2], tabDate[3], tabDate[4], tabDate[5], tabDate[6]]));
+    return collectionData(crenauxRef, { idField: 'id' }) as Observable<Crenau[]>;
+  }
+
+  // retourner tous les crenaux par semaine et par entreprise
+  getCrenauxBySemaineAndSociete(Usersociete: any, tabDate: string[]): Observable<Crenau[]> {
+    const crenauxRef = query(collection(this.firestore, 'crenau'), where("societe", "==" , Usersociete), where("dateString", 'in', [tabDate[0], tabDate[1], tabDate[2], tabDate[3], tabDate[4], tabDate[5], tabDate[6]]));
     return collectionData(crenauxRef, { idField: 'id' }) as Observable<Crenau[]>;
   }
 

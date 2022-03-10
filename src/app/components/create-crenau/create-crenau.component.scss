@@ -34,9 +34,6 @@ form{
     mat-form-field{
         width: 100%;
     }
-    .hidden{
-        display: none;
-    }
     h3{
         color: var(--secondary);
     }
@@ -106,6 +103,14 @@ table{
         td{
             padding: 10px 20px;
             text-align: center;
+            img{
+                width: 40px;
+                height: 40px;
+                margin-right: 10px;
+                border-radius: 100%;
+                object-fit: cover;
+                object-position: center;
+            }
             button{
                 background: var(--primary);
                 color: #fff;

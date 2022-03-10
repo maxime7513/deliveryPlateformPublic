@@ -37,6 +37,7 @@ import { ListeLivreurComponent } from './components/liste-livreur/liste-livreur.
 import { ModalDeleteCrenauComponent } from './components/modal-delete-crenau/modal-delete-crenau.component';
 import { HttpClientModule } from '@angular/common/http';
 import { MatPaginatorModule } from '@angular/material/paginator'; 
+import { RosebaieCreateLivraisonComponent } from './components/rosebaie-create-livraison/rosebaie-create-livraison.component';
 
 // firebase
 import { provideFirebaseApp, initializeApp } from '@angular/fire/app';
@@ -60,6 +61,7 @@ registerLocaleData(localeFr, 'fr');
     ListeLivreurComponent,
     ModalUserInscritComponent,
     ModalDeleteCrenauComponent,
+    RosebaieCreateLivraisonComponent,
   ],
   imports: [
     BrowserModule,
