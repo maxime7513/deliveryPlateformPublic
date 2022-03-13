@@ -21,13 +21,17 @@
       <mat-icon>calendar_month</mat-icon>
       <span>Mon planning</span>
     </button> 
-    <button *ngIf="user.role == 'woozoo' || user.role == 'rocket' || user.role == 'rosebaie'" mat-menu-item routerLink="/crenau">
+    <button *ngIf="user.role == 'woozoo' || user.role == 'rocket'" mat-menu-item routerLink="/crenau">
       <mat-icon>more_time</mat-icon>
       <span>Ajouter Créneau</span>
     </button>
     <button *ngIf="user.role == 'rosebaie'" mat-menu-item routerLink="/createRosebaie">
       <mat-icon>more_time</mat-icon>
       <span>Programmer livraison</span>
+    </button>
+    <button *ngIf="user.role == 'rosebaie'" mat-menu-item routerLink="/carnetAdresses">
+      <mat-icon>place</mat-icon>
+      <span>Carnet d'adresses</span>
     </button>
     <button *ngIf="user.role == 'rocket' || user.role == 'rosebaie' || user.role == 'woozoo'" mat-menu-item routerLink="/planning">
       <mat-icon>date_range</mat-icon>
@@ -44,6 +48,10 @@
     <button mat-menu-item routerLink="/profil">
       <mat-icon>manage_accounts</mat-icon>
       <span>Profil</span>
+    </button>
+    <button *ngIf="user.role == 'woozoo'" mat-menu-item routerLink="/messages" class="message">
+      <mat-icon>email<span *ngIf="0 < nombreMessageNonLu">{{nombreMessageNonLu}}</span></mat-icon> 
+      <span>Messages</span>
     </button> 
     <button mat-menu-item (click)="logout()">
       <mat-icon>power_settings_new</mat-icon>

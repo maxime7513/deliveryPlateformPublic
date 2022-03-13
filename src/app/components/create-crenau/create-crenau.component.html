@@ -9,6 +9,7 @@
       La date est obligatoire
     </mat-error>
   </mat-form-field>
+
   <mat-form-field>
     <mat-label>Heure de début</mat-label>
     <mat-select formControlName="heureDebut">
@@ -20,6 +21,7 @@
       L'heure de début est obligatoire
     </mat-error>
   </mat-form-field>
+
   <mat-form-field>
     <mat-label>Heure de fin</mat-label>
     <mat-select formControlName="heureFin">
@@ -31,6 +33,7 @@
       L'heure de fin est obligatoire
     </mat-error>
   </mat-form-field>
+
   <mat-form-field>
     <mat-label>Livreur max</mat-label>
     <mat-select formControlName="inscritMax">
@@ -41,6 +44,15 @@
     <mat-error *ngIf="submitCrenauForm && inscritMax.hasError('required')">
       Livreurs maximum obligatoire
     </mat-error>
+  </mat-form-field>
+
+  <mat-form-field>
+    <mat-label>Véhicule</mat-label>
+    <mat-select formControlName="vehicule">
+      <mat-option *ngFor="let vehicule of vehicules" [value]="vehicule.value">
+        {{vehicule.viewValue}}
+      </mat-option>
+    </mat-select>
   </mat-form-field>
   
   <mat-form-field *ngIf="userRole == 'woozoo'">

@@ -9,6 +9,17 @@
       <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
       <mat-datepicker #picker></mat-datepicker>
     </mat-form-field>
+    <div>
+      <img src="/assets/images/icone_{{selectSocieteValue}}.png" alt="{{selectSocieteValue}}">
+      <mat-form-field>
+        <mat-label>Société</mat-label>
+        <mat-select [(ngModel)]="selectSocieteValue" (ngModelChange)="afficherCrenauParDate()">
+          <mat-option *ngFor="let societe of societes" [value]="societe.value">
+            {{societe.viewValue}}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
   </div>
 
   <p *ngIf="crenaux.length == 0" class="nocrenau">Pas encore de crénau disponible pour le {{defaultDatePicker  | date: 'd MMMM y'}}</p>
@@ -17,6 +28,9 @@
     <thead>
      <tr>
        <th matTooltip="horaires"><mat-icon>schedule</mat-icon></th>
+       <th>societe</th>
+       <th>vehicule</th>
+       <th>date</th>
        <th matTooltip="nombre de place encore disponible"><mat-icon>group_add</mat-icon></th>
        <th matTooltip="réserver/annuler"><mat-icon>more_time</mat-icon><span>/</span><mat-icon>event_busy</mat-icon></th>
      </tr>
@@ -24,19 +38,25 @@
     <tbody>
       <tr *ngFor="let crenau of crenaux">
         <!--<td *ngIf="datePicker < crenau.date.toDate()">{{ crenau.heureDebut }}h à {{ crenau.heureFin }}h</td>-->
-        <td *ngIf="datePicker < crenau.date.toDate()">{{ crenau.heureDebut }}<mat-icon class="hour-arrow">arrow_right_alt</mat-icon>{{ crenau.heureFin }}h</td>
-        <td *ngIf="datePicker < crenau.date.toDate()" matTooltip="place encore disponible">{{ getPlaceRestante(crenau.inscritMax, crenau.inscrit) }}</td>
-        <td *ngIf="datePicker < crenau.date.toDate()">
-          <button *ngIf="(crenau.inscrit < crenau.inscritMax) && !verifierUserInscrit(crenau, user.uid)" (click)="inscriptionLivreur(crenau, user.uid); send_sms_to(crenau,user)">
+        <td>{{ crenau.heureDebut }}<mat-icon class="hour-arrow">arrow_right_alt</mat-icon>{{ crenau.heureFin }}h</td>
+        <td>{{crenau.societe}}</td>
+        <td>{{crenau.vehicule}}</td>
+        <td>{{crenau.dateString}}</td>
+        <td matTooltip="place encore disponible">{{ getPlaceRestante(crenau.inscritMax, crenau.inscrit) }}</td>
+        <td>
+          <button *ngIf="(crenau.inscrit < crenau.inscritMax) && !verifierUserInscrit(crenau)" (click)="inscriptionLivreur(crenau); send_sms_to(crenau,user)">
             <mat-icon>more_time</mat-icon>
             Réserver
           </button>
-          <button *ngIf="verifierUserInscrit(crenau, user.uid)" (click)="openDialogModal(crenau)" class="annule">
+          <button *ngIf="verifierUserInscrit(crenau) && 60 < calculDifferenceDate(crenau.date.toDate())" (click)="openDialogModal(crenau)" class="annule">
             <mat-icon>event_busy</mat-icon>
             Annuler
           </button>
-          <button *ngIf="crenau.inscritMax == crenau.inscrit && !verifierUserInscrit(crenau, user.uid)" class="complet">
+          <button *ngIf="crenau.inscritMax == crenau.inscrit && !verifierUserInscrit(crenau)" class="complet">
             Complet !
+          </button>
+          <button *ngIf="verifierUserInscrit(crenau) && calculDifferenceDate(crenau.date.toDate()) < 60" class="dansmin">
+            Dans<span>{{calculDifferenceDate(crenau.date.toDate())}}</span>min
           </button>
         </td>
       </tr>

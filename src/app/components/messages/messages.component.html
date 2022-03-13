@@ -1,0 +1,22 @@
+<h1>Messages<span>({{nombreMessageNonLu}})</span></h1>
+<div>
+    <div *ngFor="let message of messages | slice: lowValueSlice : highValueSlice" class="message-afficher" [ngClass]="{'nonlu': !message.lu, 'traite': message.traite}">
+        <div (click)="openDialogModal(message)">
+            <span>
+                <img [src]="message.photoUrl ?? '/assets/images/avatar.svg'" *ngIf="message.photoUrl != ''"/>
+                <img src="/assets/images/avatar.svg" *ngIf="message.photoUrl == ''"/>
+                {{message.nom}} {{message.prenom}}
+            </span>
+            <span>{{message.contenue}}</span>
+        </div>
+        <span>{{message.date.seconds * 1000 | date: 'd MMM'}}</span>
+        <mat-icon (click)="deleteMessage(message)" class="delete" matTooltip="supprimer">delete_forever</mat-icon>
+    </div>
+</div>
+
+<mat-paginator [length]="messages.length" pageSize=10
+               (page)="getPaginatorData($event)" [pageSizeOptions]="[5, 10, 30]"
+               showFirstLastButtons="false">
+</mat-paginator>
+
+<div class="blur"></div>

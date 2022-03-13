@@ -10,6 +10,11 @@ import { UsersService } from 'src/app/services/users.service';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 import { TwilioService } from 'src/app/services/twilio.service';
 
+interface Vehicule {
+  value: string;
+  viewValue: string;
+}
+
 @UntilDestroy()
 @Component({
   selector: 'app-profile',
@@ -21,7 +26,11 @@ export class ProfileComponent implements OnInit {
   user$ = this.usersService.currentUserProfile$;
   profileForm: FormGroup;
   profileFormSend: boolean;
-
+  vehicules: Vehicule[] = [
+    {value: 'velo', viewValue: 'vélo'},
+    {value: 'scooter', viewValue: 'scooter'},
+    {value: 'voiture', viewValue: 'voiture'},
+  ];
   
   constructor(private imageUploadService: ImageUploadService, private usersService: UsersService, private toast: HotToastService,) { }
 
@@ -48,6 +57,7 @@ export class ProfileComponent implements OnInit {
         lastName: new FormControl('', Validators.required),
         phone: new FormControl('', Validators.required),
         email: new FormControl('', [Validators.required, Validators.email]),
+        vehicule: new FormControl('', Validators.required),
       }
     );
   }
@@ -64,6 +74,9 @@ export class ProfileComponent implements OnInit {
   }
   get email() {
     return this.profileForm.get('email');
+  }
+  get vehicule() {
+    return this.profileForm.get('vehicule');
   }
 
   uploadImage(event: any, user: ProfileUser) {

@@ -49,16 +49,21 @@
     }
     form{
         width: 100%;
+        ::ng-deep mat-form-field{
+            color: #fff;
+            label{
+                color: #ccc!important;
+            }
+            .mat-select-value{
+                color: #fff;
+            }
+        }
         div{
             display: flex;
             flex-direction: row;
             justify-content: space-between;
-            ::ng-deep mat-form-field{
+            .mat-form-field{
                 width: 45%;
-                color: white;
-                label{
-                    color: #ccc!important;
-                }
             }
         }
         button{
@@ -67,6 +72,10 @@
             // background: var(--button);
             color: #fff;
             margin: 13px auto 0 auto;
+        }
+        > .mat-form-field:last-of-type{
+            display: flex;
+            justify-content: center;
         }
     }
 }
@@ -97,11 +106,18 @@
     .profil-container{
         width: 100%;
         padding: 20px 50px;
-        form div{
-            flex-direction: column;
-            mat-form-field{
+        form{
+            div{
+                flex-direction: column;
+                .mat-form-field{
+                    width: 100%;
+                }
+            }
+            > .mat-form-field:last-of-type{
+                display: inline-block;
                 width: 100%;
             }
         }
     }
+
 }

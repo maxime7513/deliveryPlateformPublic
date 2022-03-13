@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { AuthService } from 'src/app/services/auth.service';
 import { Router } from '@angular/router';
 import { UsersService } from 'src/app/services/users.service';
+import { MessageService } from 'src/app/services/message.service';
+import { Message } from 'src/app/models/message.model';
 
 @Component({
   selector: 'app-header',
@@ -11,10 +13,16 @@ import { UsersService } from 'src/app/services/users.service';
 export class HeaderComponent implements OnInit {
 
   user$ = this.usersService.currentUserProfile$;
+  nombreMessageNonLu : number;
 
-  constructor( public authService: AuthService, private router: Router, private usersService: UsersService) { }
+  constructor( public authService: AuthService, private router: Router, private usersService: UsersService, private messageService: MessageService) { }
 
-  ngOnInit(): void { }
+  ngOnInit(): void {
+    // retourner message non lu
+    this.messageService.getMessagesNonLu().subscribe((res: Message[]) => {
+      this.nombreMessageNonLu = res.length;
+    })
+  }
 
   logout() {
     this.authService.logout().subscribe(() => {

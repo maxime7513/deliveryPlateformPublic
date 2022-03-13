@@ -22,6 +22,7 @@
           </mat-error>
       </mat-form-field>
     </div>
+    
     <div>
       <mat-form-field>
         <input type="tel" matInput formControlName="phone" placeholder="Téléphone"/>
@@ -39,6 +40,18 @@
           </mat-error>
       </mat-form-field>
     </div>
+
+    <mat-form-field>
+      <mat-select formControlName="vehicule" placeholder="véhicule">
+        <mat-option *ngFor="let vehicule of vehicules" [value]="vehicule.value">
+          {{vehicule.viewValue}}
+        </mat-option>
+      </mat-select>
+      <mat-error *ngIf="profileFormSend && vehicule.hasError('required')">
+        Veuillez renseigner votre type de véhicule
+      </mat-error>
+    </mat-form-field>
+
     <button type="submit" mat-raised-button>
       <mat-icon>how_to_reg</mat-icon>
       Enregistrer

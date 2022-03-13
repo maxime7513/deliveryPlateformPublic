@@ -11,6 +11,10 @@ interface Role {
   value: string;
   viewValue: string;
 }
+interface Vehicule {
+  value: string;
+  viewValue: string;
+}
 
 @Component({
   selector: 'app-sign-up',
@@ -28,6 +32,12 @@ export class SignUpComponent implements OnInit {
     {value: 'rocket', viewValue: 'Rocket'},
     {value: 'rosebaie', viewValue: 'RoseBaie'},
   ];
+  vehicules: Vehicule[] = [
+    {value: 'velo', viewValue: 'velo'},
+    {value: 'scooter', viewValue: 'scooter'},
+    {value: 'voiture', viewValue: 'voiture'},
+  ];
+  
   constructor(private authService: AuthService, private usersService: UsersService, private router: Router, private toast: HotToastService) { }
 
   ngOnInit(): void {
@@ -46,6 +56,7 @@ export class SignUpComponent implements OnInit {
         password: new FormControl("", [Validators.required, Validators.minLength(6)]),
         confirmPassword: new FormControl('', Validators.required),
         role: new FormControl('', Validators.required),
+        vehicule: new FormControl(''),
       },
       { validators: this.passwordsMatchValidator() 
       }
@@ -96,10 +107,10 @@ export class SignUpComponent implements OnInit {
       return;
     }
 
-    const {lastName, firstName, phone, email, password, role } = this.signUpForm.value;
+    const {lastName, firstName, phone, email, password, role, vehicule } = this.signUpForm.value;
     this.authService.signUp(email, password).pipe(
-      switchMap(({ user: { uid }})=> 
-        this.usersService.addUser({ uid, email, lastName, firstName, phone, role})
+      switchMap(({ user: { uid }})=>
+        this.usersService.addUser({ uid, email, lastName, firstName, phone, role, vehicule})
         ),
         this.toast.observe({
           success: 'Votre inscription est validée',
@@ -110,4 +121,5 @@ export class SignUpComponent implements OnInit {
         this.router.navigate(['/register']);
       });
   }
+  
 }

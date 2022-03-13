@@ -20,6 +20,28 @@ h1{
 .date-picker{
     display: flex;
     justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+    > mat-form-field{
+        margin: 0 15px;
+    }
+    div{
+        display: flex;
+        align-items: center;
+        margin: 0 15px;
+        mat-form-field{
+            margin-top: 5px;
+        }
+        img{
+            width: 30px;
+            height: 30px;
+            margin-right: 7px;
+            border-radius: 100%;
+            object-fit: cover;
+            object-position: center;
+            background: #fff;
+        }
+    }
 }
 
 table{
@@ -37,9 +59,6 @@ table{
                 background: var(--primary);
                 border-bottom: 1px solid #ccc;
                 border-top-left-radius: 13px
-            }
-            &:nth-of-type(2){
-                border-right: 1px solid #fff;
             }
             &:last-of-type{
                 border-top-right-radius: 13px;
@@ -79,6 +98,14 @@ table{
                 vertical-align: bottom;
                 color: var(--secondary);
             }
+            img{
+                width: 40px;
+                height: 40px;
+                margin-right: 10px;
+                border-radius: 100%;
+                object-fit: cover;
+                object-position: center;
+            }
         }
         button{
             display: flex;
@@ -103,6 +130,15 @@ table{
             color: red;
             border: 1px solid red;
             cursor: default;
+        }
+        .dansmin{
+            background: transparent;
+            border: 1px solid var(--primary);
+            color: var(--primary);
+            span{
+                color: var(--secondary);
+                margin: 0 3px;
+            }
         }
     }
 }

@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { addDoc, arrayRemove, arrayUnion, collection, collectionData, deleteDoc, doc, docData, Firestore, getDocs, increment, query, setDoc, updateDoc, where } from '@angular/fire/firestore';
+import { addDoc, arrayRemove, arrayUnion, collection, collectionData, deleteDoc, doc, Firestore, increment, orderBy, query, updateDoc, where } from '@angular/fire/firestore';
 import { Observable } from 'rxjs';
 import { Crenau } from '../models/crenau.model';
 
@@ -18,25 +18,25 @@ export class CrenauService {
 
   // retourner tous les crenaux
   getCrenaux(): Observable<Crenau[]> {
-    const booksRef = collection(this.firestore, 'crenau');
-    return collectionData(booksRef, { idField: 'id' }) as Observable<Crenau[]>;
+    const crenauxRef = collection(this.firestore, 'crenau');
+    return collectionData(crenauxRef, { idField: 'id' }) as Observable<Crenau[]>;
   }
 
   // ajouter 1 au inscrit
   incrementInscrit(crenau: Crenau) {
-    const bookDocRef = doc(this.firestore, `crenau/${crenau.id}`);
-    return updateDoc(bookDocRef, { inscrit: increment(1) });
+    const incrementDocRef = doc(this.firestore, `crenau/${crenau.id}`);
+    return updateDoc(incrementDocRef, { inscrit: increment(1) });
   }
 
   // retirer 1 au inscrit
   decrementInscrit(crenau: Crenau) {
-    const bookDocRef = doc(this.firestore, `crenau/${crenau.id}`);
-    return updateDoc(bookDocRef, { inscrit: increment(-1) });
+    const decrementDocRef = doc(this.firestore, `crenau/${crenau.id}`);
+    return updateDoc(decrementDocRef, { inscrit: increment(-1) });
   }
   // retirer 1 au inscrit (mon planning)
   decrementInscrit2(crenauId: string) {
-    const bookDocRef = doc(this.firestore, `crenau/${crenauId}`);
-    return updateDoc(bookDocRef, { inscrit: increment(-1) });
+    const decrementDocRef = doc(this.firestore, `crenau/${crenauId}`);
+    return updateDoc(decrementDocRef, { inscrit: increment(-1) });
   }
 
   // inscription d'un livreur
@@ -78,10 +78,21 @@ export class CrenauService {
 
   // retourner tous les crenaux par date
   getCrenauxByDate(date: string): Observable<Crenau[]> {
-    const crenauxRef = query(collection(this.firestore, 'crenau'), where("dateString", "==", date));
+    const crenauxRef = query(collection(this.firestore, 'crenau'), where("dateString", "==", date), orderBy("date"));
     return collectionData(crenauxRef, { idField: 'id' }) as Observable<Crenau[]>;
   }
 
+  // retourner les crenaux par date et supérieur à l'heure actuelle
+  getCrenauxValableByDate(dateString: string, date: Date): Observable<Crenau[]> {
+    const crenauxRef = query(collection(this.firestore, 'crenau'), where("dateString", "==", dateString), where("date", ">", date));
+    return collectionData(crenauxRef, { idField: 'id' }) as Observable<Crenau[]>;
+  }
+  // retourner les crenaux par date et par société et supérieur à l'heure actuelle
+  getCrenauxValableByDateandSociete(dateString: string, date: Date, societe: string): Observable<Crenau[]> {
+    const crenauxRef = query(collection(this.firestore, 'crenau'), where("dateString", "==", dateString), where("societe", "==", societe), where("date", ">", date));
+    return collectionData(crenauxRef, { idField: 'id' }) as Observable<Crenau[]>;
+  }
+  
   // retourner tous les crenaux par date (filtrer par societe)
   getCrenauxByDateandSociete(Usersociete: any, date: string): Observable<Crenau[]> {
     const crenauxRef = query(collection(this.firestore, 'crenau'), where("societe", "==" , Usersociete), where("dateString", "==", date));
@@ -100,13 +111,18 @@ export class CrenauService {
     return collectionData(crenauxRef, { idField: 'id' }) as Observable<Crenau[]>;
   }
 
-  // retourner les crenaux que l'user connecté à réservé et afficher par jour
+  // retourner les crenaux que l'user connecté à réservé et par jour(string)
   getCrenauxInscritCurrentUserByDate(userid: string, date: string): Observable<Crenau[]> {
     const crenauxRef = query(collection(this.firestore, 'crenau'), where("users", "array-contains", userid), where("dateString", "==", date));
     return collectionData(crenauxRef, { idField: 'id' }) as Observable<Crenau[]>;
   }
+  // retourner les crenaux que l'user connecté à réservé et par jour(format date)
+  getCrenauxInscritCurrentUserByDate2(userid: string, date: Date): Observable<Crenau[]> {
+    const crenauxRef = query(collection(this.firestore, 'crenau'), where("users", "array-contains", userid), where("date", "==", date));
+    return collectionData(crenauxRef, { idField: 'id' }) as Observable<Crenau[]>;
+  }
 
-  // retourner les crenaux que l'user connecté à réservé et afficher par semaine
+  // retourner les crenaux que l'user connecté à réservé et  par semaine
   getCrenauxInscritCurrentUserBySemaine(userid: string, tabDate: string[]): Observable<Crenau[]> {
     const crenauxRef = query(collection(this.firestore, 'crenau'), where("users", "array-contains", userid), where("dateString", 'in', [tabDate[0], tabDate[1], tabDate[2], tabDate[3], tabDate[4], tabDate[5], tabDate[6]]));
     return collectionData(crenauxRef, { idField: 'id' }) as Observable<Crenau[]>;

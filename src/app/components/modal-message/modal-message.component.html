@@ -1,0 +1,16 @@
+<div mat-dialog-content>
+  <div class="header">
+    <div>
+      <img [src]="message.photoUrl ?? '/assets/images/avatar.svg'" *ngIf="message.photoUrl != ''"/>
+      <img src="/assets/images/avatar.svg" *ngIf="message.photoUrl == ''"/>
+      <p>{{message.nom}} {{message.prenom}}</p>
+    </div>
+    <p>{{message.date.seconds * 1000 | date: 'd MMMM y'}} à {{message.date.seconds * 1000 | date: 'HH:mm'}}</p>
+  </div>
+  <p>{{message.contenue}}</p>
+  <a *ngIf="message.bonLivraisonUrl" href="{{message.bonLivraisonUrl}}" target="_blank">voir le bon de livraison</a>
+</div>
+<div mat-dialog-actions>
+  <button mat-button mat-dialog-close>Fermer</button>
+  <button *ngIf="!message.traite" mat-button (click)="updateTraite(message, true)" mat-dialog-close class="traite">Marquer comme traité</button>
+</div>

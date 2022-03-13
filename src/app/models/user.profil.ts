@@ -7,4 +7,5 @@ export interface ProfileUser {
     photoURL?: string;
     crenauInscrit?: string[];
     role?: string;
+    vehicule?: string;
   }

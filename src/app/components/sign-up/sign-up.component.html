@@ -65,6 +65,16 @@
       Le rôle est obligatoire
     </mat-error>
   </mat-form-field>
+  
+  <mat-form-field *ngIf="role.value == 'livreur'">
+    <mat-label>Véhicule</mat-label>
+    <mat-select formControlName="vehicule">
+      <mat-option *ngFor="let vehicule of vehicules" [value]="vehicule.value">
+        {{vehicule.viewValue}}
+      </mat-option>
+    </mat-select>
+  </mat-form-field>
+
   <mat-error *ngIf="signUpFormSend && signUpForm.hasError('passwordsDontMatch')" class="dontmatch">
     Les deux mots de passe doivent correspondre
   </mat-error>

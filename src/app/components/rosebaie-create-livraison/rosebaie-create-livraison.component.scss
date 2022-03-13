@@ -1,3 +1,15 @@
+:host{
+    display: block;
+    width: 100%;
+    min-height: 100%;
+    padding: 80px 20px 40px 20px;
+    position: relative;
+}
+
+.blur{
+    background: rgba(255, 255, 255, 0.9);
+}
+
 h1{
     text-align: center;
     color: var(--primary);
@@ -9,6 +21,15 @@ form{
     align-items: center;
     width: max-content;
     margin: auto;
+    > div{
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-between;
+        align-items: center;
+        mat-form-field{
+            width: 45%;
+        }
+    }
     mat-form-field{
         width: 100%;
         span{
@@ -30,24 +51,27 @@ form{
         display: flex;
         flex-direction: row;
         align-items: center;
-        margin: 10px auto 30px auto;
-        color: var(--secondary);
         font-weight: 600;
         cursor: pointer;
         mat-icon{
             margin-right: 3px;
         }
+        &:first-of-type{
+            color: var(--secondary);
+            margin: 10px auto 25px auto;
+        }
+        &:last-of-type{
+            color: var(--primary);
+            margin: auto auto 30px;
+        }
     }
 }
 
-:host{
-    display: block;
-    width: 100%;
-    min-height: 100%;
-    padding: 80px 20px 40px 20px;
-    position: relative;
-}
-
-.blur{
-    background: rgba(255, 255, 255, 0.9);
+@media (max-width: 450px){
+    form{
+        width: 100%;
+        > div mat-form-field{
+            width: 100%;
+        }
+    }
 }

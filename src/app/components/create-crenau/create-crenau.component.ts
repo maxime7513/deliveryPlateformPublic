@@ -21,6 +21,10 @@ interface inscritMax {
   value: number;
   viewValue: string;
 }
+interface Vehicule {
+  value: string;
+  viewValue: string;
+}
 interface Societe {
   value: string;
   viewValue: string;
@@ -65,6 +69,12 @@ export class CreateCrenauComponent implements OnInit {
     {value: 7, viewValue: '7 livreur'},
     {value: 8, viewValue: '8 livreur'},
   ];
+  vehicules: Vehicule[] = [
+    {value: 'velo', viewValue: 'vélo'},
+    {value: 'scooter', viewValue: 'scooter'},
+    {value: 'voiture', viewValue: 'voiture'},
+
+  ];
   societes: Societe[] = [
     {value: 'rocket', viewValue: 'Rocket'},
     {value: 'rosebaie', viewValue: 'RoseBaie'},
@@ -88,13 +98,14 @@ export class CreateCrenauComponent implements OnInit {
 
 
   // init validator
-  validateform() {
+  async validateform() {
     this.crenauForm = new FormGroup(
       {
         date: new FormControl('', Validators.required),
         heureDebut: new FormControl("", Validators.required),
         heureFin: new FormControl("", Validators.required),
         inscritMax: new FormControl('', Validators.required),
+        vehicule: new FormControl(''),
         societe: new FormControl('')
       }
     );
@@ -129,9 +140,7 @@ export class CreateCrenauComponent implements OnInit {
       })
     }else{
       this.crenauservice.getCrenauxByDate(date).subscribe((res: Crenau[]) => {
-        this.crenaux = res.sort(function (a:any, b:any) {
-        return a.heureDebut - b.heureDebut
-        });
+        this.crenaux = res;
       })
     }
 
@@ -143,7 +152,7 @@ export class CreateCrenauComponent implements OnInit {
   }
 
   // envoi du formulaire
-  async onSubmit() {
+  onSubmit() {
     this.toast.close();
     // this.toast.loading('Ajout du crénau ...');
     this.submitCrenauForm = true;
