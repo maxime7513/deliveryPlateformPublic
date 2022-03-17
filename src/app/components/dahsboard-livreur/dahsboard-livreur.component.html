@@ -7,7 +7,34 @@
     <mat-datepicker #picker></mat-datepicker>
   </mat-form-field>
 </div>
+
 <div class="table-wrapper">
+    <table class="fl-table">
+        <thead>
+          <tr>
+            <th><mat-icon>schedule</mat-icon></th>
+            <th>Lundi</th>
+            <th>Mardi</th>
+            <th>Mercredi</th>
+            <th>Jeudi</th>
+            <th>Vendredi</th>
+            <th>Samedi</th>
+            <th>Dimanche</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let heure of heures; index as i">
+            <td>{{heure}}/{{heure + 1}}h</td>
+            <td *ngFor="let jour of jours" [ngClass]="crenaux | returnIcon : jour : i" class="creneau_td">
+              <div [innerHTML]="crenaux | returnLogo: jour : i"></div>
+              <mat-icon [innerHTML]="crenaux | returnIcon : jour : i" (click)="openDialogModal(returnCrenauId(jour,i))"></mat-icon>
+            </td>
+          </tr>
+        <tbody>
+    </table>
+</div>
+
+<!--<div class="table-wrapper">
     <table class="fl-table">
         <thead>
           <tr>
@@ -41,18 +68,20 @@
         <tbody>
     </table>
 </div>
+-->
+
 <div class="explic">
   <span>
     <mat-icon>assignment_turned_in</mat-icon>
     Effectué
   </span>
   <span>
-    <mat-icon class="reserve">free_cancellation</mat-icon>
-    Réservé(cliquez pour annuler)
-  </span>
-  <span>
     <mat-icon>hourglass_bottom</mat-icon>
     En cours
+  </span>
+  <span>
+    <mat-icon class="reserve">event_busy</mat-icon>
+    Annuler
   </span>
 </div>
 

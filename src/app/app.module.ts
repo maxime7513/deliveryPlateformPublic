@@ -41,6 +41,11 @@ import { RosebaieCreateLivraisonComponent } from './components/rosebaie-create-l
 import { MessagesComponent } from './components/messages/messages.component';
 import { ModalMessageComponent } from './components/modal-message/modal-message.component';
 import { CarnetAdressesComponent } from './components/carnet-adresses/carnet-adresses.component';
+import { GooglePlaceModule } from "ngx-google-places-autocomplete";
+
+// Pipe
+import { ReturnLogoPipe } from './components/dahsboard-livreur/return-logo.pipe';
+import { ReturnIconPipe } from './components/dahsboard-livreur/return-icon.pipe';
 
 // firebase
 import { provideFirebaseApp, initializeApp } from '@angular/fire/app';
@@ -68,6 +73,8 @@ registerLocaleData(localeFr, 'fr');
     MessagesComponent,
     ModalMessageComponent,
     CarnetAdressesComponent,
+    ReturnLogoPipe,
+    ReturnIconPipe,
   ],
   imports: [
     BrowserModule,
@@ -88,6 +95,7 @@ registerLocaleData(localeFr, 'fr');
     MatMenuModule,
     MatDialogModule,
     FormsModule,
+    GooglePlaceModule,
     HotToastModule.forRoot(),
     provideFirebaseApp(() => initializeApp(environment.firebaseConfig)),
     provideAuth(() => getAuth()),

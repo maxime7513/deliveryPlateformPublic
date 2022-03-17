@@ -100,8 +100,16 @@ table{
             &:not(:last-of-type){
                 border-right: 1px solid #ccc;
             }
-            &.effectue{
-                background: rgba(79, 195, 161, 0.5);
+            &.assignment_turned_in{
+                background: rgba(79, 195, 161, 0.35);
+                mat-icon{
+                    color: var(--secondary);
+                }
+            }
+            &.hourglass_bottom{
+                mat-icon{
+                    color: var(--secondary);
+                }  
             }
             button{
                 display: flex;
@@ -143,14 +151,9 @@ table{
         color: var(--primary);
         mat-icon{
             color: var(--secondary);
-            margin-right: 7px;
-            padding: 5px 13px;
-            border-radius: 5px;
-            border: 1px solid var(--secondary);
-            box-sizing: initial;
+            margin-right: 3px;
             &.reserve{
-                background: var(--secondary);
-                color: #fff;
+                color: #f22;
             }
         }
     }
@@ -270,4 +273,38 @@ table{
         }
     }
    
+}
+
+::ng-deep .creneau_td{
+    div{
+        height: 40px;
+        img{
+            width: 40px;
+            height: 40px;
+            border-radius: 100%;
+            object-fit: cover;
+            object-position: center;
+            background: #fff;
+        }
+    }
+    mat-icon{
+        position: absolute;
+        width: 25px;
+        height: 25px;
+        bottom: 2px;
+        right: 2px;
+        pointer-events: none;
+    }
+    &.event_busy{
+        mat-icon{
+            color: #f22;
+            pointer-events: all;
+            cursor: pointer;
+            opacity: .7;
+            transition: .3s;
+            &:hover{
+                opacity: 1;
+            }
+        }
+    }
 }
