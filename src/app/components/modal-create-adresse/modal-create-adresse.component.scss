@@ -1,0 +1,41 @@
+::ng-deep .mat-dialog-container{
+    padding: 24px 34px;
+}
+
+mat-icon{
+    display: block;
+    margin: auto auto 7px;
+    font-size: 50px;
+    height: 50px;
+    width: 50px;
+}
+
+h3{
+    margin: 0 0 7px;
+}
+
+form{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    ::ng-deep mat-form-field{
+        width: 100%;
+        color: #fff;
+        label{
+            color: #ccc!important;
+        }
+        .mat-select-value{
+            color: #fff;
+        }
+    }
+    button{
+        background: var(--button);
+        color: #fff;
+    }
+}
+
+.mat-dialog-actions{
+    button{
+        padding: 0;
+    }
+}

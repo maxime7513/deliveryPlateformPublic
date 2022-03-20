@@ -42,6 +42,8 @@ import { MessagesComponent } from './components/messages/messages.component';
 import { ModalMessageComponent } from './components/modal-message/modal-message.component';
 import { CarnetAdressesComponent } from './components/carnet-adresses/carnet-adresses.component';
 import { GooglePlaceModule } from "ngx-google-places-autocomplete";
+import {MatAutocompleteModule} from '@angular/material/autocomplete'; 
+import { ModalCreateAdresseComponent } from './components/modal-create-adresse/modal-create-adresse.component';
 
 // Pipe
 import { ReturnLogoPipe } from './components/dahsboard-livreur/return-logo.pipe';
@@ -75,6 +77,7 @@ registerLocaleData(localeFr, 'fr');
     CarnetAdressesComponent,
     ReturnLogoPipe,
     ReturnIconPipe,
+    ModalCreateAdresseComponent,
   ],
   imports: [
     BrowserModule,
@@ -96,6 +99,7 @@ registerLocaleData(localeFr, 'fr');
     MatDialogModule,
     FormsModule,
     GooglePlaceModule,
+    MatAutocompleteModule,
     HotToastModule.forRoot(),
     provideFirebaseApp(() => initializeApp(environment.firebaseConfig)),
     provideAuth(() => getAuth()),

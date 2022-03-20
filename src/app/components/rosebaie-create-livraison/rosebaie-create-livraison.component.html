@@ -27,29 +27,32 @@
   <mat-form-field>
       <mat-label>Adresse d'enlévement</mat-label>
       <input matInput formControlName="adresseEnlevement"/>
-      <mat-error *ngIf="adresseEnlevement.hasError('required')">
+     <mat-error *ngIf="adresseEnlevement.hasError('required')">
         Adresse d'enlévement obligatoire
       </mat-error>
   </mat-form-field>
-
-  <ng-container formArrayName="adresseLivraison" class="adressLiv">
-      <mat-form-field *ngFor="let _ of arrayAdresseLivraison.controls; index as i">
+  
+  <ng-container formArrayName="adresseLivraison">
+      <mat-form-field *ngFor="let _ of arrayAdresseLivraison.controls; index as i" [formGroupName]="i">
           <mat-label *ngIf="arrayAdresseLivraison.length == 1">Adresse de livraison</mat-label>
           <mat-label *ngIf="1 < arrayAdresseLivraison.length">Adresse de livraison {{i + 1}}</mat-label>
-          <input matInput [formControlName]="i"/>
-          <span *ngIf="i != 0" (click)="removeAdresse(i)" matTooltip="supprimer"><mat-icon>clear</mat-icon></span>
-          <!--<mat-error *ngIf="arrayAdresseLivraison2.hasError('required')">
-            Adresse de livraison obligatoire
-          </mat-error>-->
+          <input matInput formControlName="adresse" #vb [matAutocomplete]="auto"/>
+          <mat-autocomplete #auto="matAutocomplete">
+            <mat-option *ngFor="let option of filteredOptions[i] | async" [value]="option.value">
+              {{option.viewValue}}
+            </mat-option>
+          </mat-autocomplete>
+          <mat-icon *ngIf="i != 0" (click)="removeAdresse(i)" matTooltip="supprimer" class="remove">clear</mat-icon>
+          <mat-icon (click)="openDialogModal(vb.value, i)" matTooltip="ajouter au carnet d'adresse" class="add_location">add_location_alt</mat-icon>
       </mat-form-field>
   </ng-container>
     
-  <span (click)="addAdresse()" matTooltip="ajouter une adresse de livraison"><mat-icon>add_circle</mat-icon>Adresse de livraison</span>
+  <span (click)="addNewAdresse()" matTooltip="ajouter une adresse de livraison"><mat-icon>add_circle</mat-icon>Adresse de livraison</span>
 
-  <span (click)="inputField.click()" matTooltip="ajouter bon de livraison">
+  <!--<span (click)="inputField.click()" matTooltip="ajouter bon de livraison">
     <mat-icon>note_add</mat-icon>Bon de livraison
   </span>
-  <input formControlName="urlBonLivraison" #inputField type="file" hidden (change)="uploadImage($event)"/>
+  <input formControlName="urlBonLivraison" #inputField type="file" hidden (change)="uploadImage($event)"/>-->
 
   <button type="submit" mat-raised-button>
     Valider

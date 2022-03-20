@@ -4,5 +4,5 @@ export interface DemandecrenauRB {
     heureEnlevement : Number;
     adresseEnlevement : string;
     adresseLivraison: Array<string>;
-    urlBonLivraison : string;
+    // urlBonLivraison : string;
 }

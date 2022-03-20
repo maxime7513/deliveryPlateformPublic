@@ -111,32 +111,41 @@ table{
                     color: var(--secondary);
                 }  
             }
-            button{
-                display: flex;
-                margin: auto;
-                align-items: center;
-                justify-content: center;
-                border-radius: 5px;
-                border: none;
-                padding: 5px 13px;
-                background: #fff;
-                border: 1.3px solid #4FC3A1;
-                color: #4FC3A1;
-                cursor: default;
-                &.annule{
-                    background: #4FC3A1;
-                    color: #fff;
+            &.event_busy{
+                mat-icon{
+                    color: #f22;
+                    pointer-events: all;
                     cursor: pointer;
-                }
-            }
-            span{
-                color: #324960;
-                strong{
-                    color: #4FC3A1;
-                    font-size: 17px;
+                    opacity: .7;
+                    transition: .3s;
+                    &:hover{
+                        opacity: 1;
+                    }
                 }
             }
         }
+    }
+}
+
+::ng-deep .creneau_td{
+    div{
+        height: 40px;
+        img{
+            width: 40px;
+            height: 40px;
+            border-radius: 100%;
+            object-fit: cover;
+            object-position: center;
+            background: #fff;
+        }
+    }
+    mat-icon{
+        position: absolute;
+        width: 25px;
+        height: 25px;
+        bottom: 2px;
+        right: 2px;
+        pointer-events: none;
     }
 }
 
@@ -273,38 +282,4 @@ table{
         }
     }
    
-}
-
-::ng-deep .creneau_td{
-    div{
-        height: 40px;
-        img{
-            width: 40px;
-            height: 40px;
-            border-radius: 100%;
-            object-fit: cover;
-            object-position: center;
-            background: #fff;
-        }
-    }
-    mat-icon{
-        position: absolute;
-        width: 25px;
-        height: 25px;
-        bottom: 2px;
-        right: 2px;
-        pointer-events: none;
-    }
-    &.event_busy{
-        mat-icon{
-            color: #f22;
-            pointer-events: all;
-            cursor: pointer;
-            opacity: .7;
-            transition: .3s;
-            &:hover{
-                opacity: 1;
-            }
-        }
-    }
 }

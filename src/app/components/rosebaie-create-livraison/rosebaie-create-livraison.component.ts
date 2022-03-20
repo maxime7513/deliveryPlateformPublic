@@ -1,18 +1,25 @@
 import { DatePipe } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
-import { FormArray, FormControl, FormGroup, Validators } from '@angular/forms';
+import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { HotToastService } from '@ngneat/hot-toast';
-import { getAuth } from 'firebase/auth';
-import { concatMap, Observable } from 'rxjs';
+import { concatMap, map, Observable, startWith } from 'rxjs';
 import { ProfileUser } from 'src/app/models/user.profil';
 import { DemandeCrenauRBService } from 'src/app/services/demande-crenau-rb.service';
 import { MessageService } from 'src/app/services/message.service';
 import { UsersService } from 'src/app/services/users.service';
 import { ImageUploadService } from 'src/app/services/image-upload.service';
+import { AdressesService } from 'src/app/services/adresses.service';
+import { resolve } from 'dns';
+import { ModalCreateAdresseComponent } from '../modal-create-adresse/modal-create-adresse.component';
+import { MatDialog } from '@angular/material/dialog';
 
 interface Heure {
   value: number;
+  viewValue: string;
+}
+interface Adresse {
+  value: string;
   viewValue: string;
 }
 
@@ -46,37 +53,118 @@ export class RosebaieCreateLivraisonComponent implements OnInit {
   ];
   user$ = this.usersService.currentUserProfile$;
   user: ProfileUser;
+  options: Adresse[] = [];
+  filteredOptions: Observable<Adresse[]>[] = [];
 
-  constructor(private demandeCrenauRB: DemandeCrenauRBService, private messageService: MessageService, private usersService: UsersService, private imageUploadService: ImageUploadService, private toast: HotToastService, public datePipe : DatePipe, private router: Router) { }
+  constructor(private fb: FormBuilder, private demandeCrenauRB: DemandeCrenauRBService, private messageService: MessageService, public dialog: MatDialog, private usersService: UsersService, private imageUploadService: ImageUploadService, private adresseservice: AdressesService, private toast: HotToastService, public datePipe : DatePipe, private router: Router) { }
 
-  ngOnInit(): void {
+  async ngOnInit(): Promise<void> {
+    // init form
     this.validateform();
 
+    // return user
     this.usersService.currentUserProfile$
     .pipe()
     .subscribe((user) => {
       this.user = user;
     });
-
+    
+    // recuperer nom et adresse pour mat autocomplete
+    // this.nomAdresse();
+    await this.nomAdress$;
+    
+    // Build the account Auto Complete values
+    this.ManageNameControl(0);
   }
   
-  // init validator
-  validateform() {
-    this.rbForm = new FormGroup(
-      {
-        date: new FormControl('', Validators.required),
-        heureEnlevement: new FormControl('', Validators.required),
-        adresseEnlevement: new FormControl('', Validators.required),
-        urlBonLivraison: new FormControl('', Validators.required),
-        // adresseLivraison: new FormArray([]),
-        adresseLivraison: new FormArray([
-          new FormControl('', Validators.required), 
-        ]),
-      }
-    );
+  get nomAdress$(){
+    let tab: Adresse[] = [];
+    return new Promise(resolve => {
+      this.adresseservice.getAdresses().subscribe((res) => {
+        res.map(element =>{
+          tab.push({value: element.adresse, viewValue: element.nom})
+        });
+        resolve(this.options = tab)
+      })
+    });
   }
 
-  // getter for mat error
+  validateform() {
+    this.rbForm = this.fb.group({
+      date: [{ value: ''}, [Validators.required]],
+      heureEnlevement: ['', [Validators.required]],
+      adresseEnlevement: ['', [Validators.required]],
+      // urlBonLivraison: ['', [Validators.required]],
+      adresseLivraison: this.initItems()
+    });
+  }
+
+  // validateform() {
+  //   this.rbForm = new FormGroup(
+  //     {
+  //       date: new FormControl('', Validators.required),
+  //       heureEnlevement: new FormControl('', Validators.required),
+  //       adresseEnlevement: new FormControl('', Validators.required),
+  //       urlBonLivraison: new FormControl('', Validators.required),
+  //       // adresseLivraison: new FormArray([]),
+  //       adresseLivraison: new FormArray([
+  //         new FormControl('', Validators.required), 
+  //       ]),
+  //     }
+  //   );
+  // }
+
+  initItems() {
+    var formArray = this.fb.array([]);
+    
+      formArray.push(this.fb.group({
+        adresse: ['', [Validators.required]],
+      }));
+    
+    return formArray;
+  }
+
+  ManageNameControl(index: any) {
+    var arrayControl = this.rbForm.get('adresseLivraison') as FormArray;
+    this.filteredOptions[index] = arrayControl.at(index).get('adresse').valueChanges.pipe(
+      startWith(''),
+      map(value => typeof value === 'string' ? value : value.viewValue),
+      map(viewValue => viewValue ? this._filter(viewValue) : this.options.slice())
+      );
+  }
+
+  private _filter(name: string): Adresse[] {
+    const filterValue = name.toLowerCase();
+    return this.options.filter(option => option.viewValue.toLowerCase().includes(filterValue));
+  }
+
+  addNewAdresse() {
+    const controls = <FormArray>this.rbForm.controls['adresseLivraison'];
+    let formGroup = this.fb.group({
+      adresse: ['', [Validators.required]],
+    });
+    controls.push(formGroup);
+    // Build the account Auto Complete values
+    this.ManageNameControl(controls.length - 1);
+  }
+
+  // addAdresse() {
+  //   this.arrayAdresseLivraison.push(new FormControl('', Validators.required));
+  // }
+
+  removeAdresse(index: number) {
+    const controls = <FormArray>this.rbForm.controls['adresseLivraison'];
+    controls.removeAt(index);
+    // remove filteredOptions too
+    this.filteredOptions.splice(index, 1);
+
+  }
+
+  // removeAdresse(index: number) {
+  //   this.arrayAdresseLivraison.removeAt(index);
+  // }
+
+  // getter
   get date() {
     return this.rbForm.get('date');
   }
@@ -89,33 +177,25 @@ export class RosebaieCreateLivraisonComponent implements OnInit {
   get heureEnlevement() {
     return this.rbForm.get('adresseEnlevement');
   }
-
   get arrayAdresseLivraison() {
     return this.rbForm.get('adresseLivraison') as FormArray;
   }
 
-  addAdresse() {
-    this.arrayAdresseLivraison.push(new FormControl('', Validators.required));
-  }
-  removeAdresse(index: number) {
-    this.arrayAdresseLivraison.removeAt(index);
-  }
-
-  uploadImage(event: any) {
-    this.imageUploadService
-      .uploadImage(event.target.files[0], `/images/bonLivraisonRosebaie/bondelivraison-${this.dateTimeStamp}`)
-      .pipe(
-        this.toast.observe({
-          loading: "Téléchargement du bon de livraison ...",
-          success: 'Bon de livraison téléchargé avec succes',
-          error: "Une erreur c'est produite lors du téléchargement",
-        }),
-        concatMap((photoURL) =>
-          this.rbForm.value.urlBonLivraison = photoURL
-        )
-      )
-      .subscribe();
-  }
+  // uploadImage(event: any) {
+  //   this.imageUploadService
+  //     .uploadImage(event.target.files[0], `/images/bonLivraisonRosebaie/bondelivraison-${this.dateTimeStamp}`)
+  //     .pipe(
+  //       this.toast.observe({
+  //         loading: "Téléchargement du bon de livraison ...",
+  //         success: 'Bon de livraison téléchargé avec succes',
+  //         error: "Une erreur c'est produite lors du téléchargement",
+  //       }),
+  //       concatMap((photoURL) =>
+  //         this.rbForm.value.urlBonLivraison = photoURL
+  //       )
+  //     )
+  //     .subscribe();
+  // }
 
   onSubmit(){
     this.toast.close();
@@ -142,7 +222,7 @@ export class RosebaieCreateLivraisonComponent implements OnInit {
       nom: this.user.lastName,
       prenom: this.user.firstName,
       photoUrl : this.user.photoURL,
-      bonLivraisonUrl : this.rbForm.value.urlBonLivraison,
+      // bonLivraisonUrl : this.rbForm.value.urlBonLivraison,
       contenue : contenue,
       lu: false,
       traite: false
@@ -152,6 +232,14 @@ export class RosebaieCreateLivraisonComponent implements OnInit {
 
     toastValid.afterClosed.subscribe((e) => {
       this.router.navigate(['/planning']);
+    });
+  }
+
+  openDialogModal(nom: string, index: number) {
+    const dialogRef = this.dialog.open(ModalCreateAdresseComponent);
+    dialogRef.componentInstance.nomAdresse = nom;
+    dialogRef.afterClosed().subscribe(result => {
+      this.arrayAdresseLivraison.controls[index].setValue({adresse: result})
     });
   }
 

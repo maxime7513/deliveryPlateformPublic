@@ -1,0 +1,23 @@
+<h1>Mes adresses</h1>
+<table>
+    <thead>
+        <tr>
+            <th><mat-icon>storefront</mat-icon></th>
+            <th><mat-icon>place</mat-icon></th>
+            <th><mat-icon>phone</mat-icon></th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr *ngFor="let adresse of adresses | slice: lowValueSlice : highValueSlice">
+            <td>{{adresse.nom}}</td>
+            <td>{{adresse.adresse}}</td>
+            <td>{{adresse.phone}}</td>
+        </tr>
+    </tbody>
+</table>
+<mat-paginator [length]="adresses.length" pageSize=10
+               (page)="getPaginatorData($event)" [pageSizeOptions]="[5, 10, 30]"
+               showFirstLastButtons="false">
+</mat-paginator>
+
+<div class="blur"></div>

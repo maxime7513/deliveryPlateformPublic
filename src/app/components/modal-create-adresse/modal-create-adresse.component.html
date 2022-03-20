@@ -1,0 +1,33 @@
+<div mat-dialog-content>
+    <mat-icon>add_location_alt</mat-icon>
+    <h3>Ajouter à mes adresses</h3>
+    <form [formGroup]="adressForm" (ngSubmit)="onSubmit()">
+        <mat-form-field>
+            <mat-label>Nom</mat-label>
+            <input matInput placeholder="Ex. pharmacie" formControlName="nom">
+            <mat-error *ngIf="nom.hasError('required')">
+                Nom obligatoire
+            </mat-error>
+        </mat-form-field>
+
+        <mat-form-field>
+            <mat-label>Adresse</mat-label>
+            <input matInput formControlName="adresse" ngx-google-places-autocomplete [options]="options" (onAddressChange)="AddressChange($event)">
+            <mat-error *ngIf="adresse.hasError('required')">
+                Adresse obligatoire
+            </mat-error>
+        </mat-form-field>
+
+        <mat-form-field>
+            <mat-label>Téléphone</mat-label>
+            <input matInput placeholder="0612345678"  formControlName="phone">
+        </mat-form-field>
+
+        <button type="submit" mat-raised-button>
+            Ajouter
+        </button>
+    </form>
+</div>
+<div mat-dialog-actions>
+  <button mat-button mat-dialog-close>Fermer</button>
+</div>

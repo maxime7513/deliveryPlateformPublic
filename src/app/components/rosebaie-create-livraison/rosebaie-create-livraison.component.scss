@@ -32,7 +32,7 @@ form{
     }
     mat-form-field{
         width: 100%;
-        span{
+        .remove{
             position: absolute;
             color: var(--primary);
             cursor: pointer;
@@ -41,6 +41,12 @@ form{
             &:hover{
                 opacity: 1;
             }
+        }
+        .add_location{
+            position: absolute;
+            right: 0;
+            color: var(--primary);
+            cursor: pointer;
         }
     }
     button{
@@ -51,18 +57,12 @@ form{
         display: flex;
         flex-direction: row;
         align-items: center;
+        color: var(--secondary);
         font-weight: 600;
+        margin: 10px auto 25px auto;
         cursor: pointer;
         mat-icon{
             margin-right: 3px;
-        }
-        &:first-of-type{
-            color: var(--secondary);
-            margin: 10px auto 25px auto;
-        }
-        &:last-of-type{
-            color: var(--primary);
-            margin: auto auto 30px;
         }
     }
 }
