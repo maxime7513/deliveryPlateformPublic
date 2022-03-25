@@ -1,0 +1,30 @@
+<h1>Mes livraisons</h1>
+
+<div *ngFor="let creneauRB of creneauxRB | slice: lowValueSlice : highValueSlice" class="livraison">
+    <div class="header" [class.active]="creneauRB.showDetails">
+        <p><mat-icon>event</mat-icon>{{creneauRB.date.seconds * 1000 | date: 'd MMM Y'}} <mat-icon>schedule</mat-icon>{{creneauRB.heureEnlevement}}H00</p>
+        <span (click)="creneauRB.showDetails = !creneauRB.showDetails" matTooltip="plus de details"><mat-icon>info</mat-icon><mat-icon [class.active]="showDetails">expand_more</mat-icon></span>
+    </div>
+
+    <div *ngIf="creneauRB.showDetails" class="details">
+        <h4><mat-icon>widgets</mat-icon>Adresse d'enlévement</h4>
+        <p>{{creneauRB.adresseEnlevement}}</p>
+        <div>
+            <h4><mat-icon>location_on</mat-icon>Adresses de livraison</h4>
+            <div>
+                <p *ngFor="let adresse of creneauRB.adresseLivraison">
+                <mat-icon>check_box_outline_blank</mat-icon>
+                <!--<mat-icon>check_box</mat-icon>-->
+                {{adresse.location}}
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<mat-paginator [length]="creneauxRB.length" pageSize=10
+               (page)="getPaginatorData($event)" [pageSizeOptions]="[5, 10, 30]"
+               showFirstLastButtons="false">
+</mat-paginator>
+
+<div class="blur"></div>

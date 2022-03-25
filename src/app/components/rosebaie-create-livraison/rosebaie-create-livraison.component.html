@@ -36,7 +36,7 @@
       <mat-form-field *ngFor="let _ of arrayAdresseLivraison.controls; index as i" [formGroupName]="i">
           <mat-label *ngIf="arrayAdresseLivraison.length == 1">Adresse de livraison</mat-label>
           <mat-label *ngIf="1 < arrayAdresseLivraison.length">Adresse de livraison {{i + 1}}</mat-label>
-          <input matInput formControlName="adresse" #vb [matAutocomplete]="auto"/>
+          <input matInput formControlName="location" #vb [matAutocomplete]="auto"/>
           <mat-autocomplete #auto="matAutocomplete">
             <mat-option *ngFor="let option of filteredOptions[i] | async" [value]="option.value">
               {{option.viewValue}}

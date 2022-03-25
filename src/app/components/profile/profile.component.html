@@ -41,7 +41,7 @@
       </mat-form-field>
     </div>
 
-    <mat-form-field>
+    <mat-form-field *ngIf="user.role == 'livreur'">
       <mat-select formControlName="vehicule" placeholder="véhicule">
         <mat-option *ngFor="let vehicule of vehicules" [value]="vehicule.value">
           {{vehicule.viewValue}}

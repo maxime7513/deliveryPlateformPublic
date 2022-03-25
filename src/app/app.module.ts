@@ -46,6 +46,7 @@ import { CarnetAdressesComponent } from './components/carnet-adresses/carnet-adr
 import { GooglePlaceModule } from "ngx-google-places-autocomplete";
 import {MatAutocompleteModule} from '@angular/material/autocomplete'; 
 import { ModalCreateAdresseComponent } from './components/modal-create-adresse/modal-create-adresse.component';
+import { RosebaieLivraisonComponent } from './components/rosebaie-livraison/rosebaie-livraison.component';
 
 // Pipe
 import { ReturnLogoPipe } from './components/dahsboard-livreur/return-logo.pipe';
@@ -56,8 +57,6 @@ import { provideFirebaseApp, initializeApp } from '@angular/fire/app';
 import { getAuth, provideAuth } from '@angular/fire/auth';
 import { getFirestore, provideFirestore } from '@angular/fire/firestore';
 import { getStorage, provideStorage } from '@angular/fire/storage';
-import { TestComponent } from './components/test/test.component';
-import { RosebaieLivraisonComponent } from './components/rosebaie-livraison/rosebaie-livraison.component';
 
 registerLocaleData(localeFr, 'fr');
 
@@ -82,7 +81,6 @@ registerLocaleData(localeFr, 'fr');
     ReturnLogoPipe,
     ReturnIconPipe,
     ModalCreateAdresseComponent,
-    TestComponent,
     RosebaieLivraisonComponent,
   ],
   imports: [

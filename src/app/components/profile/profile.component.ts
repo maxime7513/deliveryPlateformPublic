@@ -57,7 +57,7 @@ export class ProfileComponent implements OnInit {
         lastName: new FormControl('', Validators.required),
         phone: new FormControl('', Validators.required),
         email: new FormControl('', [Validators.required, Validators.email]),
-        vehicule: new FormControl('', Validators.required),
+        vehicule: new FormControl(' ', Validators.required),
       }
     );
   }

@@ -13,6 +13,9 @@ import { AdressesService } from 'src/app/services/adresses.service';
 import { resolve } from 'dns';
 import { ModalCreateAdresseComponent } from '../modal-create-adresse/modal-create-adresse.component';
 import { MatDialog } from '@angular/material/dialog';
+import { CrenauService } from 'src/app/services/crenau.service';
+import { Crenau } from 'src/app/models/crenau.model';
+import { collection, doc, Firestore } from '@angular/fire/firestore';
 
 interface Heure {
   value: number;
@@ -56,7 +59,7 @@ export class RosebaieCreateLivraisonComponent implements OnInit {
   options: Adresse[] = [];
   filteredOptions: Observable<Adresse[]>[] = [];
 
-  constructor(private fb: FormBuilder, private demandeCrenauRB: DemandeCrenauRBService, private messageService: MessageService, public dialog: MatDialog, private usersService: UsersService, private imageUploadService: ImageUploadService, private adresseservice: AdressesService, private toast: HotToastService, public datePipe : DatePipe, private router: Router) { }
+  constructor(private firestore: Firestore, private fb: FormBuilder, private demandeCrenauRB: DemandeCrenauRBService, private messageService: MessageService, public dialog: MatDialog, private usersService: UsersService, private crenauservice: CrenauService, private imageUploadService: ImageUploadService, private adresseservice: AdressesService, private toast: HotToastService, public datePipe : DatePipe, private router: Router) { }
 
   async ngOnInit(): Promise<void> {
     // init form
@@ -118,7 +121,7 @@ export class RosebaieCreateLivraisonComponent implements OnInit {
     var formArray = this.fb.array([]);
     
       formArray.push(this.fb.group({
-        adresse: ['', [Validators.required]],
+        location: ['', [Validators.required]],
       }));
     
     return formArray;
@@ -126,7 +129,7 @@ export class RosebaieCreateLivraisonComponent implements OnInit {
 
   ManageNameControl(index: any) {
     var arrayControl = this.rbForm.get('adresseLivraison') as FormArray;
-    this.filteredOptions[index] = arrayControl.at(index).get('adresse').valueChanges.pipe(
+    this.filteredOptions[index] = arrayControl.at(index).get('location').valueChanges.pipe(
       startWith(''),
       map(value => typeof value === 'string' ? value : value.viewValue),
       map(viewValue => viewValue ? this._filter(viewValue) : this.options.slice())
@@ -141,7 +144,7 @@ export class RosebaieCreateLivraisonComponent implements OnInit {
   addNewAdresse() {
     const controls = <FormArray>this.rbForm.controls['adresseLivraison'];
     let formGroup = this.fb.group({
-      adresse: ['', [Validators.required]],
+      location: ['', [Validators.required]],
     });
     controls.push(formGroup);
     // Build the account Auto Complete values
@@ -197,7 +200,183 @@ export class RosebaieCreateLivraisonComponent implements OnInit {
   //     .subscribe();
   // }
 
-  onSubmit(){
+  openDialogModal(nom: string, index: number) {
+    const dialogRef = this.dialog.open(ModalCreateAdresseComponent);
+    dialogRef.componentInstance.nomAdresse = nom;
+    dialogRef.afterClosed().subscribe(result => {
+      this.arrayAdresseLivraison.controls[index].setValue({adresse: result})
+    });
+  }
+
+  caculerKm(adresseLiv: any){
+    return new Promise(resolve=> {
+      const service = new google.maps.DistanceMatrixService();
+      const origin = this.rbForm.value.adresseEnlevement;
+      const dest = adresseLiv;
+      
+      const request = {
+        origins: [origin],
+        destinations: [dest],
+        travelMode: google.maps.TravelMode.DRIVING,
+        unitSystem: google.maps.UnitSystem.METRIC,
+        avoidHighways: false,
+        avoidTolls: false,
+      };
+
+      service.getDistanceMatrix(request, callback);
+
+      function callback(response: any, status: any) {
+          var valueMetre = response["rows"][0]["elements"][0]["distance"]["value"];
+          resolve (valueMetre)
+      }
+    });
+  }
+
+  async calculerAdressePlusEloigne(tabLivraison: any){
+    return new Promise(async resolve=> {
+      let res: any = 0;
+      let resIndice;
+      for (let i = 0; i < tabLivraison.length ; i++) {
+        let res2 = await this.caculerKm(tabLivraison[i].location);
+        if(res2 > res){
+          res = res2
+          resIndice = i;
+        }
+      }  
+      resolve(resIndice)
+    });
+  }
+
+  calculTempsItineraire(origin: any, wayptsTab: any){
+    return new Promise(async resolve=> {
+      const directionsService = new google.maps.DirectionsService();
+      const indiceAdressePlusEloigne: any = await this.calculerAdressePlusEloigne(wayptsTab);
+      const destination = wayptsTab[indiceAdressePlusEloigne].location; // adresse de destination est l'adresse la plus eloigne du point d'origin
+      const waypts: google.maps.DirectionsWaypoint[] = wayptsTab.slice(); // 'slice()' pour creer nouveau tableau pour ne pas modifier l'original
+
+      waypts.splice(indiceAdressePlusEloigne,1); // supprimer adresse la plus eloignée du tableau des arrets(waypoints)
+
+      const request = {
+        origin: origin,
+        destination: destination,
+        waypoints: waypts,
+        optimizeWaypoints: true,
+        travelMode: google.maps.TravelMode.DRIVING,
+      }
+    
+      directionsService.route(request,callback);
+
+      function callback(response: any, status: any) {
+        if(status === 'OK'){
+          let time = 0;
+          for (let i = 0; i < response.routes[0].legs.length; i++) {
+            time += response.routes[0].legs[i].duration.value;
+          }
+          console.log("new time ))=>"+time / (60 * 60));
+          console.log(response)
+          resolve (time / (60 * 60))
+        }
+      }
+    });
+  }
+
+  async newTabOrdering(origin: any, wayptsTab: any){
+    return new Promise(async resolve=> {
+      const directionsService = new google.maps.DirectionsService();
+      const indiceAdressePlusEloigne: any = await this.calculerAdressePlusEloigne(wayptsTab);
+      const destination = wayptsTab[indiceAdressePlusEloigne].location; // adresse de destination est l'adresse la plus eloigne du point d'origin
+      const waypts: google.maps.DirectionsWaypoint[] = wayptsTab.slice(); // 'slice()' pour creer nouveau tableau pour ne pas modifier l'original
+
+      waypts.splice(indiceAdressePlusEloigne,1); // supprimer adresse la plus eloignée du tableau des arrets(waypoints)
+
+      const request = {
+        origin: origin,
+        destination: destination,
+        waypoints: waypts,
+        optimizeWaypoints: true,
+        travelMode: google.maps.TravelMode.DRIVING,
+      }
+    
+      directionsService.route(request,callback);
+
+      function callback(response: any, status: any) {
+        if(status === 'OK'){
+          let tab = [];
+          for (let i = 0; i < response.routes[0].legs.length; i++) {
+            tab.push({'location': response.routes[0].legs[i].end_address})
+          }
+          resolve(tab)
+        }
+      }
+    });
+  }
+
+  calculDistanceItineraire(origin: any, wayptsTab: any){
+    return new Promise(async resolve=> {
+      const directionsService = new google.maps.DirectionsService();
+      const indiceAdressePlusEloigne: any = await this.calculerAdressePlusEloigne(wayptsTab);
+      const destination = wayptsTab[indiceAdressePlusEloigne].location; // adresse de destination est l'adresse la plus eloigne du point d'origin
+      const waypts: google.maps.DirectionsWaypoint[] = wayptsTab.slice(); // 'slice()' pour creer nouveau tableau pour ne pas modifier l'original
+      // console.log("form avant splice =>"+this.rbForm.value.adresseLivraison)
+      // console.log("tab avant splice =>"+waypts)
+
+      waypts.splice(indiceAdressePlusEloigne,1); // supprimer adresse la plus eloignée du tableau des arrets(waypoints)
+      // console.log("form apres splice =>"+this.rbForm.value.adresseLivraison)
+      // console.log("tab apres splice =>"+waypts)
+
+      const request = {
+        origin: origin,
+        destination: destination,
+        waypoints: waypts,
+        optimizeWaypoints: true,
+        travelMode: google.maps.TravelMode.DRIVING,
+      }
+    
+      function callback(response: any, status: any) {
+        if(status === 'OK'){
+          let distance = 0;
+          let time = 0;
+          for (let i = 0; i < response.routes[0].legs.length; i++) {
+            distance += response.routes[0].legs[i].distance.value;
+            time += response.routes[0].legs[i].duration.value;
+          }
+          console.log("distance => "+ distance / 1000);
+          console.log(response);
+          console.log('time => '+time / 60);
+          resolve (distance / 1000)
+        }
+      }
+
+      directionsService.route(request, callback);
+
+    });
+  }
+
+  async addCreneau(idDemandeCreneauRB: any){
+    // calculer le nombre d'heure par rapport à la tournée
+    let time: any = await this.calculTempsItineraire(this.rbForm.value.adresseEnlevement, this.rbForm.value.adresseLivraison);
+    const nombreCrenau = Math.ceil(time);
+
+    for(let i = 0; i < nombreCrenau; i++){      
+      this.rbForm.value.date.setHours(this.rbForm.value.heureEnlevement + i); // setHours de la date avec la valeur de heureDebut du formulaire   
+
+      const req: Crenau ={
+        date: this.rbForm.value.date,
+        dateString: this.datePipe.transform(this.rbForm.value.date, 'dd/MM/yyyy'),
+        heureDebut: this.rbForm.value.heureEnlevement + i,
+        heureFin: this.rbForm.value.heureEnlevement + i + 1,
+        inscrit: 0,
+        inscritMax: 1,
+        vehicule: "voiture",
+        societe: "rosebaie",
+        idDemandeCreneauRB: idDemandeCreneauRB
+      }
+
+      this.crenauservice.addCrenau(req); // ajouter creneau(x) à firebase
+    }
+  }
+
+  async onSubmit(){
     this.toast.close();
 
     if (!this.rbForm.valid) {
@@ -206,10 +385,17 @@ export class RosebaieCreateLivraisonComponent implements OnInit {
       return;
     }
 
-    // ajout de la demande de creneau a firebase
-    this.demandeCrenauRB.addDemandeCrenauRB(this.rbForm.value);
-    const toastValid = this.toast.success('Demande de livraison prise en compte',{duration: 2500});
-  
+    this.rbForm.value.km = await this.calculDistanceItineraire(this.rbForm.value.adresseEnlevement, this.rbForm.value.adresseLivraison);
+    this.rbForm.value.km = this.rbForm.value.km.toFixed(3);
+
+    // remmetre tableau adresseLivraison dans l'ordre de livraison
+    this.rbForm.value.adresseLivraison = await this.newTabOrdering(this.rbForm.value.adresseEnlevement, this.rbForm.value.adresseLivraison);
+    
+    // ajout de la demande de creneau a firebase et recuperation de l'id
+    const idDemandeCreneauRB = await this.demandeCrenauRB.addDemandeCrenauRB(this.rbForm.value);
+
+    this.addCreneau(idDemandeCreneauRB); // ajouter creneau a firebase avec l'id de addDemandeCrenauRB en parametre
+
     // envoie du message dans la boite mail woozoo
     let date = this.datePipe.transform(this.rbForm.value.date, 'dd/MM/yyyy');
     let contenue = "RoseBaie viens de programmer une livraison pour le " + date + ".";
@@ -228,20 +414,17 @@ export class RosebaieCreateLivraisonComponent implements OnInit {
       traite: false
     }
 
-    this.messageService.addMessage(message);
-
+    // this.messageService.addMessage(message);
+    
+    const toastValid = this.toast.success('Demande de livraison prise en compte',{duration: 2500});
+    
     toastValid.afterClosed.subscribe((e) => {
-      this.router.navigate(['/planning']);
+      // this.router.navigate(['/planning']);
     });
   }
 
-  openDialogModal(nom: string, index: number) {
-    const dialogRef = this.dialog.open(ModalCreateAdresseComponent);
-    dialogRef.componentInstance.nomAdresse = nom;
-    dialogRef.afterClosed().subscribe(result => {
-      this.arrayAdresseLivraison.controls[index].setValue({adresse: result})
-    });
-  }
+
+
 
   // onSubmit(){
   //   this.toast.close();

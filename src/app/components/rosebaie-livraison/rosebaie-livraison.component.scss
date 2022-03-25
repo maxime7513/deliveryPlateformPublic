@@ -1,0 +1,107 @@
+:host{
+    display: block;
+    width: 100%;
+    min-height: 100%;
+    padding: 80px 20px 40px 20px;
+    position: relative;
+}
+
+.blur{
+    background: rgba(255, 255, 255, 0.9);
+}
+
+h1{
+    text-align: center;
+    color: var(--secondary);
+}
+
+.livraison{
+    width: 60%;
+    margin: auto auto 20px;
+    border-radius: 10px;
+    box-shadow: rgba(0, 0, 0, 0.1) 0px 20px 25px -5px, rgba(0, 0, 0, 0.04) 0px 10px 10px -5px;
+    p{
+        margin: 0;
+        font-weight: 500;
+        text-transform: capitalize;
+    }
+    .header{
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
+        flex-wrap: wrap;
+        padding: 15px 20px;
+        background: var(--secondary);
+        color: #fff;
+        border-radius: 10px;
+        &.active{
+            border-radius: 10px 10px 0 0;
+        }
+        p{
+            display: flex;
+            align-items: center;
+            mat-icon{
+                margin-right: 3px;
+                &:last-of-type{
+                    margin-left: 10px;
+                }
+            }
+        }
+        span{
+            cursor: pointer;
+            mat-icon{
+                transition: .3s;
+                &:last-of-type{
+                    font-size: 30px;
+                    height: 30px;
+                    width: 30px;
+                    vertical-align: sub;
+                }
+                &.active{
+                    transform: rotate(180deg);
+                }
+            }
+        }
+    }
+    .details{
+        padding: 20px;
+        background: rgba(255, 255, 255, 0.9);
+        color: var(--primary);
+        border-radius: 0 0 10px 10px;
+        h4{
+            font-size: 1.15rem;
+            text-align: center;
+            margin: 0 0 5px;
+            color: var(--secondary);
+            mat-icon{
+                vertical-align: sub;
+                margin-right: 5px;
+            }
+        }
+        >p{
+            text-align: center;
+        }
+        > div{
+            margin-top: 20px;
+            div p{
+                padding: 20px 0 0 10px;
+                mat-icon{
+                    vertical-align: sub;
+                    color: var(--secondary);
+                }
+                &:first-of-type{
+                    padding-top: 7px;
+                }
+            }
+        }
+    }
+}
+
+mat-paginator{
+    display: flex;
+    justify-content: center;
+    background: transparent;
+    color: var(--primary);
+    font-size: 14px;
+}
