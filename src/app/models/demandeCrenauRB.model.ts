@@ -5,4 +5,5 @@ export interface DemandecrenauRB {
     adresseEnlevement : string;
     adresseLivraison: Array<string>;
     // urlBonLivraison : string;
+    km: string;
 }

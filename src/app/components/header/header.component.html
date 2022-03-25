@@ -29,6 +29,10 @@
       <mat-icon>more_time</mat-icon>
       <span>Programmer livraison</span>
     </button>
+    <button *ngIf="user.role == 'rosebaie'" mat-menu-item routerLink="/livraisonRB">
+      <mat-icon>more_time</mat-icon>
+      <span>Mes livraisons</span>
+    </button>
     <button *ngIf="user.role == 'rosebaie'" mat-menu-item routerLink="/carnetAdresses">
       <mat-icon>place</mat-icon>
       <span>Carnet d'adresses</span>

@@ -8,6 +8,8 @@ import { DatePipe } from '@angular/common';
 // heure en francais
 import { registerLocaleData } from '@angular/common';
 import localeFr from '@angular/common/locales/fr';
+// google maps
+import {} from 'googlemaps'; 
 
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatIconModule } from '@angular/material/icon';
@@ -54,6 +56,8 @@ import { provideFirebaseApp, initializeApp } from '@angular/fire/app';
 import { getAuth, provideAuth } from '@angular/fire/auth';
 import { getFirestore, provideFirestore } from '@angular/fire/firestore';
 import { getStorage, provideStorage } from '@angular/fire/storage';
+import { TestComponent } from './components/test/test.component';
+import { RosebaieLivraisonComponent } from './components/rosebaie-livraison/rosebaie-livraison.component';
 
 registerLocaleData(localeFr, 'fr');
 
@@ -78,6 +82,8 @@ registerLocaleData(localeFr, 'fr');
     ReturnLogoPipe,
     ReturnIconPipe,
     ModalCreateAdresseComponent,
+    TestComponent,
+    RosebaieLivraisonComponent,
   ],
   imports: [
     BrowserModule,

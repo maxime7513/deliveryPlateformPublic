@@ -9,4 +9,5 @@ export interface Crenau {
     vehicule? : string;
     societe: string;
     users?: string[];
+    idDemandeCreneauRB?: string;
 }

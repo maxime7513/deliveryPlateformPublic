@@ -21,6 +21,7 @@ import {
   redirectUnauthorizedTo,
 } from '@angular/fire/auth-guard';
 import { CarnetAdressesComponent } from './components/carnet-adresses/carnet-adresses.component';
+import { RosebaieLivraisonComponent } from './components/rosebaie-livraison/rosebaie-livraison.component';
 
 const redirectUnauthorizedToLogin = () => redirectUnauthorizedTo(['login']);
 const redirectLoggedInToHome = () => redirectLoggedInTo(['register']);
@@ -38,6 +39,7 @@ const routes: Routes = [
   { path: 'createRosebaie', component: RosebaieCreateLivraisonComponent, ...canActivate(redirectUnauthorizedToLogin), canActivate:[RoleRocketGuard]},
   { path: 'messages', component: MessagesComponent, ...canActivate(redirectUnauthorizedToLogin), canActivate:[RoleWoozooGuard]},
   { path: 'carnetAdresses', component: CarnetAdressesComponent, ...canActivate(redirectUnauthorizedToLogin)},
+  { path: 'livraisonRB', component: RosebaieLivraisonComponent, ...canActivate(redirectUnauthorizedToLogin)},
 ];
 
 @NgModule({

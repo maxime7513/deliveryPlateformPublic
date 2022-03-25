@@ -24,6 +24,7 @@
     "@ngneat/hot-toast": "^4.1.0",
     "@ngneat/overview": "^3.0.0",
     "@ngneat/until-destroy": "^9.0.0",
+    "@types/googlemaps": "^3.43.3",
     "firebase": "^9.6.6",
     "ngx-google-places-autocomplete": "^2.0.5",
     "rxfire": "^6.0.0",
