@@ -123,10 +123,6 @@ export class RosebaieCreateLivraisonComponent implements OnInit {
       date: [{ value: ''}, [Validators.required]],
       heureEnlevement: ['', [Validators.required]],
       adresseEnlevement: ['', [Validators.required]],
-      // adresseEnlevement: this.fb.group({
-      //   locationEnlevement: ['', [Validators.required]],
-      //   recuperer: ['', [Validators.required]],
-      // }),
       // urlBonLivraison: ['', [Validators.required]],
       adresseLivraison: this.initItems()
     });
@@ -288,11 +284,8 @@ export class RosebaieCreateLivraisonComponent implements OnInit {
   calculTempsItineraire(origin: any, wayptsTab: any){
     return new Promise(async resolve=> {
       const directionsService = new google.maps.DirectionsService();
-      const indiceAdressePlusEloigne: any = await this.calculerAdressePlusEloigne(wayptsTab);
-      const destination = wayptsTab[indiceAdressePlusEloigne].location; // adresse de destination est l'adresse la plus eloigne du point d'origin
-      const waypts: google.maps.DirectionsWaypoint[] = wayptsTab.slice(); // 'slice()' pour creer nouveau tableau pour ne pas modifier l'original
-
-      waypts.splice(indiceAdressePlusEloigne,1); // supprimer adresse la plus eloignée du tableau des arrets(waypoints)
+      const destination = "14 Rue d'Anthoine, 13002 Marseille";
+      const waypts: google.maps.DirectionsWaypoint[] = wayptsTab;
 
       const request = {
         origin: origin,
@@ -321,11 +314,8 @@ export class RosebaieCreateLivraisonComponent implements OnInit {
   async newTabOrdering(origin: any, wayptsTab: any){
     return new Promise(async resolve=> {
       const directionsService = new google.maps.DirectionsService();
-      const indiceAdressePlusEloigne: any = await this.calculerAdressePlusEloigne(wayptsTab);
-      const destination = wayptsTab[indiceAdressePlusEloigne].location; // adresse de destination est l'adresse la plus eloigne du point d'origin
-      const waypts: google.maps.DirectionsWaypoint[] = wayptsTab.slice(); // 'slice()' pour creer nouveau tableau pour ne pas modifier l'original
-
-      waypts.splice(indiceAdressePlusEloigne,1); // supprimer adresse la plus eloignée du tableau des arrets(waypoints)
+      const destination = "14 Rue d'Anthoine, 13002 Marseille";
+      const waypts: google.maps.DirectionsWaypoint[] = wayptsTab;
 
       const request = {
         origin: origin,
@@ -338,7 +328,7 @@ export class RosebaieCreateLivraisonComponent implements OnInit {
       const callback = async (response: any, status: any) => {
         if(status === 'OK'){
           let tab = [];
-          for (let i = 0; i < response.routes[0].legs.length; i++) {
+          for (let i = 0; i < response.routes[0].legs.length - 1; i++) {
             let adresseFormat = response.routes[0].legs[i].end_address.substring(0, response.routes[0].legs[i].end_address.length - 8); // supprimer ",France" à la fin
             let adresseNom = await this.getNomAdresse(adresseFormat);
             let adressePhone = await this.getPhoneAdresse(adresseFormat);
@@ -389,11 +379,8 @@ export class RosebaieCreateLivraisonComponent implements OnInit {
   calculDistanceItineraire(origin: any, wayptsTab: any){
     return new Promise(async resolve=> {
       const directionsService = new google.maps.DirectionsService();
-      const indiceAdressePlusEloigne: any = await this.calculerAdressePlusEloigne(wayptsTab);
-      const destination = wayptsTab[indiceAdressePlusEloigne].location; // adresse de destination est l'adresse la plus eloigne du point d'origin
-      const waypts: google.maps.DirectionsWaypoint[] = wayptsTab.slice(); // 'slice()' pour creer nouveau tableau pour ne pas modifier l'original
-
-      waypts.splice(indiceAdressePlusEloigne,1); // supprimer adresse la plus eloignée du tableau des arrets(waypoints)
+      const destination = "14 Rue d'Anthoine, 13002 Marseille";
+      const waypts: google.maps.DirectionsWaypoint[] = wayptsTab;
 
       const request = {
         origin: origin,
@@ -464,17 +451,14 @@ export class RosebaieCreateLivraisonComponent implements OnInit {
     this.rbForm.value.km = await this.calculDistanceItineraire(this.rbForm.value.adresseEnlevement.location, this.rbForm.value.adresseLivraison);
     this.rbForm.value.km = this.rbForm.value.km.toFixed(3);
     
-    // copie tu tableau de livraison avant modification(newTabOrdering)
-    const copyTabLivraison = this.rbForm.value.adresseLivraison.slice();
-    
     // remmetre tableau adresseLivraison dans l'ordre de livraison
     this.rbForm.value.adresseLivraison = await this.newTabOrdering(this.rbForm.value.adresseEnlevement.location, this.rbForm.value.adresseLivraison);
 
-    // ajout de la demande de creneau a firebase et recuperation de l'id
-    console.log(this.rbForm.value);
+    // ajout de la demande de creneau a firebase et recuperation de l'id)
     const idDemandeCreneauRB = await this.demandeCrenauRB.addDemandeCrenauRB(this.rbForm.value);
 
-    this.addCreneau(idDemandeCreneauRB, copyTabLivraison); // ajouter creneau a firebase avec l'id de addDemandeCrenauRB en parametre
+    // this.addCreneau(idDemandeCreneauRB, copyTabLivraison);
+    this.addCreneau(idDemandeCreneauRB, this.rbForm.value.adresseLivraison); // ajouter creneau a firebase avec l'id de addDemandeCrenauRB en parametre
 
     // envoie du message dans la boite mail woozoo
     let date = this.datePipe.transform(this.rbForm.value.date, 'dd/MM/yyyy');
