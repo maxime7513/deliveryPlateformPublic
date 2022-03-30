@@ -1,21 +1,19 @@
 import { DatePipe } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
-import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { HotToastService } from '@ngneat/hot-toast';
-import { concatMap, map, Observable, startWith } from 'rxjs';
+import { map, Observable, startWith } from 'rxjs';
 import { ProfileUser } from 'src/app/models/user.profil';
 import { DemandeCrenauRBService } from 'src/app/services/demande-crenau-rb.service';
 import { MessageService } from 'src/app/services/message.service';
 import { UsersService } from 'src/app/services/users.service';
 import { ImageUploadService } from 'src/app/services/image-upload.service';
 import { AdressesService } from 'src/app/services/adresses.service';
-import { resolve } from 'dns';
 import { ModalCreateAdresseComponent } from '../modal-create-adresse/modal-create-adresse.component';
 import { MatDialog } from '@angular/material/dialog';
 import { CrenauService } from 'src/app/services/crenau.service';
 import { Crenau } from 'src/app/models/crenau.model';
-import { collection, doc, Firestore } from '@angular/fire/firestore';
 
 interface Heure {
   value: number;
@@ -237,47 +235,6 @@ export class RosebaieCreateLivraisonComponent implements OnInit {
     dialogRef.afterClosed().subscribe(result => {
       this.arrayAdresseLivraison.controls[index].setValue({location: result})
       // this.arrayAdresseLivraison.controls[index].setValue({adresse: result})
-    });
-  }
-
-  caculerKm(adresseLiv: any){
-    return new Promise(resolve=> {
-      const service = new google.maps.DistanceMatrixService();
-      const origin = this.rbForm.value.adresseEnlevement.location;
-      const dest = adresseLiv;
-      
-      const request = {
-        origins: [origin],
-        destinations: [dest],
-        travelMode: google.maps.TravelMode.DRIVING,
-        unitSystem: google.maps.UnitSystem.METRIC,
-        avoidHighways: false,
-        avoidTolls: false,
-      };
-
-      service.getDistanceMatrix(request, callback);
-
-      function callback(response: any, status: any) {
-        if(status === 'OK'){
-          var valueMetre = response["rows"][0]["elements"][0]["distance"]["value"];
-          resolve (valueMetre)
-        }
-      }
-    });
-  }
-
-  async calculerAdressePlusEloigne(tabLivraison: any){
-    return new Promise(async resolve=> {
-      let res: any = 0;
-      let resIndice;
-      for (let i = 0; i < tabLivraison.length ; i++) {
-        let res2 = await this.caculerKm(tabLivraison[i].location);
-        if(res2 > res){
-          res = res2
-          resIndice = i;
-        }
-      }  
-      resolve(resIndice)
     });
   }
 
