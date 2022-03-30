@@ -1,0 +1,27 @@
+<h1>Mission</h1>
+
+<div *ngIf="!missionRB.adresseEnlevement.recupere" class="enlevement">
+    <h4>Adresse d'enlévement</h4>
+    <p>{{missionRB.adresseEnlevement.location}}</p>
+    <button mat-raised-button (click)="colisRecupere()">
+        <mat-icon>done</mat-icon>
+        Récupérer
+    </button>
+</div>
+
+<div *ngIf="missionRB.adresseEnlevement.recupere" class="livraison">
+    <div *ngFor="let adresse of missionRB.adresseLivraison ; index as i">
+    <h4>Livraison {{ i+1 }}</h4>
+    <p><mat-icon>storefront</mat-icon>{{adresse.nom}}</p>
+    <p><mat-icon>location_on</mat-icon>{{adresse.location}}</p>
+    <p><mat-icon>call</mat-icon>{{adresse.phone}}</p>
+    <button mat-raised-button (click)="inputField.click()" *ngIf="!adresse.urlBonLivraison">
+        <mat-icon>add_a_photo</mat-icon>
+        Bon de livraison
+    </button>
+    <input #inputField type="file" hidden (change)="uploadBonLivraison($event, i)"/>
+    <p *ngIf="adresse.urlBonLivraison" class="livre"><mat-icon>done</mat-icon>Livré</p>
+    </div>
+</div>
+
+<div class="blur"></div>

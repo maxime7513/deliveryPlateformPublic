@@ -45,6 +45,11 @@ export class CreateCrenauComponent implements OnInit {
   showCrenaux: boolean;
   userRole: any;
   heures: Heure[] = [
+    {value: 7, viewValue: '07h'},
+    {value: 8, viewValue: '08h'},
+    {value: 9, viewValue: '09h'},
+    {value: 10, viewValue: '10h'},
+    {value: 11, viewValue: '11h'},
     {value: 12, viewValue: '12h'},
     {value: 13, viewValue: '13h'},
     {value: 14, viewValue: '14h'},
@@ -152,13 +157,18 @@ export class CreateCrenauComponent implements OnInit {
   }
 
   // envoi du formulaire
-  onSubmit() {
+  async onSubmit() {
     this.toast.close();
     // this.toast.loading('Ajout du crénau ...');
     this.submitCrenauForm = true;
     if (!this.crenauForm.valid) {
       console.log('formulaire invalid');
       this.toast.error('Formulaire invalide');
+      return;
+    }
+
+    if(this.crenauForm.value.heureDebut > this.crenauForm.value.heureFin){
+      this.toast.error("Heure de début doit être supérieur à l'heure de fin");
       return;
     }
 
@@ -180,12 +190,17 @@ export class CreateCrenauComponent implements OnInit {
         this.crenauForm.value.societe = this.userRole; // donner a societe la valeur du role de l'utilisateur connecté
       }
 
+      // verifier si creneau deja crée
+      let verifCrenau = await this.crenauservice.getAcceptAddCrenau(this.crenauForm.value.societe,this.crenauForm.value.dateString, this.crenauForm.value.heureDebut);
+      if(verifCrenau > 0){
+        this.toast.error('un créneau existe déjà pour '+ this.crenauForm.value.heureDebut +'h');
+        return
+      }
+
       // ajouter creneau(x) à firebase
       this.crenauservice.addCrenau(this.crenauForm.value);
     }
     
-    // this.crenauservice.addCrenau(this.crenauForm.value);
-
     const toastValid = this.toast.success('Crénau ajouter',
       {
         // dismissible: true,

@@ -1,0 +1,121 @@
+:host{
+    display: block;
+    width: 100%;
+    min-height: 100%;
+    padding: 64px 20px 40px 20px;
+    position: relative;
+}
+
+.blur{
+    background: rgba(255, 255, 255, 0.9);
+}
+
+h1{
+    text-align: center;
+    margin-top: 13px;
+    margin-bottom: 0;
+    color: var(--primary);
+    position: relative;
+    z-index: 1;
+}
+
+p{
+    margin: 0;
+}
+h4{
+    color: var(--secondary);
+    font-size: 1.2rem;
+    margin: 0 0 10px;
+    text-align: center;
+}
+
+.enlevement{
+    max-width: 500px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 17px 10px;
+    background: var(--primary);
+    margin: 50px auto auto;
+    border-radius: 7px;
+    position: relative;
+    z-index: 1;
+    p{
+        color: #fff;
+    }
+    button{
+        margin-top: 17px;
+        background: var(--secondary);
+        color: #fff;
+    }
+}
+
+.livraison{
+    max-width: 500px;
+    margin: auto;
+    position: relative;
+    z-index: 1;
+    > div{
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        background: var(--primary);
+        margin: 30px 0;
+        padding: 15px 10px;
+        border-radius: 7px;
+        p{
+            color: #fff;
+            text-align: center;
+            text-transform: capitalize;
+            margin-bottom: 5px;
+            mat-icon{
+                vertical-align: sub;
+            }
+            &:not(:nth-of-type(2)) mat-icon{
+                margin-right: 3px;
+            }
+        }
+        button{
+            margin-top: 12px;
+            background: var(--secondary);
+            color: #fff;
+        }
+        .livre{
+            border: 1.5px solid var(--secondary);
+            border-radius: 5px;
+            margin-top: 13px;
+            padding: 3px 13px 3px 5px;
+            mat-icon{
+                color: var(--secondary);
+                font-size: 21px;
+                width: 21px;
+                height: 21px;
+            }
+        }
+    }
+}
+
+/* Responsive */
+
+@media (max-width: 500px) {
+    :host{
+        background: none;
+        &:before {
+            content: "";
+            position: fixed;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -10;
+            background: url(/assets/images/woozoo-background.jpg) no-repeat;
+            -webkit-background-size: cover;
+            -moz-background-size: cover;
+            -o-background-size: cover;
+            background-size: cover;
+        }
+    }
+    .blur{
+        z-index: 0;
+    }
+}

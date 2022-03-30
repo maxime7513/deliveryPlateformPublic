@@ -73,6 +73,7 @@ export class ModalCreateAdresseComponent implements OnInit {
     this.adresseservice.addAdressse(this.adressForm.value)
     this.toast.success('Ajouter à vos adresses');
     this.dialogRef.close(this.adresse.value);
+    console.log(this.adresse.value)
   }
 
 }

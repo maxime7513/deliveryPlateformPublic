@@ -28,7 +28,7 @@ export class RegisterLivreurComponent implements OnInit {
   datePicker = new Date;
   private refreshDatePicker: any = setInterval(() => {
     this.datePicker = new Date;
-  }, 5000);
+  }, 10000);
   defaultDatePicker: Date;
   ccE: string = "+33";
   societes: Societe[] = [
@@ -46,9 +46,7 @@ export class RegisterLivreurComponent implements OnInit {
     //   this.crenaux = res;
     // })
     this.afficherCrenauParDate();
-    
-    this.refreshDatePicker;
-  }
+      }
 
   getPlaceRestante(inscritMax: number, inscrit: number){
     let calc = inscritMax - inscrit;

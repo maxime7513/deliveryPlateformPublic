@@ -10,7 +10,7 @@ import { DemandeCrenauRBService } from 'src/app/services/demande-crenau-rb.servi
 })
 export class RosebaieLivraisonComponent implements OnInit {
 
-  creneauxRB: any[];
+  creneauxRB: any[] = [];
   showDetails: boolean;
   // pagination
   lowValueSlice: number = 0;
@@ -21,16 +21,16 @@ export class RosebaieLivraisonComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.demandeCrenauRBService.getDemandeCrenauRB().subscribe((res: any[]) => {
+    this.demandeCrenauRBService.getDemandeCrenauRB().subscribe(res => {
       this.creneauxRB = res;
     })
   }
 
-    // pagination
-    public getPaginatorData(event: PageEvent): PageEvent {
-      this.lowValueSlice = event.pageIndex * event.pageSize;
-      this.highValueSlice = this.lowValueSlice + event.pageSize;
-      return event;
+  // pagination
+  public getPaginatorData(event: PageEvent): PageEvent {
+    this.lowValueSlice = event.pageIndex * event.pageSize;
+    this.highValueSlice = this.lowValueSlice + event.pageSize;
+    return event;
   }
 
 }

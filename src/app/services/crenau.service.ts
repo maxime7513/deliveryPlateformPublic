@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { addDoc, arrayRemove, arrayUnion, collection, collectionData, deleteDoc, doc, Firestore, increment, orderBy, query, updateDoc, where } from '@angular/fire/firestore';
+import { addDoc, arrayRemove, arrayUnion, collection, collectionData, deleteDoc, doc, Firestore, getDocs, increment, orderBy, query, updateDoc, where } from '@angular/fire/firestore';
 import { Observable } from 'rxjs';
 import { Crenau } from '../models/crenau.model';
 
@@ -126,6 +126,12 @@ export class CrenauService {
   getCrenauxInscritCurrentUserBySemaine(userid: string, tabDate: string[]): Observable<Crenau[]> {
     const crenauxRef = query(collection(this.firestore, 'crenau'), where("users", "array-contains", userid), where("dateString", 'in', [tabDate[0], tabDate[1], tabDate[2], tabDate[3], tabDate[4], tabDate[5], tabDate[6]]));
     return collectionData(crenauxRef, { idField: 'id' }) as Observable<Crenau[]>;
+  }
+
+  async getAcceptAddCrenau(Usersociete: any, date: string, heureDebut: number) {
+    const crenauxRef = query(collection(this.firestore, 'crenau'), where("societe", "==" , Usersociete), where("dateString", "==", date), where("heureDebut", "==", heureDebut));
+    let resLength = await getDocs(crenauxRef);
+    return resLength.size
   }
 
 }

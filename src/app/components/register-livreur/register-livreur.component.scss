@@ -121,7 +121,7 @@ table{
             }
         }
         .annule{
-            background: var(--button);
+            background: var(--secondary);
         }
         .complet{
             background: #fff;
@@ -146,4 +146,38 @@ table{
     margin-top: 50px;
     font-size: 1.3rem;
     color: var(--secondary);
+}
+
+/* Responsive */
+
+@media (max-width: 500px) {
+    :host{
+        background: none;
+        &:before {
+            content: "";
+            position: fixed;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -10;
+            background: url(/assets/images/woozoo-background.jpg) no-repeat;
+            -webkit-background-size: cover;
+            -moz-background-size: cover;
+            -o-background-size: cover;
+            background-size: cover;
+        }
+    }
+    .blur{
+        z-index: 0;
+    }
+
+    h1{
+        font-size: 1.7rem;
+    }
+
+    h1, .date-picker, p, table{
+        position: relative;
+        z-index: 1;
+    }
 }

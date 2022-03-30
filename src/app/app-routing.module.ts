@@ -11,6 +11,9 @@ import { DahsboardLivreurComponent } from './components/dahsboard-livreur/dahsbo
 import { ListeLivreurComponent } from './components/liste-livreur/liste-livreur.component';
 import { RosebaieCreateLivraisonComponent } from './components/rosebaie-create-livraison/rosebaie-create-livraison.component';
 import { MessagesComponent } from './components/messages/messages.component';
+import { CarnetAdressesComponent } from './components/carnet-adresses/carnet-adresses.component';
+import { RosebaieLivraisonComponent } from './components/rosebaie-livraison/rosebaie-livraison.component';
+import { MissionRosebaieComponent } from './components/mission-rosebaie/mission-rosebaie.component';
 
 import { RoleWoozooGuard } from './shared/role-woozoo.guard';
 import { RoleLivreurGuard } from './shared/role-livreur.guard';
@@ -20,8 +23,6 @@ import {
   redirectLoggedInTo,
   redirectUnauthorizedTo,
 } from '@angular/fire/auth-guard';
-import { CarnetAdressesComponent } from './components/carnet-adresses/carnet-adresses.component';
-import { RosebaieLivraisonComponent } from './components/rosebaie-livraison/rosebaie-livraison.component';
 
 const redirectUnauthorizedToLogin = () => redirectUnauthorizedTo(['login']);
 const redirectLoggedInToHome = () => redirectLoggedInTo(['register']);
@@ -40,6 +41,7 @@ const routes: Routes = [
   { path: 'messages', component: MessagesComponent, ...canActivate(redirectUnauthorizedToLogin), canActivate:[RoleWoozooGuard]},
   { path: 'carnetAdresses', component: CarnetAdressesComponent, ...canActivate(redirectUnauthorizedToLogin)},
   { path: 'livraisonRB', component: RosebaieLivraisonComponent, ...canActivate(redirectUnauthorizedToLogin)},
+  { path: 'missionRoseBaie/:id', component: MissionRosebaieComponent, ...canActivate(redirectUnauthorizedToLogin)},
 ];
 
 @NgModule({

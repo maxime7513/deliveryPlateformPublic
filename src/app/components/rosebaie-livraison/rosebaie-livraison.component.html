@@ -3,20 +3,23 @@
 <div *ngFor="let creneauRB of creneauxRB | slice: lowValueSlice : highValueSlice" class="livraison">
     <div class="header" [class.active]="creneauRB.showDetails">
         <p><mat-icon>event</mat-icon>{{creneauRB.date.seconds * 1000 | date: 'd MMM Y'}} <mat-icon>schedule</mat-icon>{{creneauRB.heureEnlevement}}H00</p>
+        <p *ngIf="creneauRB.adresseEnlevement.recupere && !creneauRB.status" class="header_details">Colis récuperés, livraison en cours</p>
+        <p *ngIf="creneauRB.status" class="header_details">Livraison terminée</p>
         <span (click)="creneauRB.showDetails = !creneauRB.showDetails" matTooltip="plus de details"><mat-icon>info</mat-icon><mat-icon [class.active]="showDetails">expand_more</mat-icon></span>
     </div>
 
     <div *ngIf="creneauRB.showDetails" class="details">
+    <a routerLink="/missionRoseBaie/{{creneauRB.id}}">voir mission</a>
         <h4><mat-icon>widgets</mat-icon>Adresse d'enlévement</h4>
-        <p>{{creneauRB.adresseEnlevement}}</p>
+        <p>{{creneauRB.adresseEnlevement.location}}</p>
         <div>
             <h4><mat-icon>location_on</mat-icon>Adresses de livraison</h4>
-            <div>
-                <p *ngFor="let adresse of creneauRB.adresseLivraison">
-                <mat-icon>check_box_outline_blank</mat-icon>
-                <!--<mat-icon>check_box</mat-icon>-->
-                {{adresse.location}}
-                </p>
+            <div *ngFor="let adresse of creneauRB.adresseLivraison">
+                <mat-icon *ngIf="!adresse.urlBonLivraison">check_box_outline_blank</mat-icon>
+                <mat-icon *ngIf="adresse.urlBonLivraison">check_box</mat-icon>
+                <p>{{adresse.location}}</p>
+                <a *ngIf="adresse.urlBonLivraison" [href]="adresse.urlBonLivraison" download target="_blank" matTooltip="voir bon de livraison"><mat-icon>receipt_long</mat-icon></a>
+                <!--<a *ngIf="adresse.urlBonLivraison" [href]="adresse.urlBonLivraison" download matTooltip="télécharger bon de livraison"><mat-icon>download_for_offline</mat-icon></a>-->
             </div>
         </div>
     </div>

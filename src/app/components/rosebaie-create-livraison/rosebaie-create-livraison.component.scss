@@ -13,6 +13,9 @@
 h1{
     text-align: center;
     color: var(--primary);
+    @media (max-width: 450px){
+        font-size: 1.5rem;
+    }
 }
 
 form{
@@ -21,17 +24,29 @@ form{
     align-items: center;
     width: max-content;
     margin: auto;
+    @media (max-width: 450px){
+        width: 100%;
+    }
     > div{
         display: flex;
         flex-wrap: wrap;
         justify-content: space-between;
         align-items: center;
+        @media (max-width: 450px){
+            width: 90%;
+        }
         mat-form-field{
             width: 45%;
+            @media (max-width: 450px){
+                width: 100%;
+            }
         }
     }
     mat-form-field{
         width: 100%;
+        @media (max-width: 450px){
+            width: 90%;
+        }
         .remove{
             position: absolute;
             color: var(--primary);
@@ -63,15 +78,6 @@ form{
         cursor: pointer;
         mat-icon{
             margin-right: 3px;
-        }
-    }
-}
-
-@media (max-width: 450px){
-    form{
-        width: 100%;
-        > div mat-form-field{
-            width: 100%;
         }
     }
 }

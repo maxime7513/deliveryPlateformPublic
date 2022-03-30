@@ -57,6 +57,7 @@ import { provideFirebaseApp, initializeApp } from '@angular/fire/app';
 import { getAuth, provideAuth } from '@angular/fire/auth';
 import { getFirestore, provideFirestore } from '@angular/fire/firestore';
 import { getStorage, provideStorage } from '@angular/fire/storage';
+import { MissionRosebaieComponent } from './components/mission-rosebaie/mission-rosebaie.component';
 
 registerLocaleData(localeFr, 'fr');
 
@@ -82,6 +83,7 @@ registerLocaleData(localeFr, 'fr');
     ReturnIconPipe,
     ModalCreateAdresseComponent,
     RosebaieLivraisonComponent,
+    MissionRosebaieComponent,
   ],
   imports: [
     BrowserModule,
