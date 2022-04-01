@@ -31,9 +31,9 @@ export class DemandeCrenauRBService {
     return docData(crenauRef, { idField: 'id' }) as Observable<DemandecrenauRB>;
   }
 
-  async updateAdresseEnlevement(id: string) {
+  async updateAdresseEnlevement(id: string, date: Date) {
     const crenauRef = doc(this.firestore, 'demandeCrenauRB', id);
-    await updateDoc(crenauRef, {"adresseEnlevement.recupere": true});
+    await updateDoc(crenauRef, {"adresseEnlevement.recupere": date});
   }
 
   async updateUrlBonLivraison(id: string, tabLivraison: any) {
@@ -44,15 +44,9 @@ export class DemandeCrenauRBService {
   }
 
   async setStatusLivre(id: string) {
-    const cityRef = doc(this.firestore, 'demandeCrenauRB', id);
+    const crenauRef = doc(this.firestore, 'demandeCrenauRB', id);
     let r = {'status': 'livre'}
-    await setDoc(cityRef, r, { merge: true });
+    await setDoc(crenauRef, r, { merge: true });
   }
-
-  // async ff(id: string) {
-  //   const cityRef = doc(this.firestore, 'demandeCrenauRB', id);
-  //   let r = {'adresseEnlevement':{'tulo': 'gfo'}}
-  //   await setDoc(cityRef, r, { merge: true });
-  // }
 
 }

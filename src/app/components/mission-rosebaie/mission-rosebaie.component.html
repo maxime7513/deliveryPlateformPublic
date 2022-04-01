@@ -1,6 +1,6 @@
 <h1>Mission</h1>
 
-<div *ngIf="!missionRB.adresseEnlevement.recupere" class="enlevement">
+<div *ngIf="!missionRB.adresseEnlevement.recupere && missionRB.date.seconds * 1000 < dateNow" class="enlevement">
     <h4>Adresse d'enlévement</h4>
     <p>{{missionRB.adresseEnlevement.location}}</p>
     <button mat-raised-button (click)="colisRecupere()">
@@ -21,6 +21,30 @@
     </button>
     <input #inputField type="file" hidden (change)="uploadBonLivraison($event, i)"/>
     <p *ngIf="adresse.urlBonLivraison" class="livre"><mat-icon>done</mat-icon>Livré</p>
+    </div>
+</div>
+
+<div class="recapitulatif_mission">
+    <div>
+        <span>
+            <mat-icon>location_on</mat-icon>
+            {{missionRB.adresseLivraison.length}} livraisons
+        </span>
+        <span>
+            <img src="/assets/images/km.svg" alt="distance">
+            {{missionRB.km}} km
+        </span>
+    </div>
+    <h4 (click)="showMission = !showMission" [class.active]="showMission">Apercu Mission<mat-icon>expand_more</mat-icon></h4>
+    <div *ngIf="showMission">
+        <div>
+            <span>Départ</span>
+            <p>{{missionRB.adresseEnlevement.location}}</p>
+        </div>
+        <div *ngFor="let adresse of missionRB.adresseLivraison; index as i">
+            <span>Livraison {{i+1}}</span>
+            <p>{{adresse.location}}</p>        
+        </div>
     </div>
 </div>
 

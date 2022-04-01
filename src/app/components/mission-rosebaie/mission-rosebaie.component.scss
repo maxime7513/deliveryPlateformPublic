@@ -22,6 +22,7 @@ h1{
 p{
     margin: 0;
 }
+
 h4{
     color: var(--secondary);
     font-size: 1.2rem;
@@ -36,7 +37,7 @@ h4{
     align-items: center;
     padding: 17px 10px;
     background: var(--primary);
-    margin: 50px auto auto;
+    margin: 30px auto auto;
     border-radius: 7px;
     position: relative;
     z-index: 1;
@@ -95,6 +96,121 @@ h4{
     }
 }
 
+.recapitulatif_mission{
+    display: flex;
+    flex-direction: column;
+    max-width: 500px;
+    background: var(--primary);
+    margin: 30px auto auto;
+    padding: 20px;
+    border-radius: 7px;
+    position: relative;
+    z-index: 1;
+    h4{
+        cursor: pointer;
+        color: #fff;
+        margin: 0;
+        mat-icon{
+            vertical-align: middle;
+            transition: .4s;
+        }
+        &.active{
+            color: var(--secondary);
+            margin: 0 0 10px;
+            mat-icon{
+                transform: rotate(180deg);
+            }
+        }
+    }
+    p{
+        color: #fff;
+        font-weight: 500;
+        margin-top: -5px;
+    }
+    > div:first-of-type{
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: space-evenly;
+        flex-wrap: wrap;
+        margin-bottom: 10px;
+        span{
+            display: flex;
+            flex-direction: row;
+            align-items: end;
+            font-size: 16px;
+            color: #fff;
+            margin: 0 5px;
+            mat-icon{
+                color: var(--secondary);
+                font-size: 30px;
+                height: 30px;
+                width: 30px;
+            }
+            img{
+                width: 30px;
+                margin-right: 5px;
+            }
+        }
+    }
+    > div:not(:first-of-type){
+        display: flex;
+        flex-direction: column;
+        margin: auto;
+        > div{
+            padding-left: 10px;
+            position: relative;
+            margin: 7px 0;
+            span{
+                color: var(--secondary);
+                font-size: 12px;
+            }
+            &:first-of-type{
+                &:after{
+                    content: "";
+                    position: absolute;
+                    top: 24px;
+                    left: -10px;
+                    width: 9px;
+                    height: 9px;
+                    border: 2px solid var(--secondary);
+                    border-radius: 50%;
+                }
+            }
+            &:not(:first-of-type, :last-of-type){
+                &:after{
+                    content: '';
+                    position: absolute;
+                    top: 24px;
+                    left: -10px;
+                    width: 13px;
+                    height: 13px;
+                    background: var(--secondary);
+                    border-radius: 50%;
+                }
+            }
+            &:last-of-type{
+                &:after{
+                    content: url("/assets/images/where_to_vote.svg");
+                    position: absolute;
+                    top: 21px;
+                    left: -15.5px;
+                }
+            }
+            &:not(:last-of-type){
+                &:before{
+                    content: '';
+                    position: absolute;
+                    top: 37px;
+                    left: -5.5px;
+                    height: 100%;
+                    border-left: dotted 4px var(--secondary);
+                }
+            }
+        }
+    }
+}
+
 /* Responsive */
 
 @media (max-width: 500px) {
@@ -117,5 +233,8 @@ h4{
     }
     .blur{
         z-index: 0;
+    }
+    h1{
+        font-size: 1.8rem;
     }
 }

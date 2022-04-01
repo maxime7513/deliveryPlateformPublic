@@ -11,7 +11,10 @@
     <div *ngIf="creneauRB.showDetails" class="details">
     <a routerLink="/missionRoseBaie/{{creneauRB.id}}">voir mission</a>
         <h4><mat-icon>widgets</mat-icon>Adresse d'enlévement</h4>
-        <p>{{creneauRB.adresseEnlevement.location}}</p>
+        <p>
+            {{creneauRB.adresseEnlevement.location}}
+            <span *ngIf="creneauRB.adresseEnlevement.recupere"><mat-icon>check_circle</mat-icon>{{creneauRB.adresseEnlevement.recupere.seconds * 1000 | date: 'HH'}}h{{creneauRB.adresseEnlevement.recupere.seconds * 1000 | date: 'mm'}}</span>
+        </p>
         <div>
             <h4><mat-icon>location_on</mat-icon>Adresses de livraison</h4>
             <div *ngFor="let adresse of creneauRB.adresseLivraison">
@@ -20,6 +23,7 @@
                 <p>{{adresse.location}}</p>
                 <a *ngIf="adresse.urlBonLivraison" [href]="adresse.urlBonLivraison" download target="_blank" matTooltip="voir bon de livraison"><mat-icon>receipt_long</mat-icon></a>
                 <!--<a *ngIf="adresse.urlBonLivraison" [href]="adresse.urlBonLivraison" download matTooltip="télécharger bon de livraison"><mat-icon>download_for_offline</mat-icon></a>-->
+                <span *ngIf="adresse.dateLivraisonEffectue">{{adresse.dateLivraisonEffectue.seconds * 1000 | date: 'HH'}}h{{adresse.dateLivraisonEffectue.seconds * 1000 | date: 'mm'}}</span>
             </div>
         </div>
     </div>

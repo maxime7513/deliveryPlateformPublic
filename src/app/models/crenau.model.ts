@@ -2,8 +2,8 @@ export interface Crenau {
     id?: string;
     date: any;
     dateString : string;
-    heureDebut : Number;
-    heureFin : Number;
+    heureDebut : number;
+    heureFin : number;
     inscrit : number;
     inscritMax : number;
     vehicule? : string;

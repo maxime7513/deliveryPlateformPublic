@@ -133,6 +133,7 @@ export class PlanningComponent implements OnInit {
     this.toast.loading('Chargement');
 
     const users = await this.usersInscrit(crenau.id);
+    console.log(users)
     this.toast.close();
 
     const dialogRef = this.dialog.open(ModalUserInscritComponent);

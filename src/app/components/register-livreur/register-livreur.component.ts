@@ -9,6 +9,7 @@ import { UsersService } from 'src/app/services/users.service';
 import { ModalDeleteCrenauComponent } from '../modal-delete-crenau/modal-delete-crenau.component';
 import { TwilioService } from 'src/app/services/twilio.service';
 import { ProfileUser } from 'src/app/models/user.profil';
+import { resolve } from 'dns';
 
 interface Societe {
   value: string;
@@ -59,6 +60,8 @@ export class RegisterLivreurComponent implements OnInit {
     this.crenauservice.getCrenauxValableByDateandSociete(date, this.datePicker, this.selectSocieteValue).subscribe((res: Crenau[]) => {
       this.crenaux = res;
     })
+
+  this.refreshDatePicker;
   }
 
   async inscriptionLivreur(crenau: Crenau){
@@ -66,10 +69,11 @@ export class RegisterLivreurComponent implements OnInit {
     
     // verifier si l'utilisateur n'est pas deja inscrit à un autre créneau sur le meme horaire
     let verifInscrit = await this.verifierUserInscritHeure(crenau);
-    if(verifInscrit > 0 ){
+    if(!verifInscrit){
       this.toast.error('Vous avez déjà reservé au autre créneau au même horaire');
       return
     }
+
     // verifier si user vehicule est égale à crenau vehicule
     let userVehicule =  await this.usersService.userVehicule$;
     if(crenau.vehicule != ''){
@@ -85,6 +89,7 @@ export class RegisterLivreurComponent implements OnInit {
     this.usersService.addCrenauToUser(this.userUid, crenau.id)
     // ajouter 1 au inscrit
     this.crenauservice.incrementInscrit(crenau)
+    
     this.toast.success('Crénau reservé', {duration: 3000});
   }
 
@@ -107,9 +112,19 @@ export class RegisterLivreurComponent implements OnInit {
 
   // verifier si l'utilisateur n'est pas deja inscrit à un autre créneau sur le meme horaire
   verifierUserInscritHeure(crenau: Crenau){
+    let nombreCreneau = crenau.heureFin - crenau.heureDebut;
+    console.log(nombreCreneau);
     return new Promise(resolve => {
-      this.crenauservice.getCrenauxInscritCurrentUserByDate2(this.userUid, crenau.date).subscribe((res) => {
-        resolve(res.length);
+      this.crenauservice.getCrenauxInscritCurrentUserByDate3(this.userUid, crenau.dateString).subscribe((res) => {
+        let dejaInscrit = true;
+        res.map(creneauRes => {
+          let v = creneauRes.heureDebut;
+          let x = creneauRes.heureFin;
+          if(crenau.heureDebut < x && crenau.heureFin > v){
+            dejaInscrit = false;
+          }
+        })
+        resolve(dejaInscrit);
       })
     });
   }

@@ -14,8 +14,9 @@ export class ModalCreateAdresseComponent implements OnInit {
   options : Options ={
     componentRestrictions: { country: 'FR' },
     bounds: undefined,
-    types: ['address'],
-    fields: ['address_components'],
+    types: ['geocode', 'establishment'],
+    // fields: ['address_components'],
+    fields: ['formatted_address'],
     strictBounds: false,
     origin: undefined
   }
@@ -51,15 +52,20 @@ export class ModalCreateAdresseComponent implements OnInit {
     return this.adressForm.get('phone');
   }
 
-  AddressChange(googleAddress: any) {
-    //setting address from API to local variable
-    let numero = googleAddress.address_components[0].short_name,
-    rue = googleAddress.address_components[1].short_name,
-    cp = googleAddress.address_components[6].short_name,
-    ville = googleAddress.address_components[2].short_name,
-    adressFormat = numero + ' ' + rue + ', ' + cp + ' ' + ville;
+  // AddressChange(googleAddress: any) {
+  //   //setting address from API to local variable
+  //   let numero = googleAddress.address_components[0].short_name,
+  //   rue = googleAddress.address_components[1].short_name,
+  //   cp = googleAddress.address_components[6].short_name,
+  //   ville = googleAddress.address_components[2].short_name,
+  //   adressFormat = numero + ' ' + rue + ', ' + cp + ' ' + ville;
 
-    this.adresse.setValue(adressFormat);
+  //   this.adresse.setValue(adressFormat);
+  // }
+
+  AddressChange(googleAddress: any) {
+    let adresseFormat = googleAddress.formatted_address.substring(0, googleAddress.formatted_address.length - 8)
+    this.adresse.setValue(adresseFormat);
   }
 
   // envoi du formulaire
@@ -73,7 +79,6 @@ export class ModalCreateAdresseComponent implements OnInit {
     this.adresseservice.addAdressse(this.adressForm.value)
     this.toast.success('Ajouter à vos adresses');
     this.dialogRef.close(this.adresse.value);
-    console.log(this.adresse.value)
   }
 
 }
