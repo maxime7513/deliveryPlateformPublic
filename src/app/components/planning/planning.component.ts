@@ -7,6 +7,7 @@ import { ModalUserInscritComponent } from '../modal-user-inscrit/modal-user-insc
 import { UsersService } from 'src/app/services/users.service';
 import { ProfileUser } from 'src/app/models/user.profil';
 import { HotToastService } from '@ngneat/hot-toast';
+import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-planning',
@@ -24,7 +25,7 @@ export class PlanningComponent implements OnInit {
   defaultSociete : string;
   societes: string[] = ['rocket','rosebaie'];
 
-  constructor(private crenauservice: CrenauService, private userservice: UsersService, public datePipe : DatePipe, public dialog: MatDialog, private toast: HotToastService) {
+  constructor(private crenauservice: CrenauService, private userservice: UsersService, public datePipe : DatePipe, public dialog: MatDialog, private toast: HotToastService, private sanitizer: DomSanitizer) {
     this.defaultDatePicker = new Date;
   }
 
@@ -81,39 +82,12 @@ export class PlanningComponent implements OnInit {
       });
     })
   }
-
-  returnPlanning(jour: number, heure: number){
-    let res = false;
-    for(let i = 0; i < this.crenaux.length; i++){
-      if(jour == this.getDay(this.crenaux[i].date) && this.heures[heure] == this.crenaux[i].heureDebut ){
-        res = true;
-      }
-    }
-    return res
-  }
-  returnPlanningInscrit(jour: number, heure: number){
+    
+  returnCrenauId(jour: number, heure: number){
     let res;
-    for(let i = 0; i < this.crenaux.length; i++){
-      if(jour == this.getDay(this.crenaux[i].date) && this.heures[heure] == this.crenaux[i].heureDebut ){
-        res = this.crenaux[i].inscrit;
-      }
-    }
-    return res
-  }
-  returnPlanningInscritMax(jour: number, heure: number){
-    let res;
-    for(let i = 0; i < this.crenaux.length; i++){
-      if(jour == this.getDay(this.crenaux[i].date) && this.heures[heure] == this.crenaux[i].heureDebut ){
-        res = this.crenaux[i].inscritMax;
-      }
-    }
-    return res
-  }
-  returnCrenau(jour: number, heure: number){
-    let res;
-    for(let i = 0; i < this.crenaux.length; i++){
-      if(jour == this.getDay(this.crenaux[i].date) && this.heures[heure] == this.crenaux[i].heureDebut ){
-        res = this.crenaux[i];
+    for(let crenau of this.crenaux){
+      if(jour == this.getDay(crenau.date) && this.heures[heure] == crenau.heureDebut ){
+        res = crenau.id;
       }
     }
     return res
@@ -129,16 +103,14 @@ export class PlanningComponent implements OnInit {
   }
 
   // ouvrir popup avec info livreur pour chaque créneaux
-  async openDialogModal(crenau: Crenau) {
+  async openDialogModal(crenauId: string) {
     this.toast.loading('Chargement');
 
-    const users = await this.usersInscrit(crenau.id);
-    console.log(users)
+    const users = await this.usersInscrit(crenauId);
     this.toast.close();
-
+console.log(users)
     const dialogRef = this.dialog.open(ModalUserInscritComponent);
     dialogRef.componentInstance.users = users;
-    // dialogRef.componentInstance.crenau = crenau;
   }
 
   // ouvrir popup avec livreur pour chaque créneaux

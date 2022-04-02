@@ -114,28 +114,31 @@ table{
                 border-right: 1px solid #ccc;
             }
             &.active{
-                // background: rgba(40,167,69,.3) !important;
                 background: rgba(79,195,161,.45) !important;
-            }
-            &.dateselectionne{
-                border-left: 2px solid var(--primary);
-                border-right: 2px solid var(--primary);
+                span{
+                    margin-right: 30px;
+                }
+                .complet{
+                    display: inline-block;
+                }
             }
             &:hover .voir_livreur{
                 opacity: 0.8;
             }
             span{
                 position: relative;
-                color: #324960;
-                mat-icon{
-                    position: absolute;
-                    bottom: -2px;
-                }
+                color: var(--primary);
             }
             mat-icon{
                 font-size: 27px;
                 height: 27px;
                 width: 27px;
+                &.complet{
+                    display: none;
+                    vertical-align: bottom;
+                    margin-right: 3px;
+                    color: var(--primary);
+                }
                 &.voir_livreur{
                     position: absolute;
                     bottom: 0;

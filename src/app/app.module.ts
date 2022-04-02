@@ -51,6 +51,9 @@ import { RosebaieLivraisonComponent } from './components/rosebaie-livraison/rose
 // Pipe
 import { ReturnLogoPipe } from './components/dahsboard-livreur/return-logo.pipe';
 import { ReturnIconPipe } from './components/dahsboard-livreur/return-icon.pipe';
+import { ReturnPlanningPipe } from './components/planning/return-planning.pipe';
+import { ReturnCompletPipe } from './components/planning/return-complet.pipe';
+import { ReturnInscritPipe } from './components/planning/return-inscrit.pipe';
 
 // firebase
 import { provideFirebaseApp, initializeApp } from '@angular/fire/app';
@@ -81,6 +84,9 @@ registerLocaleData(localeFr, 'fr');
     CarnetAdressesComponent,
     ReturnLogoPipe,
     ReturnIconPipe,
+    ReturnPlanningPipe,
+    ReturnCompletPipe,
+    ReturnInscritPipe,
     ModalCreateAdresseComponent,
     RosebaieLivraisonComponent,
     MissionRosebaieComponent,

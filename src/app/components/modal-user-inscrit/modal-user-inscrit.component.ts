@@ -15,11 +15,7 @@ export class ModalUserInscritComponent implements OnInit {
   
   constructor() {}
 
-  ngOnInit(): void {
-    // this.userservice.getUserInscritByCrenau(this.crenau.id).subscribe((res: ProfileUser[]) => {
-    //   this.users = res;
-    // })
-  }
+  ngOnInit(): void { }
 
   formatPhone(phone: string){
     return phone.replace(/(.{2})(?=.)/g,"$1 ")

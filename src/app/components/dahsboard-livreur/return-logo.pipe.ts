@@ -19,16 +19,16 @@ export class ReturnLogoPipe implements PipeTransform {
 
   returnLogo(crenaux: Crenau[], jour: number, heure: number){
     let res: SafeHtml;
-    for(let i = 0; i < crenaux.length; i++){
-      let nombreCreneau = crenaux[i].heureFin - crenaux[i].heureDebut;
-      let heureDebut = crenaux[i].heureDebut;
-      let societe = crenaux[i].societe;
+    for(let crenau of crenaux){
+      let nombreCreneau = crenau.heureFin - crenau.heureDebut;
+      let heureDebut = crenau.heureDebut;
+      let societe = crenau.societe;
 
-      if(jour == this.getDay(crenaux[i].date)){
+      if(jour == this.getDay(crenau.date)){
         if(nombreCreneau == 1){
-          if(this.heures[heure] == crenaux[i].heureDebut){
+          if(this.heures[heure] == crenau.heureDebut){
             res = this.sanitizer.bypassSecurityTrustHtml(
-              `<img class="logo_societe" src="/assets/images/icone_`+ crenaux[i].societe +`.png">`
+              `<img class="logo_societe" src="/assets/images/icone_`+ crenau.societe +`.png">`
             );
           }
         }else{

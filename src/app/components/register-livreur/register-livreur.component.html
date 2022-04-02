@@ -48,7 +48,7 @@
             <mat-icon>more_time</mat-icon>
             Réserver
           </button>
-          <button *ngIf="verifierUserInscrit(crenau) && 60 < calculDifferenceDate(crenau.date.toDate())" (click)="openDialogModal(crenau)" class="annule">
+          <button *ngIf="verifierUserInscrit(crenau) && 60 < calculDifferenceDate(crenau.date.toDate())" (click)="openDialogModal(crenau.id)" class="annule">
             <mat-icon>event_busy</mat-icon>
             Annuler
           </button>

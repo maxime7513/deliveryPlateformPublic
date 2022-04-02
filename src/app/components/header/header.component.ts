@@ -4,6 +4,13 @@ import { Router } from '@angular/router';
 import { UsersService } from 'src/app/services/users.service';
 import { MessageService } from 'src/app/services/message.service';
 import { Message } from 'src/app/models/message.model';
+import { Observable } from 'rxjs';
+
+interface subMenu {
+  routerLink: string;
+  matIcon: string;
+  texte: string;
+}
 
 @Component({
   selector: 'app-header',
@@ -17,11 +24,11 @@ export class HeaderComponent implements OnInit {
 
   constructor( public authService: AuthService, private router: Router, private usersService: UsersService, private messageService: MessageService) { }
 
-  ngOnInit(): void {
+  async ngOnInit(): Promise<void> {
     // retourner message non lu
     this.messageService.getMessagesNonLu().subscribe((res: Message[]) => {
       this.nombreMessageNonLu = res.length;
-    })
+    });
   }
 
   logout() {

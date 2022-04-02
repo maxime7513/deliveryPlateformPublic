@@ -29,12 +29,7 @@ export class CrenauService {
   }
 
   // retirer 1 au inscrit
-  decrementInscrit(crenau: Crenau) {
-    const decrementDocRef = doc(this.firestore, `crenau/${crenau.id}`);
-    return updateDoc(decrementDocRef, { inscrit: increment(-1) });
-  }
-  // retirer 1 au inscrit (mon planning)
-  decrementInscrit2(crenauId: string) {
+  decrementInscrit(crenauId: string) {
     const decrementDocRef = doc(this.firestore, `crenau/${crenauId}`);
     return updateDoc(decrementDocRef, { inscrit: increment(-1) });
   }
@@ -46,14 +41,7 @@ export class CrenauService {
   }
 
   // suppresion d'un livreur
-  removeLivreur(crenau: Crenau, uid: string) {
-    const crenauDocRef = doc(this.firestore, `crenau/${crenau.id}`);
-    // arrayRemove for remove
-    return updateDoc(crenauDocRef, { users: arrayRemove(uid) });
-  }
-
-  // suppresion d'un livreur (mon planning)
-  removeLivreur2(crenauId: string, uid: string) {
+  removeLivreur(crenauId: string, uid: string) {
     const crenauDocRef = doc(this.firestore, `crenau/${crenauId}`);
     // arrayRemove for remove
     return updateDoc(crenauDocRef, { users: arrayRemove(uid) });

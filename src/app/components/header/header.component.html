@@ -13,50 +13,75 @@
   </button>-->
   
   <mat-menu #userMenu>
-    <button *ngIf="user.role == 'livreur'" mat-menu-item routerLink="/register">
-      <mat-icon>pending_actions</mat-icon>
-      <span>Réserver créneau</span>
-    </button> 
-    <button *ngIf="user.role == 'livreur'" mat-menu-item routerLink="/dashboardlivreur">
-      <mat-icon>calendar_month</mat-icon>
-      <span>Mon planning</span>
-    </button> 
-    <button *ngIf="user.role == 'woozoo' || user.role == 'rocket'" mat-menu-item routerLink="/crenau">
-      <mat-icon>more_time</mat-icon>
-      <span>Ajouter Créneau</span>
-    </button>
-    <button *ngIf="user.role == 'rosebaie'" mat-menu-item routerLink="/createRosebaie">
-      <mat-icon>more_time</mat-icon>
-      <span>Programmer livraison</span>
-    </button>
-    <button *ngIf="user.role == 'rosebaie'" mat-menu-item routerLink="/livraisonRB">
-      <mat-icon>more_time</mat-icon>
-      <span>Mes livraisons</span>
-    </button>
-    <button *ngIf="user.role == 'rosebaie'" mat-menu-item routerLink="/carnetAdresses">
-      <mat-icon>place</mat-icon>
-      <span>Carnet d'adresses</span>
-    </button>
-    <button *ngIf="user.role == 'rocket' || user.role == 'rosebaie' || user.role == 'woozoo'" mat-menu-item routerLink="/planning">
-      <mat-icon>date_range</mat-icon>
-      <span>Planning</span>
-    </button>
-    <button *ngIf="user.role == 'woozoo'" mat-menu-item routerLink="/listLivreur">
-      <mat-icon>contacts</mat-icon>
-      <span>Livreurs</span>
-    </button> 
-    <button *ngIf="user.role == 'woozoo'" mat-menu-item routerLink="/signup">
-      <mat-icon>group_add</mat-icon>
-      <span>Inscription</span>
-    </button> 
+    <div *ngIf="user.role == 'livreur'">
+      <button  mat-menu-item routerLink="/register">
+        <mat-icon>pending_actions</mat-icon>
+        <span>Réserver créneau</span>
+      </button> 
+      <button mat-menu-item routerLink="/dashboardlivreur">
+        <mat-icon>calendar_month</mat-icon>
+        <span>Mon planning</span>
+      </button> 
+    </div>
+
+    <div *ngIf="user.role == 'rosebaie'">
+        <button mat-menu-item routerLink="/createRosebaie">
+        <mat-icon>more_time</mat-icon>
+        <span>Programmer livraison</span>
+      </button>
+      <button mat-menu-item routerLink="/livraisonRB">
+        <mat-icon>content_paste</mat-icon>
+        <span>Mes livraisons</span>
+      </button>
+      <button mat-menu-item routerLink="/planning">
+        <mat-icon>today</mat-icon>
+        <span>Planning</span>
+      </button>
+      <button mat-menu-item routerLink="/carnetAdresses">
+        <mat-icon>place</mat-icon>
+        <span>Carnet d'adresses</span>
+      </button>
+    </div>
+
+    <div *ngIf="user.role == 'rocket'">
+      <button mat-menu-item routerLink="/crenau">
+        <mat-icon>more_time</mat-icon>
+        <span>Ajouter Créneau</span>
+      </button>
+      <button mat-menu-item routerLink="/planning">
+        <mat-icon>today</mat-icon>
+        <span>Planning</span>
+      </button>
+    </div>
+
+    <div *ngIf="user.role == 'woozoo'">
+      <button mat-menu-item routerLink="/crenau">
+        <mat-icon>more_time</mat-icon>
+        <span>Ajouter Créneau</span>
+      </button>
+      <button mat-menu-item routerLink="/planning">
+        <mat-icon>today</mat-icon>
+        <span>Planning</span>
+      </button>
+      <button mat-menu-item routerLink="/listLivreur">
+        <mat-icon>contacts</mat-icon>
+        <span>Livreurs</span>
+      </button>
+      <button mat-menu-item routerLink="/signup">
+        <mat-icon>group_add</mat-icon>
+        <span>Inscription</span>
+      </button>
+      <button mat-menu-item routerLink="/messages" class="message">
+        <mat-icon>email<span *ngIf="0 < nombreMessageNonLu">{{nombreMessageNonLu}}</span></mat-icon> 
+        <span>Messages</span>
+      </button> 
+    </div>
+
     <button mat-menu-item routerLink="/profil">
       <mat-icon>manage_accounts</mat-icon>
       <span>Profil</span>
     </button>
-    <button *ngIf="user.role == 'woozoo'" mat-menu-item routerLink="/messages" class="message">
-      <mat-icon>email<span *ngIf="0 < nombreMessageNonLu">{{nombreMessageNonLu}}</span></mat-icon> 
-      <span>Messages</span>
-    </button> 
+
     <button mat-menu-item (click)="logout()">
       <mat-icon>power_settings_new</mat-icon>
       <span>Logout</span>

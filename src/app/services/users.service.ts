@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { arrayUnion, collection, collectionData, doc, docData, Firestore, query, setDoc, updateDoc, where } from '@angular/fire/firestore';
+import { arrayRemove, arrayUnion, collection, collectionData, doc, docData, Firestore, query, setDoc, updateDoc, where } from '@angular/fire/firestore';
 import { from, Observable, of, switchMap } from 'rxjs';
 import { ProfileUser } from '../models/user.profil';
 import { AuthService } from './auth.service';
@@ -55,6 +55,12 @@ export class UsersService {
   addCrenauToUser(userId: string, crenauId: string) {
     const crenauDocRef = doc(this.firestore, `users/${userId}`);
     return updateDoc(crenauDocRef, { crenauInscrit: arrayUnion(crenauId) });
+  }
+  
+  // supprimer crenauInscrit au profil user
+  removeCrenauToUser(userId: string, crenauId: string) {
+    const crenauDocRef = doc(this.firestore, `users/${userId}`);
+    return updateDoc(crenauDocRef, { crenauInscrit: arrayRemove(crenauId) });
   }
 
   // retourner tous les users

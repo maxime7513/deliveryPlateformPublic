@@ -30,12 +30,10 @@
         <tbody>
           <tr *ngFor="let heure of heures; index as i">
             <td>{{heure}}/{{heure + 1}}h</td>
-            <td *ngFor="let jour of jours" [class.active]="returnPlanningInscritMax(jour,i) - returnPlanningInscrit(jour,i) == 0">
-              <span *ngIf="returnPlanning(jour,i)">
-                {{returnPlanningInscrit(jour,i)}}/{{returnPlanningInscritMax(jour,i)}}
-                <mat-icon *ngIf="returnPlanningInscritMax(jour,i) - returnPlanningInscrit(jour,i) == 0">how_to_reg</mat-icon>
-              </span>
-              <mat-icon *ngIf="0 < returnPlanningInscrit(jour,i)" matTooltip="voir livreurs sur ce créneau" (click)="openDialogModal(returnCrenau(jour,i))" class="voir_livreur">person_search</mat-icon>
+            <td *ngFor="let jour of jours" [class.active]="crenaux | returnComplet: jour : i">
+              <mat-icon class="complet">how_to_reg</mat-icon>
+              <span [innerHTML]="crenaux | returnPlanning: jour : i"></span>
+              <mat-icon *ngIf="crenaux | returnInscrit: jour : i" (click)="openDialogModal(returnCrenauId(jour,i))" class="voir_livreur" matTooltip="voir livreurs sur ce créneau">person_search</mat-icon>
             </td>
           </tr>
         <tbody>

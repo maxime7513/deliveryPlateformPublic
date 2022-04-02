@@ -93,11 +93,12 @@ export class RegisterLivreurComponent implements OnInit {
     this.toast.success('Crénau reservé', {duration: 3000});
   }
 
-  desinscriptionLivreur(crenau: Crenau){
+  desinscriptionLivreur(crenauId: string){
     this.toast.close();
-    this.crenauservice.removeLivreur(crenau, this.userUid)
+    this.crenauservice.removeLivreur(crenauId, this.userUid);
+    this.usersService.removeCrenauToUser(this.userUid, crenauId)
     // retirer 1 au inscrit
-    this.crenauservice.decrementInscrit(crenau)
+    this.crenauservice.decrementInscrit(crenauId)
     this.toast.success('Crénau retiré de votre planning', {duration: 3000});
   }
 
@@ -136,12 +137,12 @@ export class RegisterLivreurComponent implements OnInit {
   }
 
   // ouvrir popup confirmation suppression du créneaux
-  openDialogModal(crenau: Crenau) {
+  openDialogModal(crenauId: string) {
     const dialogRef = this.dialog.open(ModalDeleteCrenauComponent);
     dialogRef.componentInstance.confirmMessage = "Êtes-vous sûr de vouloir enlever ce créneau de votre planning ?"
     dialogRef.afterClosed().subscribe(result => {
       if(result == true) {
-        this.desinscriptionLivreur(crenau);      
+        this.desinscriptionLivreur(crenauId);      
       }    
     });
   }
