@@ -21,8 +21,6 @@ export class ReturnLogoPipe implements PipeTransform {
     let res: SafeHtml;
     for(let crenau of crenaux){
       let nombreCreneau = crenau.heureFin - crenau.heureDebut;
-      let heureDebut = crenau.heureDebut;
-      let societe = crenau.societe;
 
       if(jour == this.getDay(crenau.date)){
         if(nombreCreneau == 1){
@@ -33,9 +31,9 @@ export class ReturnLogoPipe implements PipeTransform {
           }
         }else{
           for(let i = 0; i < nombreCreneau; i++){
-            if(this.heures[heure] == heureDebut + i){
+            if(this.heures[heure] == crenau.heureDebut + i){
               res = this.sanitizer.bypassSecurityTrustHtml(
-                `<img class="logo_societe" src="/assets/images/icone_`+ societe +`.png">`
+                `<img class="logo_societe" src="/assets/images/icone_`+ crenau.societe +`.png">`
               );
             }
           }
