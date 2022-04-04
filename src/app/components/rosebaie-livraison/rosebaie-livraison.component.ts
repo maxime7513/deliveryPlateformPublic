@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import { PageEvent } from '@angular/material/paginator';
-import { DemandecrenauRB } from 'src/app/models/demandeCrenauRB.model';
 import { DemandeCrenauRBService } from 'src/app/services/demande-crenau-rb.service';
 
 @Component({
@@ -24,6 +23,19 @@ export class RosebaieLivraisonComponent implements OnInit {
     this.demandeCrenauRBService.getDemandeCrenauRB().subscribe(res => {
       this.creneauxRB = res;
     })
+  }
+
+  formatTime(time: number){
+    let heure = Math.floor(time),
+    minutes = parseInt((time * 60).toFixed(0)),
+    nbminuteRestante = (minutes % 60),
+    res;
+    if(nbminuteRestante < 10){
+      res = 'Temps de livraison estimé : ' + heure + 'h0' + nbminuteRestante;
+    }else{
+      res = 'Temps de livraison estimé : ' + heure + 'h' + nbminuteRestante;
+    }
+    return res
   }
 
   // pagination

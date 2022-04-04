@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { HotToastService } from '@ngneat/hot-toast';
 import { concatMap } from 'rxjs';
+import { DemandecrenauRB } from 'src/app/models/demandeCrenauRB.model';
 import { DemandeCrenauRBService } from 'src/app/services/demande-crenau-rb.service';
 import { ImageUploadService } from 'src/app/services/image-upload.service';
 
@@ -20,7 +21,7 @@ export class MissionRosebaieComponent implements OnInit {
     this.dateNow = new Date().getTime();
   }, 10000);
 
-  constructor(private route: ActivatedRoute, private demandeCrenauRbService: DemandeCrenauRBService, private imageUploadService: ImageUploadService, private toast: HotToastService) { }
+  constructor(private route: ActivatedRoute, private demandeCrenauRbService: DemandeCrenauRBService, private imageUploadService: ImageUploadService, private toast: HotToastService, private router: Router) { }
 
   async ngOnInit(): Promise<void> {
     this.showMission = false;
@@ -32,6 +33,37 @@ export class MissionRosebaieComponent implements OnInit {
     });
 
     this.refreshdateNow;
+  }
+
+  async returnGoogleItinary() {
+  
+    const success = async (position: any) => {
+      this.toast.close();
+      const lat  = await position.coords.latitude,
+      lng = await position.coords.longitude;
+            
+      let adresseItinary = "";
+      for(let adresse of this.missionRB.adresseLivraison){
+        adresseItinary += '/' + adresse.location;
+      }
+      let urlItinary = "https://www.google.com/maps/dir/" + lat + "," + lng + "/" + this.missionRB.adresseEnlevement.location + adresseItinary;
+      let formatUrl = urlItinary.replace(/ /g, "+")
+
+      window.open(formatUrl, '_blank');
+    }
+  
+    const error = () => {
+      this.toast.close()
+      this.toast.error('Impossible de trouver votre position')
+    }
+  
+    if(!navigator.geolocation) {
+      this.toast.error("La geolocation n'est pas supporté par votre navigateur")
+    }else{
+      navigator.geolocation.getCurrentPosition(success, error);
+      this.toast.loading('Récupération de votre position')
+    }
+  
   }
 
   colisRecupere(){

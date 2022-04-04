@@ -1,6 +1,5 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { AppComponent } from './app.component';
 import { LoginComponent } from './components/login/login.component';
 import { SignUpComponent } from './components/sign-up/sign-up.component';
 import { RegisterLivreurComponent } from './components/register-livreur/register-livreur.component';
@@ -17,7 +16,7 @@ import { MissionRosebaieComponent } from './components/mission-rosebaie/mission-
 
 import { RoleWoozooGuard } from './shared/role-woozoo.guard';
 import { RoleLivreurGuard } from './shared/role-livreur.guard';
-import { RoleRocketGuard } from './shared/role-rocket.guard';
+import { RoleProGuard } from './shared/role-pro.guard';
 import {
   canActivate,
   redirectLoggedInTo,
@@ -33,11 +32,11 @@ const routes: Routes = [
   { path: 'signup', component: SignUpComponent, ...canActivate(redirectUnauthorizedToLogin), canActivate:[RoleWoozooGuard] },
   { path: 'register', component: RegisterLivreurComponent, ...canActivate(redirectUnauthorizedToLogin), canActivate:[RoleLivreurGuard] },
   { path: 'profil', component: ProfileComponent, ...canActivate(redirectUnauthorizedToLogin)},
-  { path: 'crenau', component: CreateCrenauComponent, ...canActivate(redirectUnauthorizedToLogin), canActivate:[RoleRocketGuard]},
-  { path: 'planning', component: PlanningComponent, ...canActivate(redirectUnauthorizedToLogin), canActivate:[RoleRocketGuard] },
+  { path: 'crenau', component: CreateCrenauComponent, ...canActivate(redirectUnauthorizedToLogin), canActivate:[RoleProGuard]},
+  { path: 'planning', component: PlanningComponent, ...canActivate(redirectUnauthorizedToLogin), canActivate:[RoleProGuard] },
   { path: 'dashboardlivreur', component: DahsboardLivreurComponent, ...canActivate(redirectUnauthorizedToLogin), canActivate:[RoleLivreurGuard] },
   { path: 'listLivreur', component: ListeLivreurComponent, ...canActivate(redirectUnauthorizedToLogin), canActivate:[RoleWoozooGuard]},
-  { path: 'createRosebaie', component: RosebaieCreateLivraisonComponent, ...canActivate(redirectUnauthorizedToLogin), canActivate:[RoleRocketGuard]},
+  { path: 'createRosebaie', component: RosebaieCreateLivraisonComponent, ...canActivate(redirectUnauthorizedToLogin), canActivate:[RoleProGuard]},
   { path: 'messages', component: MessagesComponent, ...canActivate(redirectUnauthorizedToLogin), canActivate:[RoleWoozooGuard]},
   { path: 'carnetAdresses', component: CarnetAdressesComponent, ...canActivate(redirectUnauthorizedToLogin)},
   { path: 'livraisonRB', component: RosebaieLivraisonComponent, ...canActivate(redirectUnauthorizedToLogin)},

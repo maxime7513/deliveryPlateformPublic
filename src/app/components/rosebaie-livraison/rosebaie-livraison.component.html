@@ -1,7 +1,7 @@
 <h1>Mes livraisons</h1>
 
 <div *ngFor="let creneauRB of creneauxRB | slice: lowValueSlice : highValueSlice" class="livraison">
-    <div class="header" [class.active]="creneauRB.showDetails">
+    <div class="header" [class.active]="creneauRB.showDetails"  [ngClass]="{'livre': creneauRB.status}">
         <p><mat-icon>event</mat-icon>{{creneauRB.date.seconds * 1000 | date: 'd MMM Y'}} <mat-icon>schedule</mat-icon>{{creneauRB.heureEnlevement}}H00</p>
         <p *ngIf="creneauRB.adresseEnlevement.recupere && !creneauRB.status" class="header_details">Colis récuperés, livraison en cours</p>
         <p *ngIf="creneauRB.status" class="header_details">Livraison terminée</p>
@@ -21,10 +21,11 @@
                 <mat-icon *ngIf="!adresse.urlBonLivraison">check_box_outline_blank</mat-icon>
                 <mat-icon *ngIf="adresse.urlBonLivraison">check_box</mat-icon>
                 <p>{{adresse.location}}</p>
-                <a *ngIf="adresse.urlBonLivraison" [href]="adresse.urlBonLivraison" download target="_blank" matTooltip="voir bon de livraison"><mat-icon>receipt_long</mat-icon></a>
+                <a *ngIf="adresse.urlBonLivraison" [href]="adresse.urlBonLivraison" target="_blank" matTooltip="voir bon de livraison"><mat-icon>receipt_long</mat-icon></a>
                 <!--<a *ngIf="adresse.urlBonLivraison" [href]="adresse.urlBonLivraison" download matTooltip="télécharger bon de livraison"><mat-icon>download_for_offline</mat-icon></a>-->
                 <span *ngIf="adresse.dateLivraisonEffectue">{{adresse.dateLivraisonEffectue.seconds * 1000 | date: 'HH'}}h{{adresse.dateLivraisonEffectue.seconds * 1000 | date: 'mm'}}</span>
             </div>
+            <p *ngIf="!creneauRB.status" [innerHtml]="formatTime(creneauRB.time)" class="time"></p>
         </div>
     </div>
 </div>

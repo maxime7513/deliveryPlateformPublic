@@ -39,6 +39,7 @@ h4{
     background: var(--primary);
     margin: 30px auto auto;
     border-radius: 7px;
+    box-shadow: rgba(0, 0, 0, 0.11) 0px 20px 25px -3px, rgba(0, 0, 0, 0.04) 0px 10px 10px -5px;
     position: relative;
     z-index: 1;
     p{
@@ -64,6 +65,7 @@ h4{
         margin: 30px 0;
         padding: 15px 10px;
         border-radius: 7px;
+        box-shadow: rgba(0, 0, 0, 0.11) 0px 20px 25px -3px, rgba(0, 0, 0, 0.04) 0px 10px 10px -5px;
         p{
             color: #fff;
             text-align: center;
@@ -104,6 +106,7 @@ h4{
     margin: 30px auto auto;
     padding: 20px;
     border-radius: 7px;
+    box-shadow: rgba(0, 0, 0, 0.11) 0px 20px 25px -3px, rgba(0, 0, 0, 0.04) 0px 10px 10px -5px;
     position: relative;
     z-index: 1;
     h4{
@@ -205,9 +208,39 @@ h4{
                     left: -5.5px;
                     height: 100%;
                     border-left: dotted 4px var(--secondary);
+                    @media (max-width: 500px) {
+                        top: 41px;
+                        height: 87%;
+                        left: -4.5px;
+                        border-left: dotted 2px var(--secondary);
+                    }
                 }
             }
         }
+    }
+}
+
+.navigation{
+    display: block;
+    width: max-content;
+    background: var(--secondary);
+    color: #fff;
+    margin: 30px auto auto;
+    padding: 8px 13px 8px 45px;
+    font-size: 1rem;
+    font-weight: 500;
+    border: none;
+    border-radius: 7px;
+    box-shadow: rgba(0, 0, 0, 0.11) 0px 20px 25px -3px, rgba(0, 0, 0, 0.04) 0px 10px 10px -5px;
+    cursor: pointer;
+    position: relative;
+    z-index: 1;
+    &:after{
+        content: url("/assets/images/googlemap.svg");
+        position: absolute;
+        width: 45px;
+        top: -5px;
+        left: -6px;
     }
 }
 

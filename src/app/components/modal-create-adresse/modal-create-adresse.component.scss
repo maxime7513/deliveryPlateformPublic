@@ -39,3 +39,8 @@ form{
         padding: 0;
     }
 }
+
+// google adresse autocomplete
+::ng-deep .pac-container{
+    width: 250px !important;
+}

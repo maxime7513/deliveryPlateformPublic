@@ -1,7 +1,5 @@
-import { ifStmt } from '@angular/compiler/src/output/output_ast';
 import { Injectable } from '@angular/core';
 import { ActivatedRouteSnapshot, CanActivate, Router, RouterStateSnapshot, UrlTree } from '@angular/router';
-import { Observable } from 'rxjs';
 import { UsersService } from '../services/users.service';
 
 @Injectable({
@@ -9,7 +7,7 @@ import { UsersService } from '../services/users.service';
 })
 export class RoleWoozooGuard implements CanActivate {
   
-  constructor(private userservice: UsersService, private router: Router) { }
+  constructor(private userservice: UsersService) { }
 
   async canActivate(){
     const userRole = await this.userservice.canAccess$;

@@ -60,6 +60,8 @@ export class RosebaieCreateLivraisonComponent implements OnInit {
   // mat autocomplete depot
   optionsDepot: Adresse[] = [];
   filteredOptionsDepot: Observable<Adresse[]>;
+  
+  recapLivraison: boolean = false;
 
   constructor(private fb: FormBuilder, private demandeCrenauRB: DemandeCrenauRBService, private messageService: MessageService, public dialog: MatDialog, private usersService: UsersService, private crenauservice: CrenauService, private imageUploadService: ImageUploadService, private adresseservice: AdressesService, private toast: HotToastService, public datePipe : DatePipe, private router: Router) { }
 
@@ -248,6 +250,19 @@ export class RosebaieCreateLivraisonComponent implements OnInit {
     });
   }
 
+  formatTime(time: number){
+    let heure = Math.floor(time),
+    minutes = parseInt((time * 60).toFixed(0)),
+    nbminuteRestante = (minutes % 60),
+    res;
+    if(nbminuteRestante < 10){
+      res =  heure + 'h0' + nbminuteRestante;
+    }else{
+      res =  heure + 'h' + nbminuteRestante;
+    }
+    return res
+  }
+
   calculTempsItineraire(origin: any, wayptsTab: any){
     return new Promise(async resolve=> {
       const directionsService = new google.maps.DirectionsService();
@@ -359,18 +374,9 @@ export class RosebaieCreateLivraisonComponent implements OnInit {
     });
   }
 
-  async addCreneau(idDemandeCreneauRB: any, tabAdresseLivraison: any){
-    // calculer le nombre d'heure par rapport à la tournée
-    let time: any = await this.calculTempsItineraire(this.rbForm.value.adresseEnlevement.location, tabAdresseLivraison);
-    let heuresEnlevementColis = 0.5; // 30min
-    let tempsLivraison = tabAdresseLivraison.length * (10/60); // 10min par livraison
-    const nombreCrenau = Math.ceil(time + heuresEnlevementColis + tempsLivraison);
-    console.log('time creneau =>'+ time + 'h')
-    console.log('nombre creneau =>'+ nombreCrenau + 'h')
-
-    this.rbForm.value.date.setHours(this.rbForm.value.heureEnlevement); // setHours de la date avec la valeur de heureDebut du formulaire   
-
-    const req: Crenau ={
+  async addCreneau(idDemandeCreneauRB: any){
+    const nombreCrenau = Math.ceil(this.rbForm.value.time);
+    const req: Crenau = {
       date: this.rbForm.value.date,
       dateString: this.datePipe.transform(this.rbForm.value.date, 'dd/MM/yyyy'),
       heureDebut: this.rbForm.value.heureEnlevement,
@@ -385,6 +391,7 @@ export class RosebaieCreateLivraisonComponent implements OnInit {
     this.crenauservice.addCrenau(req); // ajouter creneau(x) à firebase
     
   }
+  
   // async addCreneau(idDemandeCreneauRB: any, tabAdresseLivraison: any){
   //   // calculer le nombre d'heure par rapport à la tournée
   //   let time: any = await this.calculTempsItineraire(this.rbForm.value.adresseEnlevement.location, tabAdresseLivraison);
@@ -421,28 +428,43 @@ export class RosebaieCreateLivraisonComponent implements OnInit {
       return;
     }
 
-    this.toast.loading('Demande en cours');
+    this.toast.loading("Calcul de l'itinéraire ...");
 
     // ajouter recuperer false a adresseEnlevement
     this.rbForm.value.adresseEnlevement = {location: this.rbForm.value.adresseEnlevement, recupere: false};
 
+    // calcul distance livraison
     this.rbForm.value.km = await this.calculDistanceItineraire(this.rbForm.value.adresseEnlevement.location, this.rbForm.value.adresseLivraison);
-    this.rbForm.value.km = this.rbForm.value.km.toFixed(3);
+    this.rbForm.value.km = this.rbForm.value.km.toFixed(1);
     
+    // calcul temps livraison
+    let timeLivraison: any = await this.calculTempsItineraire(this.rbForm.value.adresseEnlevement.location, this.rbForm.value.adresseLivraison);
+    let heuresEnlevementColis = 0.5; // 30min
+    let tempsLivraison = this.rbForm.value.adresseLivraison.length * (10/60); // 10min par livraison
+    this.rbForm.value.time = (timeLivraison + heuresEnlevementColis + tempsLivraison).toFixed(2);
+
     // setHours de la date avec la valeur de heureDebut du formulaire
     this.rbForm.value.date.setHours(this.rbForm.value.heureEnlevement);
 
     // copie tu tableau de livraison avant modification(newTabOrdering)
-    const copyTabLivraison = this.rbForm.value.adresseLivraison.slice();
+    // const copyTabLivraison = this.rbForm.value.adresseLivraison.slice();
 
     // remmetre tableau adresseLivraison dans l'ordre de livraison
     this.rbForm.value.adresseLivraison = await this.newTabOrdering(this.rbForm.value.adresseEnlevement.location, this.rbForm.value.adresseLivraison);
+    
+    this.recapLivraison = true;
+
+    this.toast.close();
+  }
+
+  async onSubmit2(){
+    this.toast.loading('Demande en cours');
 
     // ajout de la demande de creneau a firebase et recuperation de l'id)
     const idDemandeCreneauRB = await this.demandeCrenauRB.addDemandeCrenauRB(this.rbForm.value);
 
     // ajouter creneau a firebase avec l'id de addDemandeCrenauRB en parametre
-    this.addCreneau(idDemandeCreneauRB, copyTabLivraison);
+    this.addCreneau(idDemandeCreneauRB);
 
     // envoie du message dans la boite mail woozoo
     let date = this.datePipe.transform(this.rbForm.value.date, 'dd/MM/yyyy');

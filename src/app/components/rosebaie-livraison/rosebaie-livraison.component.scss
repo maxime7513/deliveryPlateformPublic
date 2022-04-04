@@ -34,7 +34,7 @@ h1{
         align-items: center;
         flex-wrap: wrap;
         padding: 15px 20px;
-        background: var(--secondary);
+        background: var(--primary);
         color: #fff;
         border-radius: 10px;
         &.active{
@@ -43,9 +43,12 @@ h1{
                 transform: rotate(180deg);
             }
         }
+        &.livre{
+            background: var(--secondary);
+        }
         @media (max-width: 600px){
                 flex-direction: column;
-                padding: 15px 20px 7px 20px;
+                padding: 15px 20px 0px 20px;
         }
         p{
             display: flex;
@@ -69,6 +72,11 @@ h1{
             cursor: pointer;
             mat-icon{
                 transition: .3s;
+                @media (max-width: 600px){
+                    &:first-of-type{
+                        display: none;
+                    }
+                }
                 &:last-of-type{
                     font-size: 30px;
                     height: 30px;
@@ -110,6 +118,11 @@ h1{
                 vertical-align: sub;
             }
         }
+        .time{
+            color: var(--secondary);
+            text-align: center;
+            margin-top: 20px;
+        }
         > div{
             margin-top: 20px;
             div {
@@ -143,8 +156,36 @@ mat-paginator{
 }
 
 @media (max-width: 500px) {
+    :host{
+        background: none;
+        &:before {
+            content: "";
+            position: fixed;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -10;
+            background: url(/assets/images/woozoo-background.jpg) no-repeat;
+            -webkit-background-size: cover;
+            -moz-background-size: cover;
+            -o-background-size: cover;
+            background-size: cover;
+        }
+    }
+    .blur{
+        z-index: 0;
+    }
+
+    h1, .livraison{
+        position: relative;
+        z-index: 1;
+    }
+    
     ::ng-deep mat-paginator{
         margin-top: 5px;
+        position: relative;
+        z-index: 1;
         .mat-paginator-container{
             justify-content: center !important;
             .mat-paginator-page-size{

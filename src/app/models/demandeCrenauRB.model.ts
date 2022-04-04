@@ -6,4 +6,5 @@ export interface DemandecrenauRB {
     adresseLivraison: Array<string>;
     urlBonLivraison? : string;
     km: string;
+    time: number;
 }
