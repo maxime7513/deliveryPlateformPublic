@@ -88,3 +88,20 @@ form{
     padding-bottom: 3px;
   }
 }
+
+// loader
+mat-spinner{
+  width: 70px !important;
+  height: 70px !important;
+  position: absolute !important;
+  top: calc(50% - 35px);
+  left: calc(50% - 35px);
+  z-index: 10;
+  svg{
+      width: 70px !important;
+      height: 70px !important;
+  }
+}
+.mat-spinner circle, .mat-progress-spinner circle{
+  stroke: var(--secondary);
+}

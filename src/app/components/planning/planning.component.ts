@@ -108,7 +108,6 @@ export class PlanningComponent implements OnInit {
 
     const users = await this.usersInscrit(crenauId);
     this.toast.close();
-console.log(users)
     const dialogRef = this.dialog.open(ModalUserInscritComponent);
     dialogRef.componentInstance.users = users;
   }

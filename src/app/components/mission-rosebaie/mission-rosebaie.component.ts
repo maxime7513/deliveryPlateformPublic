@@ -20,6 +20,7 @@ export class MissionRosebaieComponent implements OnInit {
   private refreshdateNow: any = setInterval(() => {
     this.dateNow = new Date().getTime();
   }, 10000);
+  showSpinner : boolean = true;
 
   constructor(private route: ActivatedRoute, private demandeCrenauRbService: DemandeCrenauRBService, private imageUploadService: ImageUploadService, private toast: HotToastService, private router: Router) { }
 
@@ -29,7 +30,8 @@ export class MissionRosebaieComponent implements OnInit {
     // console.log(this.id);
 
     this.demandeCrenauRbService.getDemandeCrenauRBByID(this.id).subscribe(res => {
-      this.missionRB = res;
+      this.missionRB= res;
+      this.showSpinner = false;
     });
 
     this.refreshdateNow;

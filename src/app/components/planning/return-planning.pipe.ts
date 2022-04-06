@@ -30,12 +30,16 @@ export class ReturnPlanningPipe implements PipeTransform {
       if(jour == this.getDay(crenau.date)){
         if(nombreCreneau == 1){
           if(this.heures[heure] == crenau.heureDebut){
-            res = crenau.inscrit + "/" + crenau.inscritMax;
+            if(crenau.inscritMax - crenau.inscrit > 0){
+              res = crenau.inscrit + "/" + crenau.inscritMax;
+            }
           }
         }else{
           for(let i = 0; i < nombreCreneau; i++){
             if(this.heures[heure] == crenau.heureDebut + i){
-              res = crenau.inscrit + "/" + crenau.inscritMax;
+              if(crenau.inscritMax - crenau.inscrit > 0){
+                res = crenau.inscrit + "/" + crenau.inscritMax;
+              }
             }
           }
         }

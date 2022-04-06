@@ -14,6 +14,8 @@ export class RosebaieLivraisonComponent implements OnInit {
   // pagination
   lowValueSlice: number = 0;
   highValueSlice: number = 10;
+  
+  showSpinner : boolean = true;
 
   constructor(private demandeCrenauRBService: DemandeCrenauRBService) {
     this.showDetails = false;
@@ -22,6 +24,7 @@ export class RosebaieLivraisonComponent implements OnInit {
   ngOnInit(): void {
     this.demandeCrenauRBService.getDemandeCrenauRB().subscribe(res => {
       this.creneauxRB = res;
+      this.showSpinner = false;
     })
   }
 

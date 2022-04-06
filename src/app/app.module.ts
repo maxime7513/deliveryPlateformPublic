@@ -21,7 +21,8 @@ import { MatMenuModule } from '@angular/material/menu';
 import { MatDatepickerModule } from '@angular/material/datepicker'; 
 import { MatNativeDateModule } from '@angular/material/core';
 import { MatSelectModule } from '@angular/material/select';
-import { MatDialogModule } from '@angular/material/dialog'; 
+import { MatDialogModule } from '@angular/material/dialog';
+import {MatProgressSpinnerModule} from '@angular/material/progress-spinner'; 
 import { ReactiveFormsModule } from '@angular/forms';
 import { FormsModule } from '@angular/forms';
 import { ModalUserInscritComponent } from './components/modal-user-inscrit/modal-user-inscrit.component';
@@ -61,6 +62,7 @@ import { getAuth, provideAuth } from '@angular/fire/auth';
 import { getFirestore, provideFirestore } from '@angular/fire/firestore';
 import { getStorage, provideStorage } from '@angular/fire/storage';
 import { MissionRosebaieComponent } from './components/mission-rosebaie/mission-rosebaie.component';
+import { AddAdresseLivraionComponent } from './components/add-adresse-livraion/add-adresse-livraion.component';
 
 registerLocaleData(localeFr, 'fr');
 
@@ -90,6 +92,7 @@ registerLocaleData(localeFr, 'fr');
     ModalCreateAdresseComponent,
     RosebaieLivraisonComponent,
     MissionRosebaieComponent,
+    AddAdresseLivraionComponent,
   ],
   imports: [
     BrowserModule,
@@ -109,6 +112,7 @@ registerLocaleData(localeFr, 'fr');
     ReactiveFormsModule,
     MatMenuModule,
     MatDialogModule,
+    MatProgressSpinnerModule,
     FormsModule,
     GooglePlaceModule,
     MatAutocompleteModule,
