@@ -1,0 +1,51 @@
+<h1>Livraison en attente</h1>
+
+<mat-spinner *ngIf="showSpinner"></mat-spinner>
+
+<p *ngIf="!showSpinner && livraisonAttente.length == 0" class="zero">Aucune livraison en attente ...</p>
+
+<div *ngIf="!showSpinner && livraisonAttente.length != 0">
+    <table>
+        <thead>
+            <tr>
+                <th><mat-icon>check_box</mat-icon></th>
+                <th><mat-icon>storefront</mat-icon></th>
+                <th><mat-icon>location_on</mat-icon></th>
+                <th matTooltip="nombre de colis"><mat-icon>widgets</mat-icon></th>
+                <th matTooltip="bon de livraison"><mat-icon>description</mat-icon></th>
+                <th matTooltip="date création"><mat-icon>today</mat-icon></th>
+                <th matTooltip="supprimer"><mat-icon>delete_forever</mat-icon></th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let livraison of livraisonAttente | slice: lowValueSlice : highValueSlice;index as i" [class.active]="livraison.nombreColis">
+                <td><mat-checkbox [(ngModel)]="checkbox[i]"></mat-checkbox></td>
+                <td>{{livraison.nom}}</td>
+                <td>{{livraison.location}}</td>
+                <td>
+                    <mat-form-field *ngIf="!livraison.nombreColis">
+                        <mat-label>Colis</mat-label>
+                        <mat-select [(ngModel)]="colis[i]">
+                            <mat-option *ngFor="let colis of nombreColis" [value]="colis">
+                              {{colis}}
+                            </mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                    <span *ngIf="livraison.nombreColis">{{livraison.nombreColis}}</span>
+                </td>
+                <td matTooltip="voir bon de livraison"><a [href]="livraison.urlBonLivraison" target="_blank"><mat-icon>plagiarism</mat-icon></a></td>
+                <td>{{livraison.date.seconds * 1000 | date: 'dd/MM/yy'}}</td>
+                <td><mat-icon (click)="openDialogModalDelete(livraison.id)" matTooltip="supprimer">clear</mat-icon></td>
+            </tr>
+        </tbody>
+    </table>
+
+    <mat-paginator [length]="livraisonAttente.length" pageSize=10
+                   (page)="getPaginatorData($event)" [pageSizeOptions]="[5, 10, 30]"
+                   showFirstLastButtons="false">
+    </mat-paginator>
+
+    <button [disabled]="checkChekbox()" (click)="valider()" mat-raised-button>Lancer livraison</button>
+</div>
+
+<div class="blur"></div>

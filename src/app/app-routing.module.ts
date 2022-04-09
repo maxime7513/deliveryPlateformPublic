@@ -8,11 +8,13 @@ import { CreateCrenauComponent } from './components/create-crenau/create-crenau.
 import { PlanningComponent } from './components/planning/planning.component';
 import { DahsboardLivreurComponent } from './components/dahsboard-livreur/dahsboard-livreur.component';
 import { ListeLivreurComponent } from './components/liste-livreur/liste-livreur.component';
-import { RosebaieCreateLivraisonComponent } from './components/rosebaie-create-livraison/rosebaie-create-livraison.component';
 import { MessagesComponent } from './components/messages/messages.component';
 import { CarnetAdressesComponent } from './components/carnet-adresses/carnet-adresses.component';
-import { RosebaieLivraisonComponent } from './components/rosebaie-livraison/rosebaie-livraison.component';
-import { MissionRosebaieComponent } from './components/mission-rosebaie/mission-rosebaie.component';
+import { RosebaieLivraisonComponent } from './components/rosebaie/rosebaie-livraison/rosebaie-livraison.component';
+import { MissionRosebaieComponent } from './components/rosebaie/mission-rosebaie/mission-rosebaie.component';
+import { RosebaieCreateLivraisonAttenteComponent } from './components/rosebaie/rosebaie-create-livraison-attente/rosebaie-create-livraison-attente.component';
+import { RosebaieListLivraisonAttenteComponent } from './components/rosebaie/rosebaie-list-livraison-attente/rosebaie-list-livraison-attente.component';
+// import { RosebaieCreateLivraisonComponent } from './components/rosebaie-create-livraison/rosebaie-create-livraison.component';
 
 import { RoleWoozooGuard } from './shared/role-woozoo.guard';
 import { RoleLivreurGuard } from './shared/role-livreur.guard';
@@ -36,9 +38,11 @@ const routes: Routes = [
   { path: 'planning', component: PlanningComponent, ...canActivate(redirectUnauthorizedToLogin), canActivate:[RoleProGuard] },
   { path: 'dashboardlivreur', component: DahsboardLivreurComponent, ...canActivate(redirectUnauthorizedToLogin), canActivate:[RoleLivreurGuard] },
   { path: 'listLivreur', component: ListeLivreurComponent, ...canActivate(redirectUnauthorizedToLogin), canActivate:[RoleWoozooGuard]},
-  { path: 'createRosebaie', component: RosebaieCreateLivraisonComponent, ...canActivate(redirectUnauthorizedToLogin), canActivate:[RoleProGuard]},
+  // { path: 'createRosebaie', component: RosebaieCreateLivraisonComponent, ...canActivate(redirectUnauthorizedToLogin), canActivate:[RoleProGuard]},
+  { path: 'createRosebaie', component: RosebaieCreateLivraisonAttenteComponent, ...canActivate(redirectUnauthorizedToLogin), canActivate:[RoleProGuard]},
   { path: 'messages', component: MessagesComponent, ...canActivate(redirectUnauthorizedToLogin), canActivate:[RoleWoozooGuard]},
   { path: 'carnetAdresses', component: CarnetAdressesComponent, ...canActivate(redirectUnauthorizedToLogin)},
+  { path: 'listLivraisonAttenteRB', component: RosebaieListLivraisonAttenteComponent, ...canActivate(redirectUnauthorizedToLogin)},
   { path: 'livraisonRB', component: RosebaieLivraisonComponent, ...canActivate(redirectUnauthorizedToLogin)},
   { path: 'missionRoseBaie/:id', component: MissionRosebaieComponent, ...canActivate(redirectUnauthorizedToLogin)},
 ];

@@ -3,7 +3,7 @@ import { Component, OnInit } from '@angular/core';
 import { MessageService } from 'src/app/services/message.service';
 import { HotToastService } from '@ngneat/hot-toast';
 import { MatDialog } from '@angular/material/dialog';
-import { ModalMessageComponent } from '../modal-message/modal-message.component';
+import { ModalMessageComponent } from '../modal/modal-message/modal-message.component';
 import { PageEvent } from '@angular/material/paginator';
 
 @Component({

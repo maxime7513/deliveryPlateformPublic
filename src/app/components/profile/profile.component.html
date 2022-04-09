@@ -42,10 +42,8 @@
     </div>
 
     <mat-form-field *ngIf="user.role == 'livreur'">
-      <mat-select formControlName="vehicule" placeholder="véhicule">
-        <mat-option *ngFor="let vehicule of vehicules" [value]="vehicule.value">
-          {{vehicule.viewValue}}
-        </mat-option>
+      <mat-select formControlName="vehicule" placeholder="véhicule" multiple>
+        <mat-option *ngFor="let vehicule of vehiculeList" [value]="vehicule">{{vehicule}}</mat-option>
       </mat-select>
       <mat-error *ngIf="profileFormSend && vehicule.hasError('required')">
         Veuillez renseigner votre type de véhicule

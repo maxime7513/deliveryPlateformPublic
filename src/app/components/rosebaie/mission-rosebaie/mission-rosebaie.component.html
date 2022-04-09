@@ -1,0 +1,65 @@
+<h1>Mission</h1>
+
+<mat-spinner *ngIf="showSpinner"></mat-spinner>
+
+<div *ngIf="!showSpinner">
+    <div *ngIf="!missionRB.adresseEnlevement.recupere && missionRB.date.seconds * 1000 < dateNow" class="enlevement">
+        <h4>Adresse d'enlévement</h4>
+        <p>{{missionRB.adresseEnlevement.location}}</p>
+        <button mat-raised-button (click)="colisRecupere()">
+            <mat-icon>done</mat-icon>
+            Récupérer
+        </button>
+    </div>
+
+    <div *ngIf="missionRB.adresseEnlevement.recupere" class="livraison">
+        <div *ngFor="let adresse of missionRB.adresseLivraison; index as i">
+            <h4>Livraison {{ i+1 }}</h4>
+            <p><mat-icon>storefront</mat-icon>{{adresse.nom}}</p>
+            <p><mat-icon>location_on</mat-icon>{{adresse.location}}</p>
+            <p><mat-icon>call</mat-icon>{{adresse.phone}}</p>
+            <p>
+                <mat-icon>widgets</mat-icon>
+                {{adresse.nombreColis}} colis
+                <a [href]="adresse.urlBonLivraison" target="_blank" matTooltip="voir bon de livraison"><mat-icon>assignment</mat-icon></a>
+            </p>
+            <p *ngIf="adresse.complementAdresse"><mat-icon class="complement">warning</mat-icon>{{adresse.complementAdresse}}</p>
+            <button mat-raised-button (click)="inputField.click()" *ngIf="!adresse.urlBonLivraisonSigne && !adresse.incident">
+                <mat-icon>add_a_photo</mat-icon>
+                Bon de livraison
+            </button>
+            <span *ngIf="!adresse.incident && !adresse.urlBonLivraisonSigne" (click)="openDialogModal(adresse, missionRB.adresseLivraison, i)" class="incident"><mat-icon>report_problem</mat-icon>Signaler un incident</span>
+            <input #inputField type="file" hidden (change)="uploadBonLivraison($event, i)"/>
+            <p *ngIf="adresse.urlBonLivraisonSigne" class="livre"><mat-icon>done</mat-icon>Livré</p>
+            <p *ngIf="adresse.incident" class="livre"><mat-icon>block</mat-icon>Reporté</p>
+        </div>
+    </div>
+
+    <div class="recapitulatif_mission">
+        <div>
+            <span>
+                <mat-icon>location_on</mat-icon>
+                {{missionRB.adresseLivraison.length}} livraisons
+            </span>
+            <span>
+                <img src="/assets/images/km.svg" alt="distance">
+                {{missionRB.km}} km
+            </span>
+        </div>
+        <h4 (click)="showMission = !showMission" [class.active]="showMission">Apercu Mission<mat-icon>expand_more</mat-icon></h4>
+        <div *ngIf="showMission">
+            <div>
+                <span>Départ</span>
+                <p>{{missionRB.adresseEnlevement.location}}</p>
+            </div>
+            <div *ngFor="let adresse of missionRB.adresseLivraison; index as i">
+                <span>Livraison {{i+1}}</span>
+                <p>{{adresse.location}}</p>        
+            </div>
+        </div>
+    </div>
+
+    <button *ngIf="!missionRB.status" (click)="returnGoogleItinary()" class="navigation">Lancer navigation</button> 
+</div>
+
+<div class="blur"></div>

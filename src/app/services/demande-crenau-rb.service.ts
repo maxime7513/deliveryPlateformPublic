@@ -36,16 +36,16 @@ export class DemandeCrenauRBService {
     await updateDoc(crenauRef, {"adresseEnlevement.recupere": date});
   }
 
-  async updateUrlBonLivraison(id: string, tabLivraison: any) {
+  async updateAdresseLivraison(id: string, tabLivraison: any) {
     const crenauRef = doc(this.firestore, 'demandeCrenauRB', id);
     let adresseLivraison = {'adresseLivraison': tabLivraison}
 
     await setDoc(crenauRef, adresseLivraison, { merge: true });
   }
 
-  async setStatusLivre(id: string) {
+  async setStatusLivraison(id: string, etat: string) {
     const crenauRef = doc(this.firestore, 'demandeCrenauRB', id);
-    let r = {'status': 'livre'}
+    let r = {'status': etat}
     await setDoc(crenauRef, r, { merge: true });
   }
 

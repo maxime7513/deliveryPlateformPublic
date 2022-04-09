@@ -8,7 +8,7 @@
     <p>{{message.date.seconds * 1000 | date: 'd MMMM y'}} à {{message.date.seconds * 1000 | date: 'HH:mm'}}</p>
   </div>
   <p>{{message.contenue}}</p>
-  <!--<a *ngIf="message.bonLivraisonUrl" href="{{message.bonLivraisonUrl}}" target="_blank">voir le bon de livraison</a>-->
+  <a *ngIf="message.urlBonLivraison" href="{{message.urlBonLivraison}}" target="_blank">voir le bon de livraison</a>
 </div>
 <div mat-dialog-actions>
   <button mat-button mat-dialog-close>Fermer</button>

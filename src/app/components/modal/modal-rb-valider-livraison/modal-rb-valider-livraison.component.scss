@@ -1,0 +1,144 @@
+h3{
+    text-align: center;
+    font-size: 1.7rem;
+    margin: 0 0 13px;
+}
+
+form{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    ::ng-deep mat-form-field{
+        color: #fff;
+        label{
+            color: #ccc!important;
+        }
+        .mat-select-value{
+            color: #fff;
+        }
+    }
+    div{
+        width: 100%;
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-between;
+        mat-form-field{
+            width: 45%;
+        }
+
+    }
+    > mat-form-field{
+        width: 100%;
+    }
+    button{
+        background: var(--secondary);
+        color: #fff;
+        margin: 13px auto auto;
+    }
+}
+
+.recap_mission{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    > p{
+        color: var(--secondary);
+        margin: 3px 0 5px;
+        span{
+            color: #fff;
+        }
+    }
+    > div:first-of-type{
+        display: flex;
+        justify-content: space-between;
+        margin: 17px 0 10px 0;
+        span{
+            color: #fff;
+            margin: 0 15px;
+            mat-icon{
+                vertical-align: middle;
+            }
+        }
+    } 
+    .adresse{
+        margin: auto;
+        > div{
+            display: flex;
+            align-items: flex-start;
+            margin: 15px 0;
+            mat-icon{
+                margin-right: 5px;
+                color: var(--secondary);
+            }
+            &:not(:last-of-type){
+                position: relative;
+                &:before{
+                    content: '';
+                    position: absolute;
+                    top: 21px;
+                    left: 10px;
+                    height: 90%;
+                    border-left: dotted 4px var(--secondary);
+                    @media (max-width: 500px) {
+                        top: 24px;
+                        height: 82%;
+                        left: 11px;
+                        border-left: dotted 2px var(--secondary);
+                    }
+                }
+            }
+        }
+        p{
+            color: #fff;
+            margin: 0;
+            text-transform: capitalize;
+        }
+    }
+    button{
+        margin: 13px 10px auto;
+        &:first-of-type{
+            color: #fff;
+            background: none;
+            border: none;
+            font-family: Roboto, "Helvetica Neue", sans-serif;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+        }
+        &:last-of-type{
+            background: var(--secondary);
+            color: #fff;
+        }
+    }
+}
+
+.mat-dialog-actions{
+    padding: 0;
+}
+
+@media (max-width: 500px) {
+    :host{
+        background: none;
+        &:before {
+            content: "";
+            position: fixed;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -10;
+            background: url(/assets/images/woozoo-background.jpg) no-repeat;
+            -webkit-background-size: cover;
+            -moz-background-size: cover;
+            -o-background-size: cover;
+            background-size: cover;
+        }
+    }
+    .blur{
+        z-index: 0;
+    }
+    h1, form, .recap_mission{
+        position: relative;
+        z-index: 1;
+    }
+}

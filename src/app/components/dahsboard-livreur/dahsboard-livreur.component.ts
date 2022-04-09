@@ -2,11 +2,12 @@ import { DatePipe } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { Auth } from '@angular/fire/auth';
 import { MatDialog } from '@angular/material/dialog';
+import { Router } from '@angular/router';
 import { HotToastService } from '@ngneat/hot-toast';
 import { Crenau } from 'src/app/models/crenau.model';
 import { CrenauService } from 'src/app/services/crenau.service';
 import { UsersService } from 'src/app/services/users.service';
-import { ModalDeleteCrenauComponent } from '../modal-delete-crenau/modal-delete-crenau.component';
+import { ModalDeleteCrenauComponent } from '../modal/modal-delete-crenau/modal-delete-crenau.component';
 
 @Component({
   selector: 'app-dahsboard-livreur',
@@ -21,7 +22,7 @@ export class DahsboardLivreurComponent implements OnInit {
   heures: number[] = [8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23];
   jours: number[]= [1, 2, 3, 4, 5, 6, 0];
 
-  constructor(private crenauservice: CrenauService, private usersService: UsersService, private auth: Auth, private toast: HotToastService, public datePipe : DatePipe, public dialog: MatDialog) {
+  constructor(private crenauservice: CrenauService, private usersService: UsersService, private auth: Auth, private toast: HotToastService, public datePipe : DatePipe, public dialog: MatDialog, private router: Router) {
     this.defaultDatePicker = new Date;
   }
 
@@ -55,6 +56,14 @@ export class DahsboardLivreurComponent implements OnInit {
     var date = day.toDate();
     var day = date.getDay();
     return day
+  }
+
+  returnUrlMissionRB(crenaux: Crenau[], jour: number, heure: number){
+    for(let crenau of crenaux){
+      if(jour == this.getDay(crenau.date) && this.heures[heure] == crenau.heureDebut && crenau.societe == 'rosebaie'){
+          this.router.navigate(['/missionRoseBaie/'+ crenau.idDemandeCreneauRB]);
+      }
+    }
   }
 
   returnCrenauId(jour: number, heure: number){

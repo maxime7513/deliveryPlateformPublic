@@ -1,10 +1,12 @@
 import { Component, OnInit } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute, Router } from '@angular/router';
 import { HotToastService } from '@ngneat/hot-toast';
 import { concatMap } from 'rxjs';
 import { DemandecrenauRB } from 'src/app/models/demandeCrenauRB.model';
 import { DemandeCrenauRBService } from 'src/app/services/demande-crenau-rb.service';
 import { ImageUploadService } from 'src/app/services/image-upload.service';
+import { ModalIncidentMissionComponent } from '../../modal/modal-incident-mission/modal-incident-mission.component';
 
 @Component({
   selector: 'app-mission-rosebaie',
@@ -14,7 +16,7 @@ import { ImageUploadService } from 'src/app/services/image-upload.service';
 export class MissionRosebaieComponent implements OnInit {
 
   missionRB: any;
-  id: string;
+  idMission: string;
   showMission: boolean;
   dateNow = new Date().getTime();
   private refreshdateNow: any = setInterval(() => {
@@ -22,14 +24,14 @@ export class MissionRosebaieComponent implements OnInit {
   }, 10000);
   showSpinner : boolean = true;
 
-  constructor(private route: ActivatedRoute, private demandeCrenauRbService: DemandeCrenauRBService, private imageUploadService: ImageUploadService, private toast: HotToastService, private router: Router) { }
+  constructor(private route: ActivatedRoute, private demandeCrenauRbService: DemandeCrenauRBService, private imageUploadService: ImageUploadService, private toast: HotToastService, public dialog: MatDialog) { }
 
   async ngOnInit(): Promise<void> {
     this.showMission = false;
-    this.id = await this.route.snapshot.params['id'];
-    // console.log(this.id);
+    this.idMission = await this.route.snapshot.params['id'];
+    // console.log(this.idMission);
 
-    this.demandeCrenauRbService.getDemandeCrenauRBByID(this.id).subscribe(res => {
+    this.demandeCrenauRbService.getDemandeCrenauRBByID(this.idMission).subscribe(res => {
       this.missionRB= res;
       this.showSpinner = false;
     });
@@ -69,7 +71,7 @@ export class MissionRosebaieComponent implements OnInit {
   }
 
   colisRecupere(){
-    this.demandeCrenauRbService.updateAdresseEnlevement(this.id, new Date);
+    this.demandeCrenauRbService.updateAdresseEnlevement(this.idMission, new Date);
   }
 
   uploadBonLivraison(event: any, indice: number) { 
@@ -92,22 +94,50 @@ export class MissionRosebaieComponent implements OnInit {
 
   async updateBonLivraison(indice: number, photoURL: string){
     let tabAdresseLivraison = this.missionRB.adresseLivraison;
-    tabAdresseLivraison[indice].urlBonLivraison = photoURL;
+    tabAdresseLivraison[indice].urlBonLivraisonSigne = photoURL;
     tabAdresseLivraison[indice].dateLivraisonEffectue = new Date;
-    // console.log(tabAdresseLivraison);
-    this.demandeCrenauRbService.updateUrlBonLivraison(this.id, tabAdresseLivraison);
-    if(this.parcourirTabLivraison(tabAdresseLivraison)){
-      this.demandeCrenauRbService.setStatusLivre(this.id);
+    this.demandeCrenauRbService.updateAdresseLivraison(this.idMission, tabAdresseLivraison);
+    // if(this.parcourirTabLivraison(tabAdresseLivraison)){
+    //   this.demandeCrenauRbService.setStatusLivraison(this.idMission, "livre");
+    // }
+    if(this.parcourirTabLivraison(tabAdresseLivraison) == 'livre'){
+      this.demandeCrenauRbService.setStatusLivraison(this.idMission, "livre");
+    }else if(this.parcourirTabLivraison(tabAdresseLivraison) == 'livre avec incident'){
+      this.demandeCrenauRbService.setStatusLivraison(this.idMission, "livre avec incident");
     }
   }
 
+  // parcourirTabLivraison(tabLivraison: any){
+  //   for(let liv of tabLivraison){
+  //     if(!liv.urlBonLivraisonSigne && !liv.incident){
+  //       return false
+  //     }
+  //   }
+  //   return true
+  // }
+
   parcourirTabLivraison(tabLivraison: any){
+    let status;
     for(let liv of tabLivraison){
-      if(!liv.urlBonLivraison){
+      if(!liv.urlBonLivraisonSigne && !liv.incident){
         return false
+      }else if(liv.incident){
+        status = 'livre avec incident'
       }
     }
-    return true
+    if(status == 'livre avec incident'){
+      return status
+    }else{
+      return 'livre'
+    }
+  }
+
+  openDialogModal(livraison: any, tabLivraison: any[], index: number) {
+    const dialogRef = this.dialog.open(ModalIncidentMissionComponent);
+    dialogRef.componentInstance.livraison = livraison;
+    dialogRef.componentInstance.tabLivraison = tabLivraison;
+    dialogRef.componentInstance.indexTab = index;
+    dialogRef.componentInstance.idMission = this.idMission;
   }
 
 }

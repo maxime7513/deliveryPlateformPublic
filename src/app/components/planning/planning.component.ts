@@ -3,7 +3,7 @@ import { Component, OnInit } from '@angular/core';
 import { Crenau } from 'src/app/models/crenau.model';
 import { CrenauService } from 'src/app/services/crenau.service';
 import { MatDialog } from '@angular/material/dialog';
-import { ModalUserInscritComponent } from '../modal-user-inscrit/modal-user-inscrit.component';
+import { ModalUserInscritComponent } from '../modal/modal-user-inscrit/modal-user-inscrit.component';
 import { UsersService } from 'src/app/services/users.service';
 import { ProfileUser } from 'src/app/models/user.profil';
 import { HotToastService } from '@ngneat/hot-toast';

@@ -1,0 +1,24 @@
+<div mat-dialog-content>
+    <h3>Appeler le SAV</h3>
+    <p><mat-icon>phone</mat-icon>0690283748</p>
+    <p>Et renseigner le problème</p>
+    <form [formGroup]="problemeMissionForm" (ngSubmit)="onSubmit()">
+        <mat-form-field>
+            <mat-select formControlName="incident" placeholder="incident">
+              <mat-option *ngFor="let incident of incidentList" [value]="incident">{{incident}}</mat-option>
+            </mat-select>
+        </mat-form-field>
+        <mat-form-field>
+          <mat-label>Message</mat-label>
+          <input matInput formControlName="message" #message maxlength="256" placeholder="Décriver le problème ...">
+          <mat-hint align="end">{{message.value.length}} / 256</mat-hint>
+        </mat-form-field>
+
+        <button type="submit" mat-raised-button>
+            Envoyer
+        </button>
+    </form>
+</div>
+<div mat-dialog-actions>
+  <button mat-button mat-dialog-close>Fermer</button>
+</div>

@@ -25,12 +25,16 @@
     </div>
 
     <div *ngIf="user.role == 'rosebaie'">
-        <button mat-menu-item routerLink="/createRosebaie">
-        <mat-icon>more_time</mat-icon>
+      <button mat-menu-item routerLink="/createRosebaie">
+        <mat-icon>content_paste</mat-icon>
         <span>Programmer livraison</span>
       </button>
+      <button mat-menu-item routerLink="/listLivraisonAttenteRB">
+        <mat-icon>pending_actions</mat-icon>
+        <span>Lancer livraison</span>
+      </button>
       <button mat-menu-item routerLink="/livraisonRB">
-        <mat-icon>content_paste</mat-icon>
+        <mat-icon>content_paste_search</mat-icon>
         <span>Mes livraisons</span>
       </button>
       <button mat-menu-item routerLink="/planning">

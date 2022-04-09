@@ -11,7 +11,9 @@ mat-icon{
 }
 
 h3{
-    margin: 0 0 7px;
+    margin: 0 7px 7px 7px;
+    text-align: center;
+    white-space: nowrap;
 }
 
 form{
@@ -35,6 +37,7 @@ form{
 }
 
 .mat-dialog-actions{
+    padding: 0;
     button{
         padding: 0;
     }

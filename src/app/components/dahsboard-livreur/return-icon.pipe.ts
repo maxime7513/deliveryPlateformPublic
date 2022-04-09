@@ -15,13 +15,13 @@ export class ReturnIconPipe implements PipeTransform {
 
   returnIcon(crenaux: Crenau[], jour: number, heure: number){
     let res;
-    for(let i = 0; i < crenaux.length; i++){
-      if(jour == this.getDay(crenaux[i].date) && this.heures[heure] == crenaux[i].heureDebut ){
-        if(60 < this.calculDifferenceDate(crenaux[i].date.toDate(), new Date)){
+    for(let crenau of crenaux){
+      if(jour == this.getDay(crenau.date) && this.heures[heure] == crenau.heureDebut ){
+        if(60 < this.calculDifferenceDate(crenau.date.toDate(), new Date)){
           res = "event_busy";
-        }else if(this.calculDifferenceDate(crenaux[i].date.toDate(), new Date) <= -60){
+        }else if(this.calculDifferenceDate(crenau.date.toDate(), new Date) <= -60){
           res = "assignment_turned_in";
-        }else if(-60 < this.calculDifferenceDate(crenaux[i].date.toDate(), new Date) && this.calculDifferenceDate(crenaux[i].date.toDate(), new Date) <= 0){
+        }else if(-60 < this.calculDifferenceDate(crenau.date.toDate(), new Date) && this.calculDifferenceDate(crenau.date.toDate(), new Date) <= 0){
           res = "hourglass_bottom";
         }
       }

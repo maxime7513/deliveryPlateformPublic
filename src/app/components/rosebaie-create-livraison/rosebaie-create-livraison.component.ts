@@ -10,7 +10,7 @@ import { MessageService } from 'src/app/services/message.service';
 import { UsersService } from 'src/app/services/users.service';
 import { ImageUploadService } from 'src/app/services/image-upload.service';
 import { AdressesService } from 'src/app/services/adresses.service';
-import { ModalCreateAdresseComponent } from '../modal-create-adresse/modal-create-adresse.component';
+import { ModalCreateAdresseComponent } from '../modal/modal-create-adresse/modal-create-adresse.component';
 import { MatDialog } from '@angular/material/dialog';
 import { CrenauService } from 'src/app/services/crenau.service';
 import { Crenau } from 'src/app/models/crenau.model';
@@ -191,7 +191,6 @@ export class RosebaieCreateLivraisonComponent implements OnInit {
     controls.removeAt(index);
     // remove filteredOptions too
     this.filteredOptions.splice(index, 1);
-
   }
 
   // removeAdresse(index: number) {
@@ -209,7 +208,7 @@ export class RosebaieCreateLivraisonComponent implements OnInit {
     return this.rbForm.get('adresseEnlevement');
   }
   get heureEnlevement() {
-    return this.rbForm.get('adresseEnlevement');
+    return this.rbForm.get('heureEnlevement');
   }
   get arrayAdresseLivraison() {
     return this.rbForm.get('adresseLivraison') as FormArray;

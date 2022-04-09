@@ -4,7 +4,7 @@ export interface Message {
     nom : string;
     prenom : string;
     photoUrl? : string;
-    bonLivraisonUrl? : string;
+    urlBonLivraison? : string;
     contenue : string;
     lu: boolean;
     traite: boolean;

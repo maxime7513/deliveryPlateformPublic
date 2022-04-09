@@ -24,6 +24,12 @@ export class AdressesService {
     const adresseRef = query(collection(this.firestore, 'adresses'), where("adresse", "==", adresse));
     return collectionData(adresseRef, { idField: 'id' });
   }
+
+  getByNom(nom: any){
+    const adresseRef = query(collection(this.firestore, 'adresses'), where("nom", "==", nom));
+    return collectionData(adresseRef, { idField: 'id' });
+  }
+  
   getAdresseDepot(): Observable<Adresse[]>{
     const adresseRef = query(collection(this.firestore, 'adresses'), where("status", "==", "depot"));
     return collectionData(adresseRef, { idField: 'id' }) as Observable<Adresse[]>;

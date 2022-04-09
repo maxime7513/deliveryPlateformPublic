@@ -4,8 +4,8 @@ import { PageEvent } from '@angular/material/paginator';
 import { HotToastService } from '@ngneat/hot-toast';
 import { Adresse } from 'src/app/models/adresse.model';
 import { AdressesService } from 'src/app/services/adresses.service';
-import { ModalCreateAdresseComponent } from '../modal-create-adresse/modal-create-adresse.component';
-import { ModalDeleteCrenauComponent } from '../modal-delete-crenau/modal-delete-crenau.component';
+import { ModalCreateAdresseComponent } from '../modal/modal-create-adresse/modal-create-adresse.component';
+import { ModalDeleteCrenauComponent } from '../modal/modal-delete-crenau/modal-delete-crenau.component';
 
 @Component({
   selector: 'app-carnet-adresses',

@@ -1,0 +1,48 @@
+<h1>Programmer vos livraisons</h1>
+
+<form [formGroup]="rbForm" (ngSubmit)="onSubmit()">
+    <ng-container formArrayName="adresseLivraison">
+        <div *ngFor="let _ of arrayAdresseLivraison.controls; index as i" [formGroupName]="i" [class.active]="1 < arrayAdresseLivraison.length">
+            <mat-form-field>
+                <mat-label *ngIf="arrayAdresseLivraison.length == 1">Adresse de livraison</mat-label>
+                <mat-label *ngIf="1 < arrayAdresseLivraison.length">Adresse de livraison {{i + 1}}</mat-label>
+                <input matInput formControlName="nom" #vb [matAutocomplete]="auto"/>
+                <mat-autocomplete #auto="matAutocomplete">
+                  <mat-option *ngFor="let option of filteredOptions[i] | async" [value]="option.viewValue">
+                    {{option.viewValue}}
+                  </mat-option>
+                </mat-autocomplete>
+                <mat-icon (click)="openDialogModal(vb.value)" matTooltip="ajouter au carnet d'adresse" class="add_location">add_location_alt</mat-icon>
+            </mat-form-field>
+
+            <!--<mat-form-field>
+                <mat-label>Colis</mat-label>
+                <mat-select formControlName="nombreColis">
+                    <mat-option *ngFor="let colis of nombreColis" [value]="colis.value">
+                      {{colis.viewValue}}
+                    </mat-option>
+                </mat-select>
+            </mat-form-field>-->
+            
+            <mat-form-field>
+              <mat-label>N° bon livraison</mat-label>
+              <input matInput formControlName="numeroBonLivraison">
+            </mat-form-field>
+
+            <span (click)="inputField.click()" class="addBonLivraison">
+                <mat-icon matTooltip="ajouter bon de livraison">post_add</mat-icon>
+                <mat-icon *ngIf="i != 0" (click)="removeAdresse(i)" matTooltip="supprimer" class="remove">clear</mat-icon>
+            </span>
+            <input formControlName="urlBonLivraison" #inputField type="file" hidden (change)="uploadImage($event, i)"/>
+
+        </div>
+    </ng-container>
+
+    <span (click)="addNewAdresse()" matTooltip="ajouter une adresse de livraison"><mat-icon>add_circle</mat-icon>Adresse de livraison</span>
+
+    <button type="submit" mat-raised-button>
+      Valider
+    </button>
+</form>
+
+<div class="blur"></div>

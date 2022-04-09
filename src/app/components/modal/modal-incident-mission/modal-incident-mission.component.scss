@@ -1,0 +1,55 @@
+.mat-dialog-content{
+    text-align: center;
+    overflow: unset;
+    h3{
+        font-size: 1.5rem;
+        font-weight: 500;
+        color: var(--secondary);
+        margin: 0;
+    }
+    p{
+        margin: 0;
+        &:first-of-type{
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.4rem;
+            margin: 7px 0;
+            mat-icon{
+                margin-right: 3px;
+            }
+        }
+        &:last-of-type{
+            font-size: 1.35rem;
+            font-weight: 500;
+            color: var(--secondary);
+            white-space: nowrap;
+        }
+    }
+    form{
+        ::ng-deep mat-form-field{
+            width: 100%;
+            color: #fff;
+            label{
+                color: #ccc!important;
+                padding-bottom: 10px;
+            }
+            .mat-select-value{
+                color: #fff;
+            }
+            mat-hint{
+                color: #ccc;
+            }
+        }
+        button{
+            background: var(--secondary);
+            color: #fff;
+            margin-top: 10px;
+        }
+    }
+}
+
+.mat-dialog-actions{
+    min-height: 0;
+    padding-bottom: 10px;
+}

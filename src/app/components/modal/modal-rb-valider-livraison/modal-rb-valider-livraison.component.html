@@ -1,0 +1,84 @@
+<h3 *ngIf="!recapLivraison">Lancer livraison</h3>
+<h3  *ngIf="recapLivraison">Valider votre livraison</h3>
+<div mat-dialog-content>
+    <form [formGroup]="rbForm" (ngSubmit)="onSubmit()" *ngIf="!recapLivraison">
+        <div>
+          <mat-form-field>
+              <mat-label>Date livraison</mat-label>
+              <input matInput [min]="datePicker" [matDatepicker]="picker" formControlName="date">
+              <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+              <mat-datepicker #picker></mat-datepicker>
+              <mat-error *ngIf="date.hasError('required')">
+                La date est obligatoire
+              </mat-error>
+          </mat-form-field> 
+          <mat-form-field>
+              <mat-label>Heure d'enlévement</mat-label>
+              <mat-select formControlName="heureEnlevement">
+                <mat-option *ngFor="let heure of heures" [value]="heure.value">
+                  {{heure.viewValue}}
+                </mat-option>
+              </mat-select>
+              <mat-error *ngIf="heureEnlevement.hasError('required')">
+                L'heure d'enlévement est obligatoire
+              </mat-error>
+          </mat-form-field>
+        </div>  
+        <mat-form-field>
+            <mat-label>Adresse d'enlévement</mat-label>
+            <input matInput formControlName="adresseEnlevement" [matAutocomplete]="autoDepot"/>
+            <mat-autocomplete #autoDepot="matAutocomplete">
+              <mat-option *ngFor="let option of filteredOptionsDepot | async" [value]="option.value">
+                {{option.viewValue}}
+              </mat-option>
+            </mat-autocomplete>
+           <mat-error *ngIf="adresseEnlevement.hasError('required')">
+              Adresse d'enlévement obligatoire
+            </mat-error>
+        </mat-form-field>
+        
+        <button type="submit" mat-raised-button>
+            Valider
+        </button>
+    </form>
+
+    <div *ngIf="recapLivraison" class="recap_mission">
+        <div>
+          <span>
+            <mat-icon>today</mat-icon>
+            {{rbForm.value.date | date: 'dd/MM/yyyy'}}
+          </span>
+          <span>
+            <mat-icon>schedule</mat-icon>
+            {{rbForm.value.heureEnlevement}}h00
+          </span>
+        </div>
+
+        <p>Temps de livraison estimé : <span [innerHtml]="formatTime(this.rbForm.value.time)"></span></p>
+
+        <div class="adresse">
+          <div>
+            <mat-icon>widgets</mat-icon>
+            <div>
+              <p>Adresse d'enlévement</p>
+              <p>{{rbForm.value.adresseEnlevement.location}}</p>
+            </div>
+          </div>
+          <div *ngFor="let livraison of rbForm.value.adresseLivraison">
+            <mat-icon>location_on</mat-icon>
+            <div>
+              <p *ngIf="livraison.nom != ' n/a'">{{livraison.nom}}</p>
+              <p>{{livraison.location}}</p>
+            </div>
+          </div>
+        </div>
+
+        <button mat-raised-button (click)="onSubmit2()">
+          Valider
+        </button>
+    </div>
+</div>
+
+<div mat-dialog-actions>
+  <button mat-button mat-dialog-close>Fermer</button>
+</div>

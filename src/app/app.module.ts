@@ -22,10 +22,11 @@ import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material/core';
 import { MatSelectModule } from '@angular/material/select';
 import { MatDialogModule } from '@angular/material/dialog';
-import {MatProgressSpinnerModule} from '@angular/material/progress-spinner'; 
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner'; 
+import {MatCheckboxModule} from '@angular/material/checkbox'; 
 import { ReactiveFormsModule } from '@angular/forms';
 import { FormsModule } from '@angular/forms';
-import { ModalUserInscritComponent } from './components/modal-user-inscrit/modal-user-inscrit.component';
+import { ModalUserInscritComponent } from './components/modal/modal-user-inscrit/modal-user-inscrit.component';
 import { LoginComponent } from './components/login/login.component';
 import { environment } from 'src/environments/environment';
 import { HotToastModule } from '@ngneat/hot-toast';
@@ -37,17 +38,17 @@ import { CreateCrenauComponent } from './components/create-crenau/create-crenau.
 import { PlanningComponent } from './components/planning/planning.component';
 import { DahsboardLivreurComponent } from './components/dahsboard-livreur/dahsboard-livreur.component';
 import { ListeLivreurComponent } from './components/liste-livreur/liste-livreur.component';
-import { ModalDeleteCrenauComponent } from './components/modal-delete-crenau/modal-delete-crenau.component';
+import { ModalDeleteCrenauComponent } from './components/modal/modal-delete-crenau/modal-delete-crenau.component';
 import { HttpClientModule } from '@angular/common/http';
 import { MatPaginatorModule } from '@angular/material/paginator'; 
 import { RosebaieCreateLivraisonComponent } from './components/rosebaie-create-livraison/rosebaie-create-livraison.component';
 import { MessagesComponent } from './components/messages/messages.component';
-import { ModalMessageComponent } from './components/modal-message/modal-message.component';
+import { ModalMessageComponent } from './components/modal/modal-message/modal-message.component';
 import { CarnetAdressesComponent } from './components/carnet-adresses/carnet-adresses.component';
 import { GooglePlaceModule } from "ngx-google-places-autocomplete";
 import {MatAutocompleteModule} from '@angular/material/autocomplete'; 
-import { ModalCreateAdresseComponent } from './components/modal-create-adresse/modal-create-adresse.component';
-import { RosebaieLivraisonComponent } from './components/rosebaie-livraison/rosebaie-livraison.component';
+import { ModalCreateAdresseComponent } from './components/modal/modal-create-adresse/modal-create-adresse.component';
+import { RosebaieLivraisonComponent } from './components/rosebaie/rosebaie-livraison/rosebaie-livraison.component';
 
 // Pipe
 import { ReturnLogoPipe } from './components/dahsboard-livreur/return-logo.pipe';
@@ -55,14 +56,19 @@ import { ReturnIconPipe } from './components/dahsboard-livreur/return-icon.pipe'
 import { ReturnPlanningPipe } from './components/planning/return-planning.pipe';
 import { ReturnCompletPipe } from './components/planning/return-complet.pipe';
 import { ReturnInscritPipe } from './components/planning/return-inscrit.pipe';
+import { ReturnCompletLivreurPipe } from './components/dahsboard-livreur/return-complet.pipe';
+import { ReturnMissionRbPipe } from './components/dahsboard-livreur/return-missionRB.pipe';
 
 // firebase
 import { provideFirebaseApp, initializeApp } from '@angular/fire/app';
 import { getAuth, provideAuth } from '@angular/fire/auth';
 import { getFirestore, provideFirestore } from '@angular/fire/firestore';
 import { getStorage, provideStorage } from '@angular/fire/storage';
-import { MissionRosebaieComponent } from './components/mission-rosebaie/mission-rosebaie.component';
-import { AddAdresseLivraionComponent } from './components/add-adresse-livraion/add-adresse-livraion.component';
+import { MissionRosebaieComponent } from './components/rosebaie/mission-rosebaie/mission-rosebaie.component';
+import { RosebaieCreateLivraisonAttenteComponent } from './components/rosebaie/rosebaie-create-livraison-attente/rosebaie-create-livraison-attente.component';
+import { RosebaieListLivraisonAttenteComponent } from './components/rosebaie/rosebaie-list-livraison-attente/rosebaie-list-livraison-attente.component';
+import { ModalRbValiderLivraisonComponent } from './components/modal/modal-rb-valider-livraison/modal-rb-valider-livraison.component';
+import { ModalIncidentMissionComponent } from './components/modal/modal-incident-mission/modal-incident-mission.component';
 
 registerLocaleData(localeFr, 'fr');
 
@@ -89,10 +95,15 @@ registerLocaleData(localeFr, 'fr');
     ReturnPlanningPipe,
     ReturnCompletPipe,
     ReturnInscritPipe,
+    ReturnCompletLivreurPipe,
+    ReturnMissionRbPipe,
     ModalCreateAdresseComponent,
     RosebaieLivraisonComponent,
     MissionRosebaieComponent,
-    AddAdresseLivraionComponent,
+    RosebaieCreateLivraisonAttenteComponent,
+    RosebaieListLivraisonAttenteComponent,
+    ModalRbValiderLivraisonComponent,
+    ModalIncidentMissionComponent,
   ],
   imports: [
     BrowserModule,
@@ -113,6 +124,7 @@ registerLocaleData(localeFr, 'fr');
     MatMenuModule,
     MatDialogModule,
     MatProgressSpinnerModule,
+    MatCheckboxModule,
     FormsModule,
     GooglePlaceModule,
     MatAutocompleteModule,

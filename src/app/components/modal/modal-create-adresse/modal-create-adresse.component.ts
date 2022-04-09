@@ -22,7 +22,8 @@ export class ModalCreateAdresseComponent implements OnInit {
   }
   adressForm: FormGroup;
   nomAdresse: string;
-
+  complement: boolean = false;
+  
   constructor(public dialogRef: MatDialogRef<ModalCreateAdresseComponent>, private adresseservice: AdressesService, private toast: HotToastService) { }
 
   ngOnInit(): void {
@@ -37,6 +38,7 @@ export class ModalCreateAdresseComponent implements OnInit {
         nom: new FormControl(this.nomAdresse, Validators.required),
         adresse: new FormControl('', Validators.required),
         phone: new FormControl(""),
+        complementAdresse: new FormControl("")
       }
     );
   }
@@ -77,7 +79,7 @@ export class ModalCreateAdresseComponent implements OnInit {
     }
 
     this.adresseservice.addAdressse(this.adressForm.value)
-    this.toast.success('Ajouter à vos adresses');
+    this.toast.success('Ajouté à vos adresses');
     this.dialogRef.close(this.adresse.value);
   }
 

@@ -25,9 +25,10 @@
         <tbody>
           <tr *ngFor="let heure of heures; index as i">
             <td>{{heure}}/{{heure + 1}}h</td>
-            <td *ngFor="let jour of jours" [ngClass]="crenaux | returnIcon : jour : i" class="creneau_td">
+            <td *ngFor="let jour of jours" [ngClass]="crenaux | returnComplet: jour : i" class="creneau_td">
               <div [innerHTML]="crenaux | returnLogo: jour : i"></div>
               <mat-icon [innerHTML]="crenaux | returnIcon : jour : i" (click)="openDialogModal(returnCrenauId(jour,i))"></mat-icon>
+              <mat-icon [innerHTML]="crenaux | returnMissionRB : jour : i" (click)="returnUrlMissionRB(crenaux, jour, i)" class="voirmission"></mat-icon>
             </td>
           </tr>
         <tbody>

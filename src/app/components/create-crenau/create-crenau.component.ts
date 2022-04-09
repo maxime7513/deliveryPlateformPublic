@@ -11,7 +11,7 @@ import { ProfileUser } from 'src/app/models/user.profil';
 import { CrenauService } from 'src/app/services/crenau.service';
 import { TwilioService } from 'src/app/services/twilio.service';
 import { UsersService } from 'src/app/services/users.service';
-import { ModalDeleteCrenauComponent } from '../modal-delete-crenau/modal-delete-crenau.component';
+import { ModalDeleteCrenauComponent } from '../modal/modal-delete-crenau/modal-delete-crenau.component';
 
 interface Heure {
   value: number;

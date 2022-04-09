@@ -102,17 +102,19 @@ table{
             }
             &.assignment_turned_in{
                 background: rgba(79, 195, 161, 0.35);
-                mat-icon{
+                mat-icon:not(.voirmission){
                     color: var(--secondary);
+                    pointer-events: none;
                 }
             }
             &.hourglass_bottom{
-                mat-icon{
+                mat-icon:not(.voirmission){
                     color: var(--secondary);
+                    pointer-events: none;
                 }  
             }
             &.event_busy{
-                mat-icon{
+                mat-icon:not(.voirmission){
                     color: #f22;
                     pointer-events: all;
                     cursor: pointer;
@@ -122,6 +124,12 @@ table{
                         opacity: 1;
                     }
                 }
+            }
+            .voirmission{
+                color: var(--primary);
+                top: 2px;
+                left: 2px;
+                cursor: pointer;
             }
         }
     }
@@ -145,7 +153,6 @@ table{
         height: 25px;
         bottom: 2px;
         right: 2px;
-        pointer-events: none;
     }
 }
 

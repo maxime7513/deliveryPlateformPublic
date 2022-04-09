@@ -6,7 +6,7 @@ import { Auth } from '@angular/fire/auth';
 import { Crenau } from 'src/app/models/crenau.model';
 import { CrenauService } from 'src/app/services/crenau.service';
 import { UsersService } from 'src/app/services/users.service';
-import { ModalDeleteCrenauComponent } from '../modal-delete-crenau/modal-delete-crenau.component';
+import { ModalDeleteCrenauComponent } from '../modal/modal-delete-crenau/modal-delete-crenau.component';
 import { TwilioService } from 'src/app/services/twilio.service';
 import { ProfileUser } from 'src/app/models/user.profil';
 import { resolve } from 'dns';
@@ -75,14 +75,12 @@ export class RegisterLivreurComponent implements OnInit {
     }
 
     // verifier si user vehicule est égale à crenau vehicule
-    let userVehicule =  await this.usersService.userVehicule$;
-    if(crenau.vehicule != ''){
-      if(userVehicule != crenau.vehicule){
-        this.toast.error('Ce créneau de livraison doit être effectué en '+ crenau.vehicule);
-        return
-      }
+    let userVehicule: any =  await this.usersService.userVehicule$;
+    if(!userVehicule.includes(crenau.vehicule) && crenau.vehicule != ''){
+      this.toast.error('Ce créneau de livraison doit être effectué en '+ crenau.vehicule);
+      return
     }
-  
+
     // ajouter user id au crenau
     this.crenauservice.addLivreur(crenau, this.userUid)
     // ajouter crenau id au user
@@ -113,8 +111,8 @@ export class RegisterLivreurComponent implements OnInit {
 
   // verifier si l'utilisateur n'est pas deja inscrit à un autre créneau sur le meme horaire
   verifierUserInscritHeure(crenau: Crenau){
-    let nombreCreneau = crenau.heureFin - crenau.heureDebut;
-    console.log(nombreCreneau);
+    // let nombreCreneau = crenau.heureFin - crenau.heureDebut;
+    // console.log(nombreCreneau);
     return new Promise(resolve => {
       this.crenauservice.getCrenauxInscritCurrentUserByDate3(this.userUid, crenau.dateString).subscribe((res) => {
         let dejaInscrit = true;

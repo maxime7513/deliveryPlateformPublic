@@ -105,3 +105,8 @@ mat-spinner{
 .mat-spinner circle, .mat-progress-spinner circle{
   stroke: var(--secondary);
 }
+
+// checkbox
+.mat-checkbox-checked.mat-accent .mat-checkbox-background {
+  background-color: var(--secondary);
+}

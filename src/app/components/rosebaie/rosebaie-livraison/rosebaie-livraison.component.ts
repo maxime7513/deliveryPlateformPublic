@@ -41,6 +41,16 @@ export class RosebaieLivraisonComponent implements OnInit {
     return res
   }
 
+  calculIncident(creneauRB: any){
+    let incident = 0;
+    for(let creneau of creneauRB.adresseLivraison){
+      if(creneau.incident){
+        incident += 1;
+      }
+    }
+    return incident
+  }
+
   // pagination
   public getPaginatorData(event: PageEvent): PageEvent {
     this.lowValueSlice = event.pageIndex * event.pageSize;
