@@ -8,4 +8,5 @@ export interface DemandecrenauRB {
     urlBonLivraisonSigne? : string;
     km: string;
     time: number;
+    numeroMission?: string;
 }

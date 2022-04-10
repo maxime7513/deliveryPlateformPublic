@@ -35,7 +35,6 @@ export class ModalRbValiderLivraisonComponent implements OnInit {
   rbForm: FormGroup;
   datePicker = new Date;
   heures: Heure[] = [
-    {value: 7, viewValue: '07h'},
     {value: 8, viewValue: '08h'},
     {value: 9, viewValue: '09h'},
     {value: 10, viewValue: '10h'},
@@ -249,7 +248,7 @@ export class ModalRbValiderLivraisonComponent implements OnInit {
       inscritMax: 1,
       vehicule: "camion",
       societe: "rosebaie",
-      idDemandeCreneauRB: idDemandeCreneauRB
+      idDemandeCreneauRB: idDemandeCreneauRB,
     }
 
     this.crenauservice.addCrenau(req); // ajouter creneau(x) à firebase
@@ -296,6 +295,10 @@ export class ModalRbValiderLivraisonComponent implements OnInit {
   async onSubmit2(){
     this.toast.loading('Demande en cours');
     
+    // donner numero de mission
+    const numeroMission = await this.crenauservice.returnNumeroCrenau('rosebaie');
+    this.rbForm.value.numeroMission = 'RB00' + (numeroMission + 1);
+
     // ajout de la demande de creneau a firebase et recuperation de l'id)
     const idDemandeCreneauRB = await this.demandeCrenauRB.addDemandeCrenauRB(this.rbForm.value);
 

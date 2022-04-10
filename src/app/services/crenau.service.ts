@@ -126,4 +126,10 @@ export class CrenauService {
     return resLength.size
   }
 
+  async returnNumeroCrenau(Usersociete: any) {
+    const crenauxRef = query(collection(this.firestore, 'crenau'), where("societe", "==" , Usersociete));
+    let resLength = await getDocs(crenauxRef);
+    return resLength.size
+  }
+
 }

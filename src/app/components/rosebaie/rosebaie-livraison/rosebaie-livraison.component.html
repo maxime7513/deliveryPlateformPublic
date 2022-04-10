@@ -12,7 +12,8 @@
         </div>
 
         <div *ngIf="creneauRB.showDetails" class="details">
-        <a routerLink="/missionRoseBaie/{{creneauRB.id}}">voir mission</a>
+        <!--<a routerLink="/missionRoseBaie/{{creneauRB.id}}">voir mission</a>-->
+            <span>N° {{creneauRB.numeroMission}}</span>
             <h4><mat-icon>widgets</mat-icon>Adresse d'enlévement</h4>
             <p>
                 {{creneauRB.adresseEnlevement.location}}
