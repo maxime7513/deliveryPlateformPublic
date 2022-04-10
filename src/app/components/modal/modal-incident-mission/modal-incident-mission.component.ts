@@ -70,9 +70,10 @@ export class ModalIncidentMissionComponent implements OnInit {
       this.user.photoURL = '';
     }
 
-    const contenue = 'Client : ' + this.livraison.nom + `\n` + 
-    'Adresse : ' + this.livraison.location + `\n` + 
-    this.problemeMissionForm.value.message;
+    const contenue = 'Client : ' + this.livraison.nom + `\n` +
+    'Adresse : ' + this.livraison.location + `\n` +
+    'Incident : ' + this.problemeMissionForm.value.incident + `\n` +
+    'Messsage :' + `\n` + this.problemeMissionForm.value.message;
 
     const message= {
       date: new Date,
@@ -89,6 +90,8 @@ export class ModalIncidentMissionComponent implements OnInit {
       this.demandeCrenauRbService.setStatusLivraison(this.idMission, "livre avec incident");
     }
 
+    // supprimer incident avant de remmettre l'adresse dans livraison adresse en attente
+    delete this.livraison.incident;
     // remettre l'adresse dans livraison adresse en attente
     this.rbAdresseAttenteService.addLivraisonAttente(this.livraison);
 

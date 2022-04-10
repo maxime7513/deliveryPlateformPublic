@@ -53,7 +53,7 @@ export class RosebaieListLivraisonAttenteComponent implements OnInit {
   // }
   checkChekbox(){
     for(let i = 0; i < this.checkbox.length; i++){
-      if(this.checkbox[i] == true && this.colis[i]){
+      if(this.checkbox[i] == true && (this.colis[i] || this.livraisonAttente[i].nombreColis)){
         return false;
       }
     }
@@ -76,12 +76,14 @@ export class RosebaieListLivraisonAttenteComponent implements OnInit {
     this.toast.close();
     let tabAdresseChecked : rbLivraisonAttente[] = [];
     for(let i=0; i < this.livraisonAttente.length; i++){
-      if(this.checkbox[i] == true && !this.colis[i]){
+      if(this.checkbox[i] == true && !this.colis[i] && !this.livraisonAttente[i].nombreColis){
         this.toast.error('Renseigner le nombre de colis')
         return
-      }else if(this.checkbox[i] == true && this.colis[i]){
+      }else if(this.checkbox[i] == true && (this.colis[i] || this.livraisonAttente[i].nombreColis)){
         tabAdresseChecked.push(this.livraisonAttente[i]);
-        this.livraisonAttente[i].nombreColis = this.colis[i];
+        if(!this.livraisonAttente[i].nombreColis){
+          this.livraisonAttente[i].nombreColis = this.colis[i];
+        }
       }
     }
     this.openDialogModal(tabAdresseChecked);
