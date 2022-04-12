@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { addDoc, collection, collectionData, deleteDoc, doc, Firestore, setDoc } from '@angular/fire/firestore';
+import { addDoc, collection, collectionData, deleteDoc, doc, Firestore, orderBy, query, setDoc } from '@angular/fire/firestore';
 import { Observable } from 'rxjs';
 import { rbLivraisonAttente } from '../models/rbLivraisonAttente';
 
@@ -16,7 +16,7 @@ export class RBAdresseAttenteService {
   }
   
   getLivraisonsAttente(): Observable<rbLivraisonAttente[]> {
-    const adresseRef = collection(this.firestore, 'rbLivraisonAttente');
+    const adresseRef = query(collection(this.firestore, 'rbLivraisonAttente'), orderBy("date"));
     return collectionData(adresseRef, { idField: 'id' }) as Observable<rbLivraisonAttente[]>;
   }
 
