@@ -10,4 +10,5 @@ export interface Crenau {
     societe: string;
     users?: string[];
     idDemandeCreneauRB?: string;
+    smsId?: string;
 }

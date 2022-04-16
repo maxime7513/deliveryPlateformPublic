@@ -9,7 +9,6 @@ import { UsersService } from 'src/app/services/users.service';
 import { ModalDeleteCrenauComponent } from '../modal/modal-delete-crenau/modal-delete-crenau.component';
 import { TwilioService } from 'src/app/services/twilio.service';
 import { ProfileUser } from 'src/app/models/user.profil';
-import { resolve } from 'dns';
 
 interface Societe {
   value: string;
@@ -47,7 +46,7 @@ export class RegisterLivreurComponent implements OnInit {
     //   this.crenaux = res;
     // })
     this.afficherCrenauParDate();
-      }
+  }
 
   getPlaceRestante(inscritMax: number, inscrit: number){
     let calc = inscritMax - inscrit;
@@ -64,7 +63,7 @@ export class RegisterLivreurComponent implements OnInit {
   this.refreshDatePicker;
   }
 
-  async inscriptionLivreur(crenau: Crenau){
+  async inscriptionLivreur(crenau: Crenau, user: ProfileUser){
     this.toast.close();
     
     // verifier si l'utilisateur n'est pas deja inscrit à un autre créneau sur le meme horaire
@@ -83,20 +82,25 @@ export class RegisterLivreurComponent implements OnInit {
 
     // ajouter user id au crenau
     this.crenauservice.addLivreur(crenau, this.userUid)
+    // this.crenauservice.addLivreur2(crenau, this.userUid, "fdsgfd")
     // ajouter crenau id au user
     this.usersService.addCrenauToUser(this.userUid, crenau.id)
     // ajouter 1 au inscrit
     this.crenauservice.incrementInscrit(crenau)
-    
+    // envoyer sms de rappel
+    this.send_sms_to(crenau, user);
+
     this.toast.success('Crénau reservé', {duration: 3000});
   }
 
-  desinscriptionLivreur(crenauId: string){
+  desinscriptionLivreur(crenau: Crenau){
     this.toast.close();
-    this.crenauservice.removeLivreur(crenauId, this.userUid);
-    this.usersService.removeCrenauToUser(this.userUid, crenauId)
+    this.crenauservice.removeLivreur(crenau.id, this.userUid);
+    this.usersService.removeCrenauToUser(this.userUid, crenau.id)
     // retirer 1 au inscrit
-    this.crenauservice.decrementInscrit(crenauId)
+    this.crenauservice.decrementInscrit(crenau.id)
+    // annuler le sms de rappel
+    this.cancelSms(crenau.smsId)
     this.toast.success('Crénau retiré de votre planning', {duration: 3000});
   }
 
@@ -135,12 +139,12 @@ export class RegisterLivreurComponent implements OnInit {
   }
 
   // ouvrir popup confirmation suppression du créneaux
-  openDialogModal(crenauId: string) {
+  openDialogModal(crenau: Crenau) {
     const dialogRef = this.dialog.open(ModalDeleteCrenauComponent);
     dialogRef.componentInstance.confirmMessage = "Êtes-vous sûr de vouloir enlever ce créneau de votre planning ?"
     dialogRef.afterClosed().subscribe(result => {
       if(result == true) {
-        this.desinscriptionLivreur(crenauId);      
+        this.desinscriptionLivreur(crenau);      
       }    
     });
   }
@@ -150,7 +154,6 @@ export class RegisterLivreurComponent implements OnInit {
     let crenauDate = new Date(crenau.date.seconds * 1000);
     // 1h avant
     let crenauDateRappel = new Date(crenauDate.getTime() - 60 * 60000);
-    
     
     let phoneFormat = user.phone.replace(/ /g, ""); // supprimer tous les espaces      
     if(phoneFormat.indexOf("+330") == 0){ // enlever +330 ou +33 phone expediteur
@@ -166,19 +169,27 @@ export class RegisterLivreurComponent implements OnInit {
       phone: phoneFormat,
       nom: user.firstName
     };
-    // this.twilioservice.send_sms(req);
+    this.twilioservice.send_sms(req, crenau.id);
   }
 
   send_sms_to2() {
+    let crenauDate = new Date('2022-04-16T12:00:00');
     let req = {
-      crenauDate: "12/12/2020",
+      crenauDate: crenauDate,
       crenauHeureDebut: "12",
       crenauHeureFin: "12",
       phone: "+33687262395",
       nom: "max"
     };
     
-    this.twilioservice.send_sms(req);
+    this.twilioservice.send_sms(req,"KEwFKktMYUXQCBUtBGJi");
   }
 
+  cancelSms(messageId: string){
+    let req = {
+      // messageId: 'SM69b9052e1ca542bc813b73294be472c8'
+      messageId: messageId
+    }
+    this.twilioservice.cancel_sms(req);
+  }
 }
