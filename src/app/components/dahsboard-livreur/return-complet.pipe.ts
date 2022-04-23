@@ -2,7 +2,7 @@ import { Pipe, PipeTransform } from "@angular/core";
 import { Crenau } from "src/app/models/crenau.model";
 
 @Pipe({
-    name: 'returnComplet',
+    name: 'returnCompletLivreur',
     pure: true
 })
 
