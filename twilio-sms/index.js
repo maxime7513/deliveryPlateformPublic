@@ -2,9 +2,10 @@ const express = require('express');
 const cors = require('cors');
 const bodyParser = require('body-parser');
 
-// envoie sms programmé
-const sendSms = require('./scheduled_sms');
+// const sendSms = require('./scheduled_sms');
+const sendSms = require('./scheduled_sms2');
 const sendSmsGroupe = require('./groupe_sms');
+const cancelSms = require('./cancel_scheduled_sms');
 
 // Express settings
 const app = express();
@@ -19,24 +20,31 @@ const port = 3000;
 
 
 // Create rappelsms endpoint
-app.post('/rappelsms', (req, res) => {
-  const { crenauDate, crenauHeureDebut,crenauHeureFin, phone, nom } = req.body;
+app.post('/rappelsms', async (req, res) => {
+  const { crenauDate, crenauHeureDebut,crenauHeureFin, phone, nom, societe, urlMission } = req.body;
   const rappelCrenau = {
     crenauDate,
     crenauHeureDebut,
     crenauHeureFin,
     phone,
-    nom
+    nom,
+    societe,
+    urlMission
   };
 
-  console.log('==> '+ crenauDate)
+  // console.log('==> '+ crenauDate)
+  let rappelMessage = nom + ", n'oublie pas ta course aujourd'hui, de " + crenauHeureDebut + "h à "+ crenauHeureFin + "h, pour " + societe,
+  url = "voir la mission : localhost:4200/mission/" + urlMission
+  if(urlMission != ""){
+    rappelMessage += url;
+  }
 
-  const rappelMessage = nom + ", n'oublie pas ta course aujourd'hui de " + crenauHeureDebut + "h à "+ crenauHeureFin + "h. Si tu as un imprévu ...";
+  // sendSms(rappelCrenau.crenauDate, rappelCrenau.phone, rappelMessage);
+  const messageId = await sendSms(rappelCrenau.crenauDate, rappelCrenau.phone, rappelMessage);
 
-  sendSms(rappelCrenau.crenauDate, rappelCrenau.phone, rappelMessage);
-  
   res.status(201).send({
     message: 'Envoie du sms programmé confirmée',
+    smsId: messageId,
     data: (rappelCrenau)
   })
 });
@@ -47,15 +55,22 @@ app.post('/notificationCrenau', (req, res) => {
   const message = role + ' viens de rajouter des crénaux pour le ' + date + '. Connectez-vous pour les réserver'
   
   sendSmsGroupe(phoneTab, message);
-  
+
   res.status(201).send({
     message: 'Envoie du sms de groupe confirmée',
     data: (phoneTab)
   })
 });
 
+
+// annuler sms programmé
+app.post('/cancelRappelSms', (req, res) => {
+  const { messageId } = req.body;
+  cancelSms(messageId);
+});
+
 app.listen(port, () => {
   console.log(`Server running on port ${port}`);
 });
-
+ 
 // module.exports = app;
