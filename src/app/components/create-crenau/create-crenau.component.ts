@@ -45,7 +45,6 @@ export class CreateCrenauComponent implements OnInit {
   showCrenaux: boolean;
   userRole: any;
   heures: Heure[] = [
-    {value: 7, viewValue: '07h'},
     {value: 8, viewValue: '08h'},
     {value: 9, viewValue: '09h'},
     {value: 10, viewValue: '10h'},

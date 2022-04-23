@@ -1,8 +1,7 @@
-<h1>Mission {{missionRB.numeroMission}}</h1>
-
 <mat-spinner *ngIf="showSpinner"></mat-spinner>
 
 <div *ngIf="!showSpinner">
+    <h1>Mission {{missionRB.numeroMission}}</h1>
     <div *ngIf="!missionRB.adresseEnlevement.recupere && missionRB.date.seconds * 1000 < dateNow" class="enlevement">
         <h4>Adresse d'enlévement</h4>
         <p>{{missionRB.adresseEnlevement.location}}</p>
