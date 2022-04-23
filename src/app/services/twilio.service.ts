@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { doc, Firestore, setDoc } from '@angular/fire/firestore';
+import { UsersService } from './users.service';
 
 @Injectable({
   providedIn: 'root'
@@ -9,14 +9,19 @@ export class TwilioService {
 
   private header = { headers: { "Content-Type": "application/json" } };
 
-  constructor(private http: HttpClient, private firestore: Firestore) { }
+  constructor(private http: HttpClient, private usersService: UsersService) { }
 
-  send_sms(req: any, creneauId: string) {
-    return this.http.post("http://localhost:3000/rappelsms", req , this.header).subscribe((resp: any) => {
+  send_sms(req: any, creneauId: string, userId: string) {
+    return this.http.post("http://localhost:3000/rappelsms", req , this.header).subscribe(async (resp: any) => {
       // ajout sms id dans firebase
-      const crenauRef = doc(this.firestore, 'crenau', creneauId);
-      let r = {'smsId': resp.smsId}
-      setDoc(crenauRef, r, { merge: true });
+      let tabCrenauInscrit: any = await this.tab;
+      for(let creneauInscrit of tabCrenauInscrit){
+        console.log(creneauInscrit.idCrenau)
+        if(creneauInscrit.idCrenau === creneauId){
+          creneauInscrit.smsId = resp.smsId
+        }
+      }
+      this.usersService.updateCrenauInscrit(userId, tabCrenauInscrit)
     });
   }
 
@@ -29,6 +34,14 @@ export class TwilioService {
   cancel_sms(req: any) {
     return this.http.post("http://localhost:3000/cancelRappelSms", req , this.header).subscribe((resp: any) => {
       console.log(resp);
+    });
+  }
+
+  get tab(){
+    return new Promise(resolve => {
+      this.usersService.currentUserProfile$.subscribe((res) => {
+        resolve(res.crenauInscrit);
+      })
     });
   }
 
