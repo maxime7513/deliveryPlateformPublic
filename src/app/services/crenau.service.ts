@@ -39,11 +39,7 @@ export class CrenauService {
     const crenauDocRef = doc(this.firestore, `crenau/${crenau.id}`);
     return updateDoc(crenauDocRef, { users: arrayUnion(uid) });
   }
-  addLivreur2(crenau: Crenau, userId: string, smsId: string) {
-    const crenauDocRef = doc(this.firestore, `crenau/${crenau.id}`);
-    return updateDoc(crenauDocRef, { users: arrayUnion({userId,smsId}) });
-  }
-
+  
   // suppresion d'un livreur
   removeLivreur(crenauId: string, uid: string) {
     const crenauDocRef = doc(this.firestore, `crenau/${crenauId}`);

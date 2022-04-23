@@ -58,6 +58,14 @@ export class DahsboardLivreurComponent implements OnInit {
     return day
   }
 
+  get tabCrenauInscrit(){
+    return new Promise(resolve => {
+      this.usersService.currentUserProfile$.subscribe((res) => {
+        resolve(res.crenauInscrit);
+      })
+    });
+  }
+
   returnUrlMissionRB(crenaux: Crenau[], jour: number, heure: number){
     for(let crenau of crenaux){
       if(jour == this.getDay(crenau.date) && this.heures[heure] == crenau.heureDebut && crenau.societe == 'rosebaie'){
@@ -90,10 +98,17 @@ export class DahsboardLivreurComponent implements OnInit {
     })
   }
 
+  async deleteCreneauUser(crenauId: string){
+    let tabCrenauInscrit: any =  await this.tabCrenauInscrit;
+    var newArray = tabCrenauInscrit.filter((item: any) => item.idCrenau !== crenauId);
+    this.usersService.updateCrenauInscrit(this.userUid, newArray)
+  }
+
   desinscriptionLivreur(crenauId: string){
     this.toast.close();
     this.crenauservice.removeLivreur(crenauId, this.userUid);
-    this.usersService.removeCrenauToUser(this.userUid, crenauId)
+    // this.usersService.removeCrenauToUser(this.userUid, crenauId)
+    this.deleteCreneauUser(crenauId)
     // retirer 1 au inscrit
     this.crenauservice.decrementInscrit(crenauId)
     this.toast.success('Crénau retiré de votre planning', {duration: 3000});

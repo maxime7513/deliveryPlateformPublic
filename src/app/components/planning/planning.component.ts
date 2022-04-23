@@ -87,26 +87,41 @@ export class PlanningComponent implements OnInit {
     let res;
     for(let crenau of this.crenaux){
       if(jour == this.getDay(crenau.date) && this.heures[heure] == crenau.heureDebut ){
-        res = crenau.id;
+        res = crenau;
       }
     }
     return res
   }
 
   // return users(Promise pour attendre les données users avant d'ouvrir la popup 'modal-user-inscrit')
-  usersInscrit(crenauId: string){
+  // usersInscrit(crenauId: string){
+  //   return new Promise<ProfileUser[]>(resolve => {
+  //     this.userservice.getUserInscritByCrenau(crenauId).subscribe((res) => {
+  //       resolve(res);
+  //     })
+  //   });
+  // }
+  
+  // return users(Promise pour attendre les données users avant d'ouvrir la popup 'modal-user-inscrit')
+  usersInscrit2(crenau: Crenau){
     return new Promise<ProfileUser[]>(resolve => {
-      this.userservice.getUserInscritByCrenau(crenauId).subscribe((res) => {
-        resolve(res);
-      })
+      let users = crenau.users;
+      let tab: any[] = [];
+      for(let user of users){
+        this.userservice.getUserByID(user).subscribe((res) => {
+          tab.push(res)
+        })
+      }
+      resolve(tab)
     });
   }
 
   // ouvrir popup avec info livreur pour chaque créneaux
-  async openDialogModal(crenauId: string) {
+  async openDialogModal(crenau: Crenau) {
     this.toast.loading('Chargement');
 
-    const users = await this.usersInscrit(crenauId);
+    // const users = await this.usersInscrit(crenauId);
+    const users = await this.usersInscrit2(crenau);
     this.toast.close();
     const dialogRef = this.dialog.open(ModalUserInscritComponent);
     dialogRef.componentInstance.users = users;

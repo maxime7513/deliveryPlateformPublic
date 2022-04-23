@@ -52,16 +52,27 @@ export class UsersService {
   }
 
   // ajouter crenauInscrit au profil user
+  // addCrenauToUser(userId: string, crenauId: string) {
+  //   const crenauDocRef = doc(this.firestore, `users/${userId}`);
+  //   return updateDoc(crenauDocRef, { crenauInscrit: arrayUnion(crenauId) });
+  // }
   addCrenauToUser(userId: string, crenauId: string) {
     const crenauDocRef = doc(this.firestore, `users/${userId}`);
-    return updateDoc(crenauDocRef, { crenauInscrit: arrayUnion(crenauId) });
+    return updateDoc(crenauDocRef, { crenauInscrit: arrayUnion({idCrenau : crenauId}) });
+  }
+
+  // ajouter id sms de rappel à l'inscription ou supprimer si livreur se desinscrit
+  updateCrenauInscrit(userId: string, tabCrenauInscrit: any) {
+    const crenauDocRef = doc(this.firestore, `users/${userId}`);
+    let crenauInscrit = {'crenauInscrit': tabCrenauInscrit}
+    return setDoc(crenauDocRef, crenauInscrit, { merge: true });
   }
   
   // supprimer crenauInscrit au profil user
-  removeCrenauToUser(userId: string, crenauId: string) {
-    const crenauDocRef = doc(this.firestore, `users/${userId}`);
-    return updateDoc(crenauDocRef, { crenauInscrit: arrayRemove(crenauId) });
-  }
+  // removeCrenauToUser(userId: string, crenauId: string) {
+  //   const crenauDocRef = doc(this.firestore, `users/${userId}`);
+  //   return updateDoc(crenauDocRef, { crenauInscrit: arrayRemove({idCrenau : crenauId}) });
+  // }
 
   // retourner tous les users
   getUsers(): Observable<ProfileUser[]> {
@@ -69,14 +80,18 @@ export class UsersService {
     return collectionData(usersRef, { idField: 'id' }) as Observable<ProfileUser[]>;
   }
 
-  // getUserByID(id: string): Observable<ProfileUser[]>{
-  //   const crenauRef = doc(this.firestore, `users/${id}`);
-  //   return docData(crenauRef, { idField: 'id' }) as Observable<ProfileUser[]>;
-  // }
+  getUserByID(id: string): Observable<ProfileUser[]>{
+    const crenauRef = doc(this.firestore, `users/${id}`);
+    return docData(crenauRef, { idField: 'id' }) as Observable<ProfileUser[]>;
+  }
 
   // retourner les users inscrit à chaque créneau
   getUserInscritByCrenau(crenauId: string): Observable<ProfileUser[]> {
     const userxRef = query(collection(this.firestore, 'users'), where("crenauInscrit", "array-contains", crenauId));
+    return collectionData(userxRef, { idField: 'id' }) as Observable<ProfileUser[]>;
+  }
+  getUserInscritByCrenau2(crenauId: string): Observable<ProfileUser[]> {
+    const userxRef = query(collection(this.firestore, 'users'), where("crenauInscrit", "array-contains", {idCrenau: crenauId}));
     return collectionData(userxRef, { idField: 'id' }) as Observable<ProfileUser[]>;
   }
 

@@ -63,6 +63,14 @@ export class RegisterLivreurComponent implements OnInit {
   this.refreshDatePicker;
   }
 
+  get tabCrenauInscrit(){
+    return new Promise(resolve => {
+      this.usersService.currentUserProfile$.subscribe((res) => {
+        resolve(res.crenauInscrit);
+      })
+    });
+  }
+
   async inscriptionLivreur(crenau: Crenau, user: ProfileUser){
     this.toast.close();
     
@@ -82,30 +90,53 @@ export class RegisterLivreurComponent implements OnInit {
 
     // ajouter user id au crenau
     this.crenauservice.addLivreur(crenau, this.userUid)
-    // this.crenauservice.addLivreur2(crenau, this.userUid, "fdsgfd")
     // ajouter crenau id au user
-    this.usersService.addCrenauToUser(this.userUid, crenau.id)
+    
+    await this.usersService.addCrenauToUser(this.userUid, crenau.id)
     // ajouter 1 au inscrit
     this.crenauservice.incrementInscrit(crenau)
     // envoyer sms de rappel
-    this.send_sms_to(crenau, user);
+    let minutesDiff = this.calculDifferenceDate(new Date(crenau.date.seconds * 1000));
+    if(minutesDiff > 120){ // si inscription au moins 2heures avant le créneau
+      this.send_sms_to(crenau, user);
+    }else{
+      console.log('trop tard pour le sms')
+    }
 
     this.toast.success('Crénau reservé', {duration: 3000});
   }
 
-  desinscriptionLivreur(crenau: Crenau){
+  async deleteCreneauUser(crenauId: string){
+    let tabCrenauInscrit: any =  await this.tabCrenauInscrit;
+    var newArray = tabCrenauInscrit.filter((item: any) => item.idCrenau !== crenauId);
+    this.usersService.updateCrenauInscrit(this.userUid, newArray)
+  }
+
+  async desinscriptionLivreur(crenau: Crenau){
     this.toast.close();
     this.crenauservice.removeLivreur(crenau.id, this.userUid);
-    this.usersService.removeCrenauToUser(this.userUid, crenau.id)
+    this.deleteCreneauUser(crenau.id)
     // retirer 1 au inscrit
     this.crenauservice.decrementInscrit(crenau.id)
     // annuler le sms de rappel
-    this.cancelSms(crenau.smsId)
+    let tabCrenauInscrit: any = await this.tabCrenauInscrit;
+    for(let crenauInscrit of tabCrenauInscrit){
+      if(crenauInscrit.idCrenau === crenau.id && crenauInscrit.smsId){
+        this.cancelSms(crenauInscrit.smsId)
+      }
+    }
+
     this.toast.success('Crénau retiré de votre planning', {duration: 3000});
   }
 
   // verifier si l'utilisateur est deja inscrit à ce créneau
   verifierUserInscrit(crenau: Crenau){
+    // let x;
+    // crenau.users.map((element:any)=>{
+    //   x = element.smsId
+    //   console.log("a")
+    // });
+    // // console.log(x)
     if(crenau.users){
       return crenau.users.includes(this.userUid)
     }else{
@@ -154,7 +185,7 @@ export class RegisterLivreurComponent implements OnInit {
     let crenauDate = new Date(crenau.date.seconds * 1000);
     // 1h avant
     let crenauDateRappel = new Date(crenauDate.getTime() - 60 * 60000);
-    
+
     let phoneFormat = user.phone.replace(/ /g, ""); // supprimer tous les espaces      
     if(phoneFormat.indexOf("+330") == 0){ // enlever +330 ou +33 phone expediteur
       phoneFormat = phoneFormat.substring(4);
@@ -162,28 +193,36 @@ export class RegisterLivreurComponent implements OnInit {
       phoneFormat = phoneFormat.substring(3);
     }
     phoneFormat = this.ccE + phoneFormat; // rajouter +33
+
+    let urlRB = "";
+    if(crenau.idDemandeCreneauRB){
+      urlRB = crenau.idDemandeCreneauRB;
+    }
+
     let req = {
       crenauDate: crenauDateRappel,
       crenauHeureDebut: crenau.heureDebut,
       crenauHeureFin: crenau.heureFin,
       phone: phoneFormat,
-      nom: user.firstName
+      nom: user.firstName,
+      societe: crenau.societe,
+      urlMission: urlRB
     };
-    this.twilioservice.send_sms(req, crenau.id);
+    this.twilioservice.send_sms(req, crenau.id, user.uid);
   }
 
-  send_sms_to2() {
-    let crenauDate = new Date('2022-04-16T12:00:00');
-    let req = {
-      crenauDate: crenauDate,
-      crenauHeureDebut: "12",
-      crenauHeureFin: "12",
-      phone: "+33687262395",
-      nom: "max"
-    };
+  // send_sms_to2() {
+  //   let crenauDate = new Date('2022-04-16T12:00:00');
+  //   let req = {
+  //     crenauDate: crenauDate,
+  //     crenauHeureDebut: "12",
+  //     crenauHeureFin: "12",
+  //     phone: "+33687262395",
+  //     nom: "max"
+  //   };
     
-    this.twilioservice.send_sms(req,"KEwFKktMYUXQCBUtBGJi");
-  }
+  //   this.twilioservice.send_sms(req,"KEwFKktMYUXQCBUtBGJi");
+  // }
 
   cancelSms(messageId: string){
     let req = {
@@ -192,4 +231,5 @@ export class RegisterLivreurComponent implements OnInit {
     }
     this.twilioservice.cancel_sms(req);
   }
+
 }
