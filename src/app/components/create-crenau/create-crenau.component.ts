@@ -208,7 +208,7 @@ export class CreateCrenauComponent implements OnInit {
     );
 
     // envoyer sms à tous les livreurs pour informer creneau ajouter
-    // this.send_smsGrouper(this.crenauForm.value.dateString);
+    this.send_smsGrouper(this.crenauForm.value.dateString);
     
     // toastValid.afterClosed.subscribe((e) => {
     //   this.router.navigate(['/planning']);
