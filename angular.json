@@ -25,7 +25,7 @@
           "options": {
             "allowedCommonJsDependencies": [
               "lodash"
-           ],
+            ],
             "outputPath": "dist/rocket",
             "index": "src/index.html",
             "main": "src/main.ts",
@@ -116,8 +116,8 @@
             "prerender": false,
             "ssr": false,
             "browserTarget": "Rocket:build:production",
-            "firebaseProject": "rocket-7a65d",
-            "firebaseHostingSite": "rocket-7a65d"
+            "firebaseProject": "woozoodelivery-p1",
+            "firebaseHostingSite": "woozoodelivery-p1"
           }
         }
       }

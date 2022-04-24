@@ -1,14 +1,14 @@
 {
   "targets": {
-    "rocket-7a65d": {
+    "woozoodelivery-p1": {
       "hosting": {
         "Rocket": [
-          "rocket-7a65d"
+          "woozoodelivery-p1"
         ]
       }
     }
   },
   "projects": {
-    "default": "rocket-7a65d"
+    "default": "woozoodelivery-p1"
   }
 }
