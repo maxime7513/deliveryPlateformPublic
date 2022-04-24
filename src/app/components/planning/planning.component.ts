@@ -23,14 +23,14 @@ export class PlanningComponent implements OnInit {
   userRole: any;
   societeSelectionne: any;
   defaultSociete : string;
-  societes: string[] = ['rocket','rosebaie'];
+  societes: string[] = ['rosebaie'];
 
   constructor(private crenauservice: CrenauService, private userservice: UsersService, public datePipe : DatePipe, public dialog: MatDialog, private toast: HotToastService, private sanitizer: DomSanitizer) {
     this.defaultDatePicker = new Date;
   }
 
   async ngOnInit(): Promise<void> {
-    this.defaultSociete = 'rocket';
+    this.defaultSociete = 'rosebaie';
     this.userRole =  await this.userservice.canAccess$;
     this.societeSelectionne = this.userRole;
     if(this.userRole == 'woozoo'){

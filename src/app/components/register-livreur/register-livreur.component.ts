@@ -32,10 +32,10 @@ export class RegisterLivreurComponent implements OnInit {
   defaultDatePicker: Date;
   ccE: string = "+33";
   societes: Societe[] = [
-    {value: 'rocket', viewValue: 'Rocket'},
+    // {value: 'rocket', viewValue: 'Rocket'},
     {value: 'rosebaie', viewValue: 'RoseBaie'},
   ];
-  selectSocieteValue: string = 'rocket';
+  selectSocieteValue: string = 'rosebaie';
 
   constructor(private usersService: UsersService, private crenauservice: CrenauService, private auth: Auth, public datePipe : DatePipe, private toast: HotToastService, public dialog: MatDialog, private twilioservice: TwilioService) {
     this.defaultDatePicker = this.datePicker;
