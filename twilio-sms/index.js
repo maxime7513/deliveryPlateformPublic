@@ -51,7 +51,7 @@ app.post('/rappelsms', async (req, res) => {
 // Create notificationCrenau endpoint
 app.post('/notificationCrenau', (req, res) => {
   const { role, date, phoneTab } = req.body;
-  const message = role + ' viens de rajouter des crénaux pour le ' + date + '. Connectez-vous pour les réserver'
+  const message = role + ' viens de rajouter des créneaux pour le ' + date + '. Connectez-vous pour les réserver'
   
   sendSmsGroupe(phoneTab, message);
 
