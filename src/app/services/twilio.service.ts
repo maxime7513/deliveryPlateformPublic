@@ -16,7 +16,6 @@ export class TwilioService {
       // ajout sms id dans firebase
       let tabCrenauInscrit: any = await this.tab;
       for(let creneauInscrit of tabCrenauInscrit){
-        console.log(creneauInscrit.idCrenau)
         if(creneauInscrit.idCrenau === creneauId){
           creneauInscrit.smsId = resp.smsId
         }
