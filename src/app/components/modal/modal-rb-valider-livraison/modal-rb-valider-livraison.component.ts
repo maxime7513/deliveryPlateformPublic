@@ -279,7 +279,7 @@ export class ModalRbValiderLivraisonComponent implements OnInit {
       date: dateCrenau,
       phoneTab: tabPhones
     }
-
+    
     // requete twilio
     this.twilioservice.send_smsGroupe(req);
   }

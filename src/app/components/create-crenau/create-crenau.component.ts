@@ -80,7 +80,7 @@ export class CreateCrenauComponent implements OnInit {
 
   ];
   societes: Societe[] = [
-    {value: 'rocket', viewValue: 'Rocket'},
+    // {value: 'rocket', viewValue: 'Rocket'},
     {value: 'rosebaie', viewValue: 'RoseBaie'},
     {value: 'woozoo', viewValue: 'WooZoo'},
   ];

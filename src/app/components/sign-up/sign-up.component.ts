@@ -29,7 +29,6 @@ export class SignUpComponent implements OnInit {
   roles: Role[] = [
     {value: 'livreur', viewValue: 'Livreur'},
     {value: 'woozoo', viewValue: 'WooZoo'},
-    {value: 'rocket', viewValue: 'Rocket'},
     {value: 'rosebaie', viewValue: 'RoseBaie'},
   ];
   vehicules: Vehicule[] = [
@@ -56,7 +55,7 @@ export class SignUpComponent implements OnInit {
         password: new FormControl("", [Validators.required, Validators.minLength(6)]),
         confirmPassword: new FormControl('', Validators.required),
         role: new FormControl('', Validators.required),
-        vehicule: new FormControl(''),
+        vehicule: new FormControl(' '),
       },
       { validators: this.passwordsMatchValidator() 
       }
