@@ -247,7 +247,7 @@ h4{
     background: var(--secondary);
     color: #fff;
     margin: 30px auto auto;
-    padding: 8px 13px 8px 45px;
+    padding: 8px 13px 8px 53px;
     font-size: 1rem;
     font-weight: 500;
     border: none;
@@ -259,9 +259,11 @@ h4{
     &:after{
         content: url("/assets/images/googlemap.svg");
         position: absolute;
-        width: 45px;
-        top: -5px;
-        left: -6px;
+        width: 47px;
+        height: auto;
+        // top: -5px;
+        bottom: -7px;
+        left: 0px;
     }
 }
 
