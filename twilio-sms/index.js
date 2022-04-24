@@ -32,9 +32,8 @@ app.post('/rappelsms', async (req, res) => {
     urlMission
   };
 
-  // console.log('==> '+ crenauDate)
-  let rappelMessage = nom + ", n'oublie pas ta course aujourd'hui, de " + crenauHeureDebut + "h à "+ crenauHeureFin + "h, pour " + societe,
-  url = "voir la mission : localhost:4200/mission/" + urlMission
+  let rappelMessage = nom + ", n'oublie pas ta course aujourd'hui de " + crenauHeureDebut + "h à "+ crenauHeureFin + "h, pour " + societe + ".",
+  url = `\n` + "voici la mission:" + `\n` + "localhost:4200/mission/" + urlMission
   if(urlMission != ""){
     rappelMessage += url;
   }
