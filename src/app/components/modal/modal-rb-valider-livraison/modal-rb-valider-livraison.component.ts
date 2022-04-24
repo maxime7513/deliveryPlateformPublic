@@ -13,6 +13,7 @@ import { CrenauService } from 'src/app/services/crenau.service';
 import { DemandeCrenauRBService } from 'src/app/services/demande-crenau-rb.service';
 import { MessageService } from 'src/app/services/message.service';
 import { RBAdresseAttenteService } from 'src/app/services/rb-adresse-attente.service';
+import { TwilioService } from 'src/app/services/twilio.service';
 import { UsersService } from 'src/app/services/users.service';
 
 interface Heure {
@@ -58,8 +59,9 @@ export class ModalRbValiderLivraisonComponent implements OnInit {
   recapLivraison: boolean = false;
   user$ = this.usersService.currentUserProfile$;
   user: ProfileUser;
+  ccE: string = "+33";
 
-  constructor(private adresseservice: AdressesService, private crenauservice: CrenauService, private demandeCrenauRB: DemandeCrenauRBService, private rbAdresseAttenteService: RBAdresseAttenteService, private usersService: UsersService, private messageService: MessageService, private toast: HotToastService, public dialogRef: MatDialogRef<ModalRbValiderLivraisonComponent>, public datePipe: DatePipe, private router: Router) { }
+  constructor(private adresseservice: AdressesService, private crenauservice: CrenauService, private demandeCrenauRB: DemandeCrenauRBService, private rbAdresseAttenteService: RBAdresseAttenteService, private usersService: UsersService, private messageService: MessageService, private twilioservice: TwilioService, private toast: HotToastService, public dialogRef: MatDialogRef<ModalRbValiderLivraisonComponent>, public datePipe: DatePipe, private router: Router) { }
 
   async ngOnInit(): Promise<void> {
     this.validateform();
@@ -118,6 +120,19 @@ export class ModalRbValiderLivraisonComponent implements OnInit {
           tab.push({value: element.adresse, viewValue: element.nom})
         });
         resolve(this.optionsDepot = tab)
+      })
+    });
+  }
+
+  // return array telephones des livreurs (Promise for use await dans la fonction send_smsGrouper())
+  get livreursPhone$(){
+    let tab: any = [];
+    return new Promise(resolve => {
+      this.usersService.getUsersByRole('livreur').subscribe((res) => {
+        res.map(user => {
+          tab.push(this.ccE + user.phone)
+        })
+        resolve(tab);
       })
     });
   }
@@ -255,6 +270,20 @@ export class ModalRbValiderLivraisonComponent implements OnInit {
     
   }
 
+  // envoyer sms à tous les livreurs
+  async send_smsGrouper(dateCrenau: string) {
+    let tabPhones = await this.livreursPhone$;
+
+    let req = {
+      role: 'rosebaie',
+      date: dateCrenau,
+      phoneTab: tabPhones
+    }
+
+    // requete twilio
+    this.twilioservice.send_smsGroupe(req);
+  }
+
   async onSubmit(){
     this.toast.close();
     console.log(this.tabAdresse)
@@ -322,8 +351,11 @@ export class ModalRbValiderLivraisonComponent implements OnInit {
       traite: false
     }
 
+    // envoyer message à woozoo
     this.messageService.addMessage(message);
-    
+    // envoyer sms aux livreurs
+    this.send_smsGrouper(date);
+
     this.toast.close();
     const toastValid = this.toast.success('Demande de livraison prise en compte',{duration: 2000});
     
