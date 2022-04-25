@@ -13,10 +13,8 @@ export class RoleWoozooGuard implements CanActivate {
     const userRole = await this.userservice.canAccess$;
     console.log(userRole);
     if( userRole == 'woozoo'){
-      console.log('canAcces => accept');
       return true;
     }else{
-      console.log('canAcces => refused');
       return false;
     }
   }

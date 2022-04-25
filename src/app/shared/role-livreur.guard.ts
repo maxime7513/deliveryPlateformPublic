@@ -15,10 +15,8 @@ export class RoleLivreurGuard implements CanActivate {
     const userRole = await this.userservice.canAccess$;
     console.log(userRole);
     if( userRole == 'livreur'){
-      console.log('canAcces => accept');
       return true;
     }else{
-      console.log('canAcces => refused');
       this.router.navigate(['/planning']);
       return false;
     }

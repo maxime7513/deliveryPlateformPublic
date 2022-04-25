@@ -13,6 +13,7 @@ export class TwilioService {
 
   send_sms(req: any, creneauId: string, userId: string) {
     return this.http.post("http://localhost:3000/rappelsms", req , this.header).subscribe(async (resp: any) => {
+    // return this.http.post("https://www.woozoo.delivery/twilio-sms/rappelsms", req , this.header).subscribe(async (resp: any) => {
       // ajout sms id dans firebase
       let tabCrenauInscrit: any = await this.tab;
       for(let creneauInscrit of tabCrenauInscrit){

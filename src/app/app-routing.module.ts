@@ -38,7 +38,6 @@ const routes: Routes = [
   { path: 'planning', component: PlanningComponent, ...canActivate(redirectUnauthorizedToLogin), canActivate:[RoleProGuard] },
   { path: 'dashboardlivreur', component: DahsboardLivreurComponent, ...canActivate(redirectUnauthorizedToLogin), canActivate:[RoleLivreurGuard] },
   { path: 'listLivreur', component: ListeLivreurComponent, ...canActivate(redirectUnauthorizedToLogin), canActivate:[RoleWoozooGuard]},
-  // { path: 'createRosebaie', component: RosebaieCreateLivraisonComponent, ...canActivate(redirectUnauthorizedToLogin), canActivate:[RoleProGuard]},
   { path: 'createRosebaie', component: RosebaieCreateLivraisonAttenteComponent, ...canActivate(redirectUnauthorizedToLogin), canActivate:[RoleProGuard]},
   { path: 'messages', component: MessagesComponent, ...canActivate(redirectUnauthorizedToLogin), canActivate:[RoleWoozooGuard]},
   { path: 'carnetAdresses', component: CarnetAdressesComponent, ...canActivate(redirectUnauthorizedToLogin)},
@@ -48,6 +47,7 @@ const routes: Routes = [
 ];
 
 @NgModule({
+  // imports: [RouterModule.forRoot(routes, { useHash: true })],
   imports: [RouterModule.forRoot(routes)],
   exports: [RouterModule]
 })
