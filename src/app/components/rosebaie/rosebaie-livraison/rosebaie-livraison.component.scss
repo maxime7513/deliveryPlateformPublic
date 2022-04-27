@@ -127,7 +127,20 @@ h1{
             text-align: center;
             margin-top: 20px;
         }
-        > div{
+        > div:first-of-type{
+            display: flex;
+            justify-content: space-between;
+            mat-icon{
+                color: red;
+                opacity: .5;
+                transition: .3s;
+                cursor: pointer;
+                &:hover{
+                    opacity: .85;
+                }
+            }
+        }
+        > div:last-of-type{
             margin-top: 20px;
             > div {
                 display: flex;

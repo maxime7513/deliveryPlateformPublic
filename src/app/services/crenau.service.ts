@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { addDoc, arrayRemove, arrayUnion, collection, collectionData, deleteDoc, doc, Firestore, getDocs, increment, orderBy, query, updateDoc, where } from '@angular/fire/firestore';
 import { Observable } from 'rxjs';
 import { Crenau } from '../models/crenau.model';
+import { DemandecrenauRB } from '../models/demandeCrenauRB.model';
 
 @Injectable({
   providedIn: 'root'
@@ -51,6 +52,12 @@ export class CrenauService {
   deleteCrenau(crenau: Crenau) {
     const crenauDocRef = doc(this.firestore, `crenau/${crenau.id}`);
     return deleteDoc(crenauDocRef);
+  }
+
+  // suppression d'un crenau
+  getCrenauRB(crenau: DemandecrenauRB){
+    const crenauxRef = query(collection(this.firestore, 'crenau'), where("idDemandeCreneauRB", "==", crenau.id));
+    return collectionData(crenauxRef, { idField: 'id' });
   }
 
   // getCrenauByID(id: string){

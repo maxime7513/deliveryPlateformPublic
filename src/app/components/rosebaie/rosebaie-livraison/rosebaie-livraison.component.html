@@ -13,7 +13,10 @@
 
         <div *ngIf="creneauRB.showDetails" class="details">
         <!--<a routerLink="/missionRoseBaie/{{creneauRB.id}}">voir mission</a>-->
-            <span>N° {{creneauRB.numeroMission}}</span>
+            <div>
+                <span>N° {{creneauRB.numeroMission}}</span>
+                <mat-icon *ngIf="!creneauRB.adresseEnlevement.recupere" (click)="openDialogModalDelete(creneauRB)" matTooltip="supprimer">delete_forever</mat-icon>
+            </div>
             <h4><mat-icon>widgets</mat-icon>Adresse d'enlévement</h4>
             <p>
                 {{creneauRB.adresseEnlevement.location}}

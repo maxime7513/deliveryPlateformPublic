@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { addDoc, arrayUnion, collection, collectionData, doc, docData, FieldValue, Firestore, orderBy, query, setDoc, updateDoc, where } from '@angular/fire/firestore';
+import { addDoc, arrayUnion, collection, collectionData, deleteDoc, doc, docData, FieldValue, Firestore, orderBy, query, setDoc, updateDoc, where } from '@angular/fire/firestore';
 import { Observable } from 'rxjs';
 import { DemandecrenauRB } from '../models/demandeCrenauRB.model';
 
@@ -29,6 +29,11 @@ export class DemandeCrenauRBService {
   getDemandeCrenauRBByID(id: string): Observable<DemandecrenauRB>{
     const crenauRef = doc(this.firestore, `demandeCrenauRB/${id}`);
     return docData(crenauRef, { idField: 'id' }) as Observable<DemandecrenauRB>;
+  }
+
+  deleteCrenau(crenau: DemandecrenauRB) {
+    const crenauDocRef = doc(this.firestore, `demandeCrenauRB/${crenau.id}`);
+    return deleteDoc(crenauDocRef);
   }
 
   async updateAdresseEnlevement(id: string, date: Date) {

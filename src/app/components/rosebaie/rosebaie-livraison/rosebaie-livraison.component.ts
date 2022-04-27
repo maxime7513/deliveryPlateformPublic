@@ -1,6 +1,12 @@
 import { Component, OnInit } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
 import { PageEvent } from '@angular/material/paginator';
+import { HotToastService } from '@ngneat/hot-toast';
+import { Crenau } from 'src/app/models/crenau.model';
+import { DemandecrenauRB } from 'src/app/models/demandeCrenauRB.model';
+import { CrenauService } from 'src/app/services/crenau.service';
 import { DemandeCrenauRBService } from 'src/app/services/demande-crenau-rb.service';
+import { ModalDeleteCrenauComponent } from '../../modal/modal-delete-crenau/modal-delete-crenau.component';
 
 @Component({
   selector: 'app-rosebaie-livraison',
@@ -17,7 +23,7 @@ export class RosebaieLivraisonComponent implements OnInit {
   
   showSpinner : boolean = true;
 
-  constructor(private demandeCrenauRBService: DemandeCrenauRBService) {
+  constructor(private demandeCrenauRBService: DemandeCrenauRBService, private crenauService: CrenauService, private toast: HotToastService, public dialog: MatDialog) {
     this.showDetails = false;
   }
 
@@ -49,6 +55,27 @@ export class RosebaieLivraisonComponent implements OnInit {
       }
     }
     return incident
+  }
+
+  deleteLivraison(creneau: DemandecrenauRB){
+    this.crenauService.getCrenauRB(creneau).subscribe((res: any) => {
+      res.forEach((element: any) => {
+        this.crenauService.deleteCrenau(element);
+      });
+    })
+    this.demandeCrenauRBService.deleteCrenau(creneau);
+  }
+
+  // ouvrir popup confirmation suppression adresse
+  openDialogModalDelete(creneau: DemandecrenauRB) {
+    const dialogRef = this.dialog.open(ModalDeleteCrenauComponent);
+    dialogRef.componentInstance.confirmMessage = "Êtes-vous sûr de vouloir supprimer cette livraison ?"
+    dialogRef.afterClosed().subscribe(async result => {
+      if(result == true) {
+        this.deleteLivraison(creneau);
+        this.toast.success('Livraison supprimée');
+      }
+    });
   }
 
   // pagination
