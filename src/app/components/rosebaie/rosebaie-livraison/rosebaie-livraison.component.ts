@@ -6,6 +6,7 @@ import { Crenau } from 'src/app/models/crenau.model';
 import { DemandecrenauRB } from 'src/app/models/demandeCrenauRB.model';
 import { CrenauService } from 'src/app/services/crenau.service';
 import { DemandeCrenauRBService } from 'src/app/services/demande-crenau-rb.service';
+import { RBAdresseAttenteService } from 'src/app/services/rb-adresse-attente.service';
 import { ModalDeleteCrenauComponent } from '../../modal/modal-delete-crenau/modal-delete-crenau.component';
 
 @Component({
@@ -23,7 +24,7 @@ export class RosebaieLivraisonComponent implements OnInit {
   
   showSpinner : boolean = true;
 
-  constructor(private demandeCrenauRBService: DemandeCrenauRBService, private crenauService: CrenauService, private toast: HotToastService, public dialog: MatDialog) {
+  constructor(private demandeCrenauRBService: DemandeCrenauRBService, private crenauService: CrenauService, private rbAdresseAttenteService: RBAdresseAttenteService, private toast: HotToastService, public dialog: MatDialog) {
     this.showDetails = false;
   }
 
@@ -58,12 +59,18 @@ export class RosebaieLivraisonComponent implements OnInit {
   }
 
   deleteLivraison(creneau: DemandecrenauRB){
+    // delete demandeCrenauRB
     this.crenauService.getCrenauRB(creneau).subscribe((res: any) => {
       res.forEach((element: any) => {
         this.crenauService.deleteCrenau(element);
       });
     })
+    // delete crenau
     this.demandeCrenauRBService.deleteCrenau(creneau);
+    // remettre adresses dans livraison adresse en attente
+    creneau.adresseLivraison.forEach((element: any) => {
+      this.rbAdresseAttenteService.addLivraisonAttente(element);
+    });
   }
 
   // ouvrir popup confirmation suppression adresse
