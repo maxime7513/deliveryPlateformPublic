@@ -69,6 +69,7 @@ import { RosebaieCreateLivraisonAttenteComponent } from './components/rosebaie/r
 import { RosebaieListLivraisonAttenteComponent } from './components/rosebaie/rosebaie-list-livraison-attente/rosebaie-list-livraison-attente.component';
 import { ModalRbValiderLivraisonComponent } from './components/modal/modal-rb-valider-livraison/modal-rb-valider-livraison.component';
 import { ModalIncidentMissionComponent } from './components/modal/modal-incident-mission/modal-incident-mission.component';
+import { ListeBonLivraisonComponent } from './components/rosebaie/liste-bon-livraison/liste-bon-livraison.component';
 
 registerLocaleData(localeFr, 'fr');
 
@@ -104,6 +105,7 @@ registerLocaleData(localeFr, 'fr');
     RosebaieListLivraisonAttenteComponent,
     ModalRbValiderLivraisonComponent,
     ModalIncidentMissionComponent,
+    ListeBonLivraisonComponent,
   ],
   imports: [
     BrowserModule,

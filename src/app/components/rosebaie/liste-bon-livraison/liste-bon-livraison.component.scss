@@ -1,0 +1,141 @@
+:host{
+    display: block;
+    width: 100%;
+    min-height: 100%;
+    padding: 64px 20px 40px 20px;
+    position: relative;
+}
+
+.blur{
+    background: rgba(255, 255, 255, 0.9);
+}
+
+
+mat-form-field{
+    display: block;
+    width: max-content;
+    margin: 20px auto auto;
+}
+
+.zero{
+    color: var(--secondary);
+    text-align: center;
+    font-size: 18px;
+    font-weight: 500;
+    margin-top: 50px;
+}
+
+table{
+    border-collapse: collapse;
+    margin: 10px auto 0 auto;
+    background: rgba(255,255,255,.8);
+    border-radius: 13px;
+    box-shadow: rgba(0, 0, 0, 0.1) 0px 20px 25px -5px, rgba(0, 0, 0, 0.04) 0px 10px 10px -5px;
+    thead{
+        th{
+            background: var(--primary);
+            color: #fff;
+            padding: 10px 25px;
+            &:first-of-type{
+                border-top-left-radius: 13px
+            }
+            &:last-of-type{
+                border-top-right-radius: 13px
+            }
+            mat-icon{
+                display: block;
+                margin: auto;
+            }
+        }
+    }
+    tbody{
+        tr{
+            &:not(:last-of-type){
+                border-bottom: 1px solid #ccc;
+            }
+            td{
+                padding: 7px 20px;
+                a{
+                    display: block;
+                    width: max-content;
+                    margin: auto;
+                }
+                &:not(:last-of-type){
+                    mat-icon{
+                        color: var(--primary);
+                        vertical-align: bottom;
+                    }
+                }
+
+                &:last-of-type{
+                    mat-icon{
+                        color: var(--secondary);
+                        font-size: 29px;
+                        height: 29px;
+                        width: 29px;
+                        vertical-align: bottom;
+                    }
+                }
+            }
+        }
+    }
+}
+
+mat-paginator{
+    display: flex;
+    justify-content: center;
+    background: transparent;
+    color: var(--primary);
+    font-size: 14px;
+}
+
+/* Responsive */
+
+@media (max-width: 815px) {
+    :host{
+        padding: 64px 10px 40px 10px;
+        background: none;
+        &:before {
+            content: "";
+            position: fixed;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -10;
+            background: url(/assets/images/woozoo-background.jpg) no-repeat;
+            -webkit-background-size: cover;
+            -moz-background-size: cover;
+            -o-background-size: cover;
+            background-size: cover;
+        }
+        > *:not(.blur){
+            position: relative;
+            z-index: 1;
+        }
+    }
+
+    table{
+        display: block;
+        max-width: max-content;
+        overflow-x: auto;
+        td:first-of-type{
+            text-align: center;
+        }
+    }
+
+    ::ng-deep mat-paginator{
+        margin-top: 5px;
+        .mat-paginator-container{
+            justify-content: center !important;
+            .mat-paginator-page-size{
+                display: none;
+            }
+        }
+    }
+
+    .blur{
+        z-index: 0;
+    }
+
+}
