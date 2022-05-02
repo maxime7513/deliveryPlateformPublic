@@ -9,6 +9,7 @@ import { Crenau } from 'src/app/models/crenau.model';
 import { rbLivraisonAttente } from 'src/app/models/rbLivraisonAttente';
 import { ProfileUser } from 'src/app/models/user.profil';
 import { AdressesService } from 'src/app/services/adresses.service';
+import { BonLivraisonRosebaieService } from 'src/app/services/bon-livraison-rosebaie.service';
 import { CrenauService } from 'src/app/services/crenau.service';
 import { DemandeCrenauRBService } from 'src/app/services/demande-crenau-rb.service';
 import { MessageService } from 'src/app/services/message.service';
@@ -61,7 +62,7 @@ export class ModalRbValiderLivraisonComponent implements OnInit {
   user: ProfileUser;
   ccE: string = "+33";
 
-  constructor(private adresseservice: AdressesService, private crenauservice: CrenauService, private demandeCrenauRB: DemandeCrenauRBService, private rbAdresseAttenteService: RBAdresseAttenteService, private usersService: UsersService, private messageService: MessageService, private twilioservice: TwilioService, private toast: HotToastService, public dialogRef: MatDialogRef<ModalRbValiderLivraisonComponent>, public datePipe: DatePipe, private router: Router) { }
+  constructor(private adresseservice: AdressesService, private crenauservice: CrenauService, private demandeCrenauRB: DemandeCrenauRBService, private rbAdresseAttenteService: RBAdresseAttenteService, private bonLivraisonRosebaieService: BonLivraisonRosebaieService, private usersService: UsersService, private messageService: MessageService, private twilioservice: TwilioService, private toast: HotToastService, public dialogRef: MatDialogRef<ModalRbValiderLivraisonComponent>, public datePipe: DatePipe, private router: Router) { }
 
   async ngOnInit(): Promise<void> {
     this.validateform();
@@ -333,6 +334,18 @@ export class ModalRbValiderLivraisonComponent implements OnInit {
 
     // ajouter creneau a firebase avec l'id de addDemandeCrenauRB en parametre
     this.addCreneau(idDemandeCreneauRB);
+
+    // ajouter les bons de livraisons à firebase
+    for(let adresseLivraison of this.rbForm.value.adresseLivraison){
+      let req = {
+        id: adresseLivraison.id,
+        nom: adresseLivraison.nom,
+        urlBonLivraison: adresseLivraison.urlBonLivraison,
+        numeroBonLivraison: adresseLivraison.numeroBonLivraison,
+        date: adresseLivraison.date
+      }
+      this.bonLivraisonRosebaieService.addBonLivraison(req)
+    }
 
     // envoie du message dans la boite mail woozoo
     let date = this.datePipe.transform(this.rbForm.value.date, 'dd/MM/yyyy');

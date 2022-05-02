@@ -30,6 +30,7 @@
             <span *ngIf="!adresse.incident && !adresse.urlBonLivraisonSigne" (click)="openDialogModal(adresse, missionRB.adresseLivraison, i)" class="incident"><mat-icon>report_problem</mat-icon>Signaler un incident</span>
             <input #inputField type="file" hidden (change)="uploadBonLivraison($event, i)"/>
             <p *ngIf="adresse.urlBonLivraisonSigne" class="livre"><mat-icon>done</mat-icon>Livré</p>
+            <span *ngIf="adresse.urlBonLivraisonSigne" (click)="inputField.click()" class="modifUrl"><mat-icon>photo_camera</mat-icon>Modifier bon de livraison</span>
             <p *ngIf="adresse.incident" class="livre"><mat-icon>block</mat-icon>Reporté</p>
         </div>
     </div>

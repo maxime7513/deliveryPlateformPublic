@@ -130,6 +130,9 @@ h1{
         > div:first-of-type{
             display: flex;
             justify-content: space-between;
+            @media (max-width: 500px){
+                margin-bottom: 10px;
+            }
             mat-icon{
                 color: red;
                 opacity: .5;

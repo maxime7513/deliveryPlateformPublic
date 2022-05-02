@@ -17,12 +17,14 @@ export class MessagesComponent implements OnInit {
   lowValueSlice: number = 0;
   highValueSlice: number = 10;
   nombreMessageNonLu : number;
+  showSpinner : boolean = true;
 
   constructor(private messageService: MessageService, public dialog: MatDialog, private toast: HotToastService) { }
 
   ngOnInit(): void {
     this.messageService.getMessages().subscribe((res: Message[]) => {
       this.messages = res;
+      this.showSpinner = false;
     })
 
     // retourner message non lu

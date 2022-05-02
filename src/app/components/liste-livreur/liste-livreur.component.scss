@@ -123,13 +123,12 @@ mat-paginator{
 
     table{
         display: block;
-        width: 100%;
+        max-width: max-content;
         overflow-x: auto;
         td:first-of-type{
-            justify-content: center;
             text-align: center;
             img{
-                margin-right: 0 !important;
+                margin: auto !important;
             }
         }
     }

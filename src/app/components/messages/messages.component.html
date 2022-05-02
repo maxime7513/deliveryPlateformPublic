@@ -1,4 +1,7 @@
 <h1>Messages<span>({{nombreMessageNonLu}})</span></h1>
+
+<mat-spinner *ngIf="showSpinner"></mat-spinner>
+
 <div>
     <div *ngFor="let message of messages | slice: lowValueSlice : highValueSlice" class="message-afficher" [ngClass]="{'nonlu': !message.lu, 'traite': message.traite}">
         <div (click)="openDialogModal(message)">

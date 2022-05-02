@@ -104,6 +104,18 @@ h4{
                 margin-right: 3px;
             }
         }
+        .modifUrl{
+            margin-top: 7px;
+            color: var(--secondary);
+            cursor: pointer;
+            mat-icon{
+                vertical-align: sub;
+                font-size: 20px;
+                height: 20px;
+                width: 20px;
+                margin-right: 3px;
+            }
+        }
         .livre{
             border: 1.5px solid var(--secondary);
             border-radius: 5px;

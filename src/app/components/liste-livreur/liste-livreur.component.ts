@@ -16,6 +16,7 @@ export class ListeLivreurComponent implements OnInit {
   highValueSliceLivreur: number = 5;
   lowValueSliceAdmin: number = 0;
   highValueSliceAdmin: number = 5;
+  showSpinner : boolean = true;
 
   constructor(private userservice: UsersService) {
 
@@ -24,6 +25,7 @@ export class ListeLivreurComponent implements OnInit {
   ngOnInit(): void {
     this.userservice.getUsersByRole('livreur').subscribe((res: ProfileUser[]) => {
       this.livreurs = res;
+      this.showSpinner = false;
     })
 
     this.userservice.getUsersAdmin().subscribe((res: ProfileUser[]) => {

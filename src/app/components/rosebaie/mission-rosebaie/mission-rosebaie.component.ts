@@ -4,6 +4,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { HotToastService } from '@ngneat/hot-toast';
 import { concatMap } from 'rxjs';
 import { DemandecrenauRB } from 'src/app/models/demandeCrenauRB.model';
+import { BonLivraisonRosebaieService } from 'src/app/services/bon-livraison-rosebaie.service';
 import { DemandeCrenauRBService } from 'src/app/services/demande-crenau-rb.service';
 import { ImageUploadService } from 'src/app/services/image-upload.service';
 import { ModalIncidentMissionComponent } from '../../modal/modal-incident-mission/modal-incident-mission.component';
@@ -24,7 +25,7 @@ export class MissionRosebaieComponent implements OnInit {
   }, 10000);
   showSpinner : boolean = true;
 
-  constructor(private route: ActivatedRoute, private demandeCrenauRbService: DemandeCrenauRBService, private imageUploadService: ImageUploadService, private toast: HotToastService, public dialog: MatDialog) { }
+  constructor(private route: ActivatedRoute, private demandeCrenauRbService: DemandeCrenauRBService, private imageUploadService: ImageUploadService, private bonLivraisonRosebaieService: BonLivraisonRosebaieService, private toast: HotToastService, public dialog: MatDialog) { }
 
   async ngOnInit(): Promise<void> {
     this.showMission = false;
@@ -105,8 +106,14 @@ export class MissionRosebaieComponent implements OnInit {
     }else if(this.parcourirTabLivraison(tabAdresseLivraison) == 'livre avec incident'){
       this.demandeCrenauRbService.setStatusLivraison(this.idMission, "livre avec incident");
     }
+    
+    // ajouter url bon de livraison signé à bonLivraisonRosebaie dans firebase
+    this.bonLivraisonRosebaieService.setBonLivraisonSigne(tabAdresseLivraison[indice].id, photoURL)
   }
 
+  setBonLivraisonSigne(idBonLivraison: string){
+
+  }
   // parcourirTabLivraison(tabLivraison: any){
   //   for(let liv of tabLivraison){
   //     if(!liv.urlBonLivraisonSigne && !liv.incident){
