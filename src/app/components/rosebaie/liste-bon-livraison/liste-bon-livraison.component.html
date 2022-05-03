@@ -10,6 +10,7 @@
   <mat-form-field>
     <mat-label>Numéro bon livraison</mat-label>
     <input matInput [(ngModel)]="numeroBonLivraison" (ngModelChange)="getBonLivraisonByNumero()"/>
+    <mat-icon *ngIf="selectSocieteValue || numeroBonLivraison" (click)="clearSearch()" matTooltip="réinitialiser">clear</mat-icon>
   </mat-form-field>
 </div>
 

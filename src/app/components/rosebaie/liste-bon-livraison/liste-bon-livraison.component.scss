@@ -21,6 +21,16 @@
             margin: 0 20px;
         }
     }
+    mat-icon{
+        position: absolute;
+        right: -33px;
+        cursor: pointer;
+        opacity: .55;
+        transition: .3s;
+        &:hover{
+            opacity: 1;
+        }
+    }
 }
 
 .zero{

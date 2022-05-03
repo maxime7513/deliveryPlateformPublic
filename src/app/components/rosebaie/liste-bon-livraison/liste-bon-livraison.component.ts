@@ -34,6 +34,16 @@ export class ListeBonLivraisonComponent implements OnInit {
     })
   }
 
+  clearSearch(){
+    this.showSpinner = true;
+    this.numeroBonLivraison = '';
+    this.selectSocieteValue = '';
+    this.bonLivraisonRosebaieService.getBonLivraison().subscribe((res: any) => {
+      this.bonLivraisons = res;
+      this.showSpinner = false;
+    })
+  }
+
   getBonLivraisonBySociete(){
     this.numeroBonLivraison = '';
     this.bonLivraisonRosebaieService.getBonLivraisonByNom(this.selectSocieteValue).subscribe((res: any) => {
