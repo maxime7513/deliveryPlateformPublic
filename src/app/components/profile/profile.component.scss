@@ -66,12 +66,26 @@
                 width: 45%;
             }
         }
+        p{
+            color: var(--secondary);
+            margin: 0;
+            text-align: center;
+            cursor: pointer;
+            font-size: 14px;
+            mat-icon{
+                font-size: 20px;
+                height: 20px;
+                width: 20px;
+                vertical-align: bottom;
+                margin-right: 4px;
+            }
+        }
         button{
             display: block;
             background: var(--button);
             // background: var(--button);
             color: #fff;
-            margin: 13px auto 0 auto;
+            margin: 15px auto 0 auto;
         }
         > .mat-form-field:last-of-type{
             display: flex;

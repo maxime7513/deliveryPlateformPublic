@@ -20,11 +20,12 @@ import { TwilioService } from 'src/app/services/twilio.service';
 export class ProfileComponent implements OnInit {
 
   user$ = this.usersService.currentUserProfile$;
+  userMail: string;
   profileForm: FormGroup;
   profileFormSend: boolean;
   vehiculeList: string[] = ['velo', 'scooter', 'voiture', 'camion'];
 
-  constructor(private imageUploadService: ImageUploadService, private usersService: UsersService, private toast: HotToastService,) { }
+  constructor(private imageUploadService: ImageUploadService, private usersService: UsersService, private authService: AuthService, private toast: HotToastService,) { }
 
   ngOnInit(): void {
     this.profileFormSend = false;
@@ -36,6 +37,10 @@ export class ProfileComponent implements OnInit {
     
     // init formulaire
     this.validateform();
+    
+    this.usersService.currentUserProfile$.subscribe((res) => {
+      this.userMail = res.email;
+    })
   }
 
   // init validator
@@ -52,10 +57,6 @@ export class ProfileComponent implements OnInit {
         vehicule: new FormControl(' ', Validators.required),
       }
     );
-  }
-
-  tt(){
-    console.log(this.profileForm.value)
   }
 
   // getter for mat-error
@@ -91,7 +92,7 @@ export class ProfileComponent implements OnInit {
       .subscribe();
   }
 
-  saveProfile() {
+  async saveProfile() {
     this.toast.close();
     if (!this.profileForm.valid) {
       this.toast.error('Formulaire invalide');
@@ -109,6 +110,14 @@ export class ProfileComponent implements OnInit {
         })
       )
       .subscribe();
+      
+      // changer email de connexion firebase
+      // if(this.profileForm.value.email != this.userMail){
+        this.authService.updateEmail(this.profileForm.value.email)
+      // }
   }
-
+  
+  resetPassword(){
+    this.authService.resetPassword(this.userMail);
+  }
 }
