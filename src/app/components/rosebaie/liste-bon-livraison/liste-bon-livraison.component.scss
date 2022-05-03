@@ -10,11 +10,17 @@
     background: rgba(255, 255, 255, 0.9);
 }
 
-
-mat-form-field{
-    display: block;
-    width: max-content;
-    margin: 20px auto auto;
+.search{
+    display: flex;
+    justify-content: center;
+    align-items: flex-end;
+    flex-wrap: wrap;
+    mat-form-field{
+        margin: 7px 20px 0 20px;
+        @media (max-width: 460px){
+            margin: 0 20px;
+        }
+    }
 }
 
 .zero{

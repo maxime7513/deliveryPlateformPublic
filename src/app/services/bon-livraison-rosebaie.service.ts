@@ -22,12 +22,17 @@ export class BonLivraisonRosebaieService {
   }
 
   getBonLivraison(): Observable<BonLivraisonRosebaie[]> {
-    const bonLivraisonRef = collection(this.firestore, 'bonLivraisonRosebaie');
+    const bonLivraisonRef = query(collection(this.firestore, 'bonLivraisonRosebaie'), orderBy("date"));
     return collectionData(bonLivraisonRef, { idField: 'id' }) as Observable<BonLivraisonRosebaie[]>;
   }
   
   getBonLivraisonByNom(nom:string): Observable<BonLivraisonRosebaie[]> {
     const bonLivraisonRef = query(collection(this.firestore, 'bonLivraisonRosebaie'), where("nom", "==", nom), orderBy("date"));
+    return collectionData(bonLivraisonRef, { idField: 'id' }) as Observable<BonLivraisonRosebaie[]>;
+  }
+
+  getBonLivraisonByNumero(numero:string): Observable<BonLivraisonRosebaie[]> {
+    const bonLivraisonRef = query(collection(this.firestore, 'bonLivraisonRosebaie'), where("numeroBonLivraison", "==", numero));
     return collectionData(bonLivraisonRef, { idField: 'id' }) as Observable<BonLivraisonRosebaie[]>;
   }
 }

@@ -1,44 +1,51 @@
-<mat-form-field>
-  <mat-label>Société</mat-label>
-  <mat-select [(ngModel)]="selectSocieteValue" (ngModelChange)="getBonLivraisonBySociete()">
-    <mat-option *ngFor="let societe of societes" [value]="societe.nom">
-      {{societe.nom}}
-    </mat-option>
-  </mat-select>
-</mat-form-field>
-
-<p *ngIf="bonLivraisons.length == 0" class="zero">Aucun bon de livraison pour cette société ...</p>
+<div class="search">
+  <mat-form-field>
+    <mat-label>Société</mat-label>
+    <mat-select [(ngModel)]="selectSocieteValue" (ngModelChange)="getBonLivraisonBySociete()">
+      <mat-option *ngFor="let societe of societes" [value]="societe.nom">
+        {{societe.nom}}
+      </mat-option>
+    </mat-select>
+  </mat-form-field>
+  <mat-form-field>
+    <mat-label>Numéro bon livraison</mat-label>
+    <input matInput [(ngModel)]="numeroBonLivraison" (ngModelChange)="getBonLivraisonByNumero()"/>
+  </mat-form-field>
+</div>
 
 <mat-spinner *ngIf="showSpinner"></mat-spinner>
 
-<table *ngIf="bonLivraisons.length != 0">
-  <thead>
-   <tr>
-        <th><mat-icon>store</mat-icon></th>
-        <th matTooltip="numero bon de livraison">N°</th>
-        <th><mat-icon>today</mat-icon></th>
-        <th matTooltip="bon de livraison"><mat-icon>assignment</mat-icon></th>
-        <th matTooltip="bon de livraison signé"><mat-icon>assignment_turned_in</mat-icon></th>
-   </tr>
-  </thead>
-  <tbody>
-    <tr *ngFor="let bonlivraison of bonLivraisons | slice: lowValueSlice : highValueSlice">
-      <td>{{bonlivraison.nom}}</td>
-      <td>{{bonlivraison.numeroBonLivraison}}</td>
-      <td>{{bonlivraison.date.seconds * 1000 | date: 'dd/MM/yy'}}</td>
-      <td>
-        <a [href]="bonlivraison.urlBonLivraison" target="_blank"><mat-icon>assignment</mat-icon></a>
-      </td>
-      <td>
-        <a [href]="bonlivraison.urlBonLivraisonSigne" target="_blank" *ngIf="bonlivraison.urlBonLivraisonSigne"><mat-icon>pageview</mat-icon></a>
-      </td>
-    </tr>
-  </tbody>
-</table>
+<div *ngIf="bonLivraisons">
+  <p *ngIf="bonLivraisons.length == 0" class="zero">Aucun bon de livraison ...</p>
 
-<mat-paginator *ngIf="bonLivraisons.length != 0" [length]="bonLivraisons.length" pageSize=10
-               (page)="getPaginatorData($event)" [pageSizeOptions]="[5, 10, 30]"
-               showFirstLastButtons="false">
-</mat-paginator>
+  <table *ngIf="bonLivraisons.length != 0">
+    <thead>
+     <tr>
+          <th><mat-icon>store</mat-icon></th>
+          <th matTooltip="numero bon de livraison">N°</th>
+          <th><mat-icon>today</mat-icon></th>
+          <th matTooltip="bon de livraison"><mat-icon>assignment</mat-icon></th>
+          <th matTooltip="bon de livraison signé"><mat-icon>assignment_turned_in</mat-icon></th>
+     </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let bonlivraison of bonLivraisons | slice: lowValueSlice : highValueSlice">
+        <td>{{bonlivraison.nom}}</td>
+        <td>{{bonlivraison.numeroBonLivraison}}</td>
+        <td>{{bonlivraison.date.seconds * 1000 | date: 'dd/MM/yy'}}</td>
+        <td>
+          <a [href]="bonlivraison.urlBonLivraison" target="_blank"><mat-icon>assignment</mat-icon></a>
+        </td>
+        <td>
+          <a [href]="bonlivraison.urlBonLivraisonSigne" target="_blank" *ngIf="bonlivraison.urlBonLivraisonSigne"><mat-icon>pageview</mat-icon></a>
+        </td>
+      </tr>
+    </tbody>
+  </table>
 
+  <mat-paginator *ngIf="bonLivraisons.length != 0" [length]="bonLivraisons.length" pageSize=10
+                 (page)="getPaginatorData($event)" [pageSizeOptions]="[5, 10, 30]"
+                 showFirstLastButtons="false">
+  </mat-paginator>
+</div>
 <div class="blur"></div>

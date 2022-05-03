@@ -16,6 +16,7 @@ export class ListeBonLivraisonComponent implements OnInit {
   societes: Adresse[];
   bonLivraisons: BonLivraisonRosebaie[];
   selectSocieteValue: string;
+  numeroBonLivraison: string;
   lowValueSlice: number = 0;
   highValueSlice: number = 10;
   showSpinner : boolean = true;
@@ -34,7 +35,15 @@ export class ListeBonLivraisonComponent implements OnInit {
   }
 
   getBonLivraisonBySociete(){
+    this.numeroBonLivraison = '';
     this.bonLivraisonRosebaieService.getBonLivraisonByNom(this.selectSocieteValue).subscribe((res: any) => {
+      this.bonLivraisons = res;
+    })
+  }
+
+  getBonLivraisonByNumero(){
+    this.selectSocieteValue = '';
+    this.bonLivraisonRosebaieService.getBonLivraisonByNumero(this.numeroBonLivraison).subscribe((res: any) => {
       this.bonLivraisons = res;
     })
   }
