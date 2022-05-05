@@ -161,6 +161,9 @@ h1{
                 }
                 a{
                     margin-left: 10px;
+                    mat-icon{
+                        vertical-align: bottom;
+                    }
                 }
                 .incident{
                     color: orangered;

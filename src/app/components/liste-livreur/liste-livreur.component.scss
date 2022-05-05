@@ -89,10 +89,15 @@ mat-paginator{
 }
 
 @keyframes swipeRight{
-    0% {transform: translateX(0);}
-    15% {transform: translateX(-30px);}
-    30% {transform: translateX(0);}
-    100% {transform: translateX(0);}
+    0% {transform: translateX(0);opacity: 1;}
+    10% {transform: translateX(-30px);}
+    25% {transform: translateX(0);}
+    35% {transform: translateX(-30px);}
+    50% {transform: translateX(0px);}
+    60% {transform: translateX(-30px);}
+    75% {transform: translateX(0px);}
+    85% {transform: translateX(-30px);opacity: 1;}
+    100% {transform: translateX(0px);}
 }
 
 /* Responsive */
@@ -141,8 +146,8 @@ mat-paginator{
             position: absolute;
             top: 13px;
             right: 0;
-            animation: 2s swipeRight;
-            animation-iteration-count: 5;
+            animation: 4s swipeRight;
+            opacity: 0;
         }
     }
 

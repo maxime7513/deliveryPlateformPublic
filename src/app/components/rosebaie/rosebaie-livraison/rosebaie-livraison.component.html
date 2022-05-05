@@ -32,7 +32,7 @@
                         <p>{{adresse.nom}}</p>
                         <p>{{adresse.location}}</p>
                     </div>
-                    <a *ngIf="adresse.urlBonLivraisonSigne" [href]="adresse.urlBonLivraisonSigne" target="_blank" matTooltip="voir bon de livraison"><mat-icon>receipt_long</mat-icon></a>
+                    <a *ngIf="adresse.urlBonLivraisonSigne" [href]="adresse.urlBonLivraisonSigne" target="_blank" matTooltip="voir bon de livraison"><mat-icon>receipt</mat-icon></a>
                     <!--<a *ngIf="adresse.urlBonLivraison" [href]="adresse.urlBonLivraison" download matTooltip="télécharger bon de livraison"><mat-icon>download_for_offline</mat-icon></a>-->
                     <span *ngIf="adresse.dateLivraisonEffectue">{{adresse.dateLivraisonEffectue.seconds * 1000 | date: 'HH'}}h{{adresse.dateLivraisonEffectue.seconds * 1000 | date: 'mm'}}</span>
                     <span *ngIf="adresse.incident" class="incident">{{adresse.incident}}</span>
