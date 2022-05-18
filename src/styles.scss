@@ -94,7 +94,8 @@ mat-spinner{
   width: 70px !important;
   height: 70px !important;
   position: absolute !important;
-  top: calc(50% - 35px);
+  // top: calc(50% - 35px);
+  top: 50%;
   left: calc(50% - 35px);
   z-index: 10;
   svg{
