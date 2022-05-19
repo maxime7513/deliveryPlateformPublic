@@ -131,24 +131,16 @@ export class RegisterLivreurComponent implements OnInit {
   }
 
   // verifier si l'utilisateur est deja inscrit à ce créneau
-  verifierUserInscrit(crenau: Crenau){
-    // let x;
-    // crenau.users.map((element:any)=>{
-    //   x = element.smsId
-    //   console.log("a")
-    // });
-    // // console.log(x)
-    if(crenau.users){
-      return crenau.users.includes(this.userUid)
-    }else{
-      return false
-    }
-  }
+  // verifierUserInscrit(crenau: Crenau){
+  //   if(crenau.users){
+  //     return crenau.users.includes(this.userUid)
+  //   }else{
+  //     return false
+  //   }
+  // }
 
   // verifier si l'utilisateur n'est pas deja inscrit à un autre créneau sur le meme horaire
   verifierUserInscritHeure(crenau: Crenau){
-    // let nombreCreneau = crenau.heureFin - crenau.heureDebut;
-    // console.log(nombreCreneau);
     return new Promise(resolve => {
       this.crenauservice.getCrenauxInscritCurrentUserByDate3(this.userUid, crenau.dateString).subscribe((res) => {
         let dejaInscrit = true;

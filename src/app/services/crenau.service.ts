@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { addDoc, arrayRemove, arrayUnion, collection, collectionData, deleteDoc, doc, Firestore, getDocs, increment, orderBy, query, updateDoc, where } from '@angular/fire/firestore';
+import { addDoc, arrayRemove, arrayUnion, collection, collectionData, deleteDoc, doc, docData, Firestore, getDocs, increment, orderBy, query, setDoc, updateDoc, where } from '@angular/fire/firestore';
 import { Observable } from 'rxjs';
 import { Crenau } from '../models/crenau.model';
 import { DemandecrenauRB } from '../models/demandeCrenauRB.model';
@@ -38,14 +38,15 @@ export class CrenauService {
   // inscription d'un livreur
   addLivreur(crenau: Crenau, uid: string) {
     const crenauDocRef = doc(this.firestore, `crenau/${crenau.id}`);
-    return updateDoc(crenauDocRef, { users: arrayUnion(uid) });
+    // return updateDoc(crenauDocRef, { users: arrayUnion(uid) });
+    return updateDoc(crenauDocRef, { users: arrayUnion({idUser : uid}) });
   }
-  
-  // suppresion d'un livreur
+
+  // désinscription d'un livreur
   removeLivreur(crenauId: string, uid: string) {
     const crenauDocRef = doc(this.firestore, `crenau/${crenauId}`);
-    // arrayRemove for remove
-    return updateDoc(crenauDocRef, { users: arrayRemove(uid) });
+    // return updateDoc(crenauDocRef, { users: arrayRemove(uid) });
+    return updateDoc(crenauDocRef, { users: arrayRemove({idUser : uid}) });
   }
   
   // suppression d'un crenau
@@ -60,10 +61,10 @@ export class CrenauService {
     return collectionData(crenauxRef, { idField: 'id' });
   }
 
-  // getCrenauByID(id: string){
-  //   const crenauRef = doc(this.firestore, `crenau/${id}`);
-  //   return docData(crenauRef, { idField: 'id' }) as Observable<Crenau>;
-  // }
+  getCrenauByID(id: string): Observable<Crenau>{
+    const crenauRef = doc(this.firestore, `crenau/${id}`);
+    return docData(crenauRef, { idField: 'id' }) as Observable<Crenau>;
+  }
 
   // retourner les crenaux que l'user connecté à réservé
   getCrenauxInscritCurrentUser(userid: string): Observable<Crenau[]> {
@@ -111,19 +112,22 @@ export class CrenauService {
     const crenauxRef = query(collection(this.firestore, 'crenau'), where("users", "array-contains", userid), where("dateString", "==", date));
     return collectionData(crenauxRef, { idField: 'id' }) as Observable<Crenau[]>;
   }
+
   // retourner les crenaux que l'user connecté à réservé et par jour(format date)
   getCrenauxInscritCurrentUserByDate2(userid: string, date: Date): Observable<Crenau[]> {
     const crenauxRef = query(collection(this.firestore, 'crenau'), where("users", "array-contains", userid), where("date", "==", date));
     return collectionData(crenauxRef, { idField: 'id' }) as Observable<Crenau[]>;
   }
   getCrenauxInscritCurrentUserByDate3(userid: string, dateString: string): Observable<Crenau[]> {
-    const crenauxRef = query(collection(this.firestore, 'crenau'), where("users", "array-contains", userid), where("dateString", "==", dateString));
+    // const crenauxRef = query(collection(this.firestore, 'crenau'), where("users", "array-contains", userid), where("dateString", "==", dateString));
+    const crenauxRef = query(collection(this.firestore, 'crenau'), where("users", "array-contains", {idUser: userid}), where("dateString", "==", dateString));
+
     return collectionData(crenauxRef, { idField: 'id' }) as Observable<Crenau[]>;
   }
 
   // retourner les crenaux que l'user connecté à réservé et  par semaine
   getCrenauxInscritCurrentUserBySemaine(userid: string, tabDate: string[]): Observable<Crenau[]> {
-    const crenauxRef = query(collection(this.firestore, 'crenau'), where("users", "array-contains", userid), where("dateString", 'in', [tabDate[0], tabDate[1], tabDate[2], tabDate[3], tabDate[4], tabDate[5], tabDate[6]]));
+    const crenauxRef = query(collection(this.firestore, 'crenau'), where("users", "array-contains", {idUser: userid}), where("dateString", 'in', [tabDate[0], tabDate[1], tabDate[2], tabDate[3], tabDate[4], tabDate[5], tabDate[6]]));
     return collectionData(crenauxRef, { idField: 'id' }) as Observable<Crenau[]>;
   }
 
@@ -137,6 +141,13 @@ export class CrenauService {
     const crenauxRef = query(collection(this.firestore, 'crenau'), where("societe", "==" , Usersociete));
     let resLength = await getDocs(crenauxRef);
     return resLength.size
+  }
+
+  // ajouter priseServiceKYO 
+  updatePriseService(creneauId: string, tabCrenauInscrit: any) {
+    const crenauDocRef = doc(this.firestore, `crenau/${creneauId}`);
+    let priseService = {'users': tabCrenauInscrit}
+    return setDoc(crenauDocRef, priseService, { merge: true });
   }
 
 }

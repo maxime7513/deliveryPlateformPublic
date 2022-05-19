@@ -1,7 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { Crenau } from 'src/app/models/crenau.model';
 import { ProfileUser } from 'src/app/models/user.profil';
-import { UsersService } from 'src/app/services/users.service';
 
 @Component({
   selector: 'app-modal-user-inscrit',

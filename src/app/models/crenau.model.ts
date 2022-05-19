@@ -8,7 +8,7 @@ export interface Crenau {
     inscritMax : number;
     vehicule? : string;
     societe: string;
-    users?: string[];
+    users?: any[];
     idDemandeCreneauRB?: string;
     smsId?: string;
 }

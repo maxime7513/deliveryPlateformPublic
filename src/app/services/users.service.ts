@@ -62,6 +62,7 @@ export class UsersService {
   }
 
   // ajouter id sms de rappel à l'inscription ou supprimer si livreur se desinscrit
+  // ajouter priseServiceKYO ou supprimer si livreur se desinscrit
   updateCrenauInscrit(userId: string, tabCrenauInscrit: any) {
     const crenauDocRef = doc(this.firestore, `users/${userId}`);
     let crenauInscrit = {'crenauInscrit': tabCrenauInscrit}

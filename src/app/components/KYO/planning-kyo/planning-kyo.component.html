@@ -1,7 +1,7 @@
 <h1>Planning</h1>
 
 <mat-form-field>
-  <mat-label>Choisi une date</mat-label>
+  <mat-label>Choisissez une date</mat-label>
   <input readonly matInput [matDatepicker]="picker" (dateChange)="afficherCrenauParDate()" [(ngModel)]="defaultDatePicker">
   <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
   <mat-datepicker #picker></mat-datepicker>
@@ -20,11 +20,14 @@
   </thead>
   <tbody>
     <tr *ngFor="let crenau of crenaux">
-      <td>{{crenau.heureDebut}}/{{crenau.heureFin}}</td>
+      <td>{{ crenau.heureDebut }}<mat-icon class="hour-arrow">arrow_right_alt</mat-icon>{{ crenau.heureFin }}h</td>
       <td>
         <div *ngFor="let user of crenau.users">
-          <p [innerHTML]="user | returnLivreurs | async"></p>
-          <button (click)="PriseService(user, crenau)">Prise de service</button>
+          <p [innerHTML]="user.idUser | returnLivreurs | async" [ngClass]="{'priseService': user.priseService && !user.finService, 'termine': user.finService, 'retard': crenau.date.toDate() < datePicker && !user.priseService}"></p>
+          <button *ngIf="!user.priseService && !dateDepasse(crenau)" (click)="updateService(user.idUser, crenau, 'priseService')" mat-raised-button>Prise de service</button>
+          <button *ngIf="user.priseService && !user.finService" (click)="updateService(user.idUser, crenau, 'finService')" mat-raised-button class="fin_service">Fin de service</button>
+          <span *ngIf="user.finService"><u>{{user.priseService.seconds * 1000 | date: 'HH'}}h{{user.priseService.seconds * 1000 | date: 'mm'}}</u><mat-icon class="hour-arrow">arrow_right_alt</mat-icon>{{user.finService.seconds * 1000 | date: 'HH'}}h{{user.finService.seconds * 1000 | date: 'mm'}}</span>
+          <span *ngIf="dateDepasse(crenau) && !user.priseService" class="absent">Absent</span>
         </div>
       </td>
     </tr>

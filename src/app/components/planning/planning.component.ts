@@ -23,7 +23,7 @@ export class PlanningComponent implements OnInit {
   userRole: any;
   societeSelectionne: any;
   defaultSociete : string;
-  societes: string[] = ['rosebaie'];
+  societes: string[] = ['rosebaie','kyo'];
 
   constructor(private crenauservice: CrenauService, private userservice: UsersService, public datePipe : DatePipe, public dialog: MatDialog, private toast: HotToastService, private sanitizer: DomSanitizer) {
     this.defaultDatePicker = new Date;
@@ -105,7 +105,10 @@ export class PlanningComponent implements OnInit {
   // return users(Promise pour attendre les données users avant d'ouvrir la popup 'modal-user-inscrit')
   usersInscrit2(crenau: Crenau){
     return new Promise<ProfileUser[]>(resolve => {
-      let users = crenau.users;
+      let users: any[] = [];
+      crenau.users.map((element: any)=>{
+        users.push(element.idUser)
+      });
       let tab: any[] = [];
       for(let user of users){
         this.userservice.getUserByID(user).subscribe((res) => {

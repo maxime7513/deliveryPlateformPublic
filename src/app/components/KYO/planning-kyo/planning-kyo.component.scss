@@ -35,24 +35,18 @@ table{
     background: rgba(255,255,255,.8);
     border-radius: 13px;
     box-shadow: rgba(0, 0, 0, 0.1) 0px 20px 25px -5px, rgba(0, 0, 0, 0.04) 0px 10px 10px -5px;
-    &:first-of-type th{
-        background: var(--secondary);
-    }
-    &:last-of-type th{
-        background: var(--primary);
-    }
     thead{
         th{
             color: #fff;
-            padding: 10px 50px;
-            &:not(:last-of-type){
-                border-right: 1px solid white;
-            }
+            padding: 10px 30px;
             &:first-of-type{
-                border-top-left-radius: 13px
+                border-top-left-radius: 13px;
+                border-bottom: 1px solid #ccc;
+                background: var(--primary);
             }
             &:last-of-type{
-                border-top-right-radius: 13px
+                border-top-right-radius: 13px;
+                background: var(--secondary);
             }
             mat-icon{
                 display: block;
@@ -65,22 +59,81 @@ table{
             &:not(:last-of-type){
                 border-bottom: 1px solid #ccc;
             }
+            &:last-of-type{
+                td:first-of-type{
+                    border-bottom-left-radius: 13px;
+                }
+            }
         }
         td{
-            padding: 10px 20px;
-            &:first-of-type{
-                display: flex;
-                flex-direction: row;
-                align-items: center;
-                flex-wrap: wrap;
-                text-transform: capitalize;
-                img {
-                    width: 40px;
-                    height: 40px;
-                    margin-right: 10px;
-                    border-radius: 100%;
-                    object-fit: cover;
-                    object-position: center;
+            padding: 13px 20px;
+            &:first-child{
+                background: var(--primary);
+                color: #fff;
+                .hour-arrow{
+                    vertical-align: bottom;
+                    color: var(--secondary);
+                }
+            }
+            &:last-of-type{
+                div{
+                    display: flex;
+                    flex-direction: row;
+                    align-items: center;
+                    justify-content: space-between;
+                    &:not(:first-of-type){
+                        margin-top: 20px;
+                    }
+                    p{
+                        margin: 0 20px 0 5px;
+                        position: relative;
+                        &:before{
+                            content: '';
+                            width: 8px;
+                            height: 8px;
+                            border-radius: 100%;
+                            background: #ccc;
+                            position: absolute;
+                            left: -15px;
+                            top: calc(50% - 4px);
+                        }
+                        &.priseService::before{
+                            background: var(--secondary);
+                        }
+                        &.termine::before{
+                            content: url(/assets/images/done.svg);
+                            background: none !important;
+                            width: 15px;
+                            height: auto;
+                            top: calc(50% - 11px);
+                            left: -18px;
+                        }
+                        &.retard::before{
+                            background: orangered;
+                        }
+                    }
+                    button{
+                        background: var(--secondary);
+                        color: #fff;
+                        &.fin_service{
+                            background: var(--primary);
+                        }
+                    }
+                    span{
+                        color: var(--primary);
+                        font-weight: 500;
+                        u{
+                            color: var(--secondary);
+                            text-decoration: none;
+                        }
+                        mat-icon{
+                            vertical-align: bottom;
+                        }
+                        &.absent{
+                            color: red;
+                            font-weight: 400;
+                        }
+                    }
                 }
             }
         }

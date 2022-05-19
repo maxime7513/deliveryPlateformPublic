@@ -45,14 +45,49 @@ export class PlanningKYOComponent implements OnInit {
     });
   }
 
-  async PriseService(userId: string, creneau: Crenau){
+  getUsersCreneau(creneauId: string){
+    return new Promise(resolve => {
+      this.crenauservice.getCrenauByID(creneauId).subscribe((res:any) => {
+        resolve(res.users);
+      })
+    });
+  }
+
+  async updateService(userId: string, creneau: Crenau, choix: string){
+    // ajouter priseServiceKYO ou finServiceKYO à table user
     let tabCrenauInscrit: any = await this.getUserInscrit(userId);
     for(let creneauInscrit of tabCrenauInscrit){
       if(creneauInscrit.idCrenau === creneau.id){
-        creneauInscrit.priseServiceKYO = new Date;
+        if(choix === 'priseService'){
+          creneauInscrit.priseServiceKYO = new Date;
+        }else{
+          creneauInscrit.finServiceKYO = new Date;
+        }
       }
     }
-    this.usersService.updateCrenauInscrit(userId, tabCrenauInscrit)
+    this.usersService.updateCrenauInscrit(userId, tabCrenauInscrit);
+    
+    // ajouter priseService ou finService à table crenau
+    let tabUsersCreneau: any = await this.getUsersCreneau(creneau.id);
+    for(let users of tabUsersCreneau){
+      if(users.idUser === userId){
+        if(choix === 'priseService'){
+          users.priseService = new Date;
+        }else{
+          users.finService = new Date;
+        }
+      }
+    }
+    this.crenauservice.updatePriseService(creneau.id, tabUsersCreneau)
   }
 
+  dateDepasse(crenau: Crenau){
+    let dateFinService = new Date(crenau.date.toDate().setHours(crenau.date.toDate().getHours() + 1));
+    if(new Date > dateFinService){
+      return true
+    }else{
+      return false
+    }
+  }
+  
 }

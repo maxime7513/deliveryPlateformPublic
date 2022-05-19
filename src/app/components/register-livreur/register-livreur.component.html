@@ -43,18 +43,18 @@
         <!--<td>{{crenau.dateString}}</td>-->
         <td matTooltip="place encore disponible">{{ getPlaceRestante(crenau.inscritMax, crenau.inscrit) }}</td>
         <td>
-          <button *ngIf="(crenau.inscrit < crenau.inscritMax) && !verifierUserInscrit(crenau)" (click)="inscriptionLivreur(crenau,user)">
+          <button *ngIf="(crenau.inscrit < crenau.inscritMax) && !(crenau | verifierUserInscrit)" (click)="inscriptionLivreur(crenau,user)">
             <mat-icon>more_time</mat-icon>
             Réserver
           </button>
-          <button *ngIf="verifierUserInscrit(crenau) && 60 < calculDifferenceDate(crenau.date.toDate())" (click)="openDialogModal(crenau)" class="annule">
+          <button *ngIf="(crenau | verifierUserInscrit) && 60 < calculDifferenceDate(crenau.date.toDate())" (click)="openDialogModal(crenau)" class="annule">
             <mat-icon>event_busy</mat-icon>
             Annuler
           </button>
-          <button *ngIf="crenau.inscritMax == crenau.inscrit && !verifierUserInscrit(crenau)" class="complet">
+          <button *ngIf="crenau.inscritMax == crenau.inscrit && !(crenau | verifierUserInscrit)" class="complet">
             Complet !
           </button>
-          <button *ngIf="verifierUserInscrit(crenau) && calculDifferenceDate(crenau.date.toDate()) < 60" class="dansmin">
+          <button *ngIf="(crenau | verifierUserInscrit) && calculDifferenceDate(crenau.date.toDate()) < 60" class="dansmin">
             Dans<span>{{calculDifferenceDate(crenau.date.toDate())}}</span>min
           </button>
         </td>
