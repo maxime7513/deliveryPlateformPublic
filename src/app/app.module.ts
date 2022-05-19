@@ -74,6 +74,7 @@ import { ReturnInscritPipe } from './components/planning/return-inscrit.pipe';
 import { ReturnCompletLivreurPipe } from './components/dahsboard-livreur/return-complet.pipe';
 import { ReturnMissionRbPipe } from './components/dahsboard-livreur/return-missionRB.pipe';
 import { ReturnLivreursPipe } from './components/KYO/planning-kyo/return-livreurs.pipe';
+import { verifierUserInscritPipe } from './components/register-livreur/verifierUserInscrit.pipe';
 
 // firebase
 import { provideFirebaseApp, initializeApp } from '@angular/fire/app';
@@ -109,6 +110,7 @@ registerLocaleData(localeFr, 'fr');
     ReturnCompletLivreurPipe,
     ReturnMissionRbPipe,
     ReturnLivreursPipe,
+    verifierUserInscritPipe,
     ModalCreateAdresseComponent,
     RosebaieLivraisonComponent,
     MissionRosebaieComponent,
