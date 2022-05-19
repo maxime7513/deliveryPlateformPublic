@@ -30,11 +30,13 @@ export class SignUpComponent implements OnInit {
     {value: 'livreur', viewValue: 'Livreur'},
     {value: 'woozoo', viewValue: 'WooZoo'},
     {value: 'rosebaie', viewValue: 'RoseBaie'},
+    {value: 'kyo', viewValue: 'Kyo-Sushi'},
   ];
   vehicules: Vehicule[] = [
     {value: 'velo', viewValue: 'velo'},
     {value: 'scooter', viewValue: 'scooter'},
     {value: 'voiture', viewValue: 'voiture'},
+    {value: 'camion', viewValue: 'camion'},
   ];
   
   constructor(private authService: AuthService, private usersService: UsersService, private router: Router, private toast: HotToastService) { }

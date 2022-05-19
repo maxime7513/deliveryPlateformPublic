@@ -1,0 +1,34 @@
+<h1>Planning</h1>
+
+<mat-form-field>
+  <mat-label>Choisi une date</mat-label>
+  <input readonly matInput [matDatepicker]="picker" (dateChange)="afficherCrenauParDate()" [(ngModel)]="defaultDatePicker">
+  <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+  <mat-datepicker #picker></mat-datepicker>
+</mat-form-field>
+
+<mat-spinner *ngIf="showSpinner"></mat-spinner>
+
+<p *ngIf="crenaux.length == 0" class="nocrenau">Aucun créneau pour le {{defaultDatePicker  | date: 'd MMMM y'}}</p>
+
+<table *ngIf="crenaux.length != 0">
+  <thead>
+   <tr>
+        <th><mat-icon>schedule</mat-icon></th>
+        <th><mat-icon>person</mat-icon></th>
+   </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let crenau of crenaux">
+      <td>{{crenau.heureDebut}}/{{crenau.heureFin}}</td>
+      <td>
+        <div *ngFor="let user of crenau.users">
+          <p [innerHTML]="user | returnLivreurs | async"></p>
+          <button (click)="PriseService(user, crenau)">Prise de service</button>
+        </div>
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+<div class="blur"></div>

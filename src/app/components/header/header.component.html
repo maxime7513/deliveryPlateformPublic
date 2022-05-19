@@ -62,6 +62,13 @@
       </button>
     </div>
 
+    <div *ngIf="user.role == 'kyo'">
+      <button mat-menu-item routerLink="/planningKYO">
+        <mat-icon>today</mat-icon>
+        <span>Planning KYO</span>
+      </button>
+    </div>
+
     <div *ngIf="user.role == 'woozoo'">
       <button mat-menu-item routerLink="/crenau">
         <mat-icon>more_time</mat-icon>

@@ -34,6 +34,7 @@ export class RegisterLivreurComponent implements OnInit {
   societes: Societe[] = [
     // {value: 'rocket', viewValue: 'Rocket'},
     {value: 'rosebaie', viewValue: 'RoseBaie'},
+    {value: 'kyo', viewValue: 'Kyo-shushi'},
   ];
   selectSocieteValue: string = 'rosebaie';
 
