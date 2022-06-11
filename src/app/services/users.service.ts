@@ -61,12 +61,23 @@ export class UsersService {
     return updateDoc(crenauDocRef, { crenauInscrit: arrayUnion({idCrenau : crenauId}) });
   }
 
+  addAstreinteToUser(userId: string, crenauId: string) {
+    const crenauDocRef = doc(this.firestore, `users/${userId}`);
+    return updateDoc(crenauDocRef, { astreinteInscrit: arrayUnion({idCrenau : crenauId}) });
+  }
+
   // ajouter id sms de rappel à l'inscription ou supprimer si livreur se desinscrit
   // ajouter priseServiceKYO ou supprimer si livreur se desinscrit
   updateCrenauInscrit(userId: string, tabCrenauInscrit: any) {
     const crenauDocRef = doc(this.firestore, `users/${userId}`);
     let crenauInscrit = {'crenauInscrit': tabCrenauInscrit}
     return setDoc(crenauDocRef, crenauInscrit, { merge: true });
+  }
+
+  updateAstreinteInscrit(userId: string, tabAstreinteInscrit: any) {
+    const crenauDocRef = doc(this.firestore, `users/${userId}`);
+    let astreinteInscrit = {'astreinteInscrit': tabAstreinteInscrit}
+    return setDoc(crenauDocRef, astreinteInscrit, { merge: true });
   }
   
   // supprimer crenauInscrit au profil user

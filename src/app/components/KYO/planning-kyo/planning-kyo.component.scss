@@ -66,26 +66,26 @@ table{
             }
         }
         td{
-            padding: 13px 20px;
+            padding: 0 20px;
             &:first-child{
                 background: var(--primary);
                 color: #fff;
+                padding: 20px;
+                white-space: nowrap;
                 .hour-arrow{
                     vertical-align: bottom;
                     color: var(--secondary);
                 }
             }
             &:last-of-type{
-                div{
+                .creneau, .astreinte{
                     display: flex;
                     flex-direction: row;
                     align-items: center;
                     justify-content: space-between;
-                    &:not(:first-of-type){
-                        margin-top: 20px;
-                    }
+                    margin: 13px 0;
                     p{
-                        margin: 0 20px 0 5px;
+                        margin-left: 5px;
                         position: relative;
                         &:before{
                             content: '';
@@ -115,6 +115,7 @@ table{
                     button{
                         background: var(--secondary);
                         color: #fff;
+                        margin-left: 20px;
                         &.fin_service{
                             background: var(--primary);
                         }
@@ -122,6 +123,8 @@ table{
                     span{
                         color: var(--primary);
                         font-weight: 500;
+                        margin-left: 20px;
+                        white-space: nowrap;
                         u{
                             color: var(--secondary);
                             text-decoration: none;
@@ -132,10 +135,96 @@ table{
                         &.absent{
                             color: red;
                             font-weight: 400;
+                            margin-left: 20px;
+                        }
+                    }
+                }
+                .astreinte{
+                    div{
+                        display: flex;
+                        flex-direction: row;
+                        align-items: center;
+                        span{
+                            font-style: italic;
+                            color: var(--secondary);
+                            margin-left: 5px;
+                            margin-bottom: -3px;
+                            font-size: 13px;
                         }
                     }
                 }
             }
+        }
+    }
+}
+
+.call_astreinte{
+    display: flex;
+    align-items: center;
+    background: var(--primary);
+    color: #fff;
+    font-weight: 500;
+    margin: 30px auto auto;
+    padding: 6px 9px;
+    border: none;
+    border-radius: 5px;
+    box-shadow: rgba(0, 0, 0, 0.1) 0px 20px 25px -5px, rgba(0, 0, 0, 0.04) 0px 10px 10px -5px;
+    cursor: pointer;
+    mat-icon{
+        color: var(--secondary);
+        margin-right: 5px;
+    }
+}
+
+@keyframes swipeRight{
+    0% {transform: translateX(0);opacity: 1;}
+    10% {transform: translateX(-30px);}
+    25% {transform: translateX(0);}
+    35% {transform: translateX(-30px);}
+    50% {transform: translateX(0px);}
+    60% {transform: translateX(-30px);}
+    75% {transform: translateX(0px);}
+    85% {transform: translateX(-30px);opacity: 1;}
+    100% {transform: translateX(0px);}
+}
+
+/* Responsive */
+
+@media (max-width: 815px) {
+    :host{
+        padding: 64px 10px 40px 10px;
+        background: none;
+        &:before {
+            content: "";
+            position: fixed;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -10;
+            background: url(/assets/images/woozoo-background.jpg) no-repeat;
+            -webkit-background-size: cover;
+            -moz-background-size: cover;
+            -o-background-size: cover;
+            background-size: cover;
+        }
+        > *:not(.blur){
+            position: relative;
+            z-index: 1;
+        }
+    }
+
+    table{
+        display: block;
+        max-width: max-content;
+        overflow-x: auto;
+        &:before{
+            content: url("/assets/images/swipe.svg");
+            position: absolute;
+            top: 3px;
+            right: 0;
+            animation: 4s swipeRight;
+            opacity: 0;
         }
     }
 }

@@ -19,16 +19,16 @@ export class verifierUserInscritPipe implements PipeTransform {
 
   // verifier si l'utilisateur est deja inscrit à ce créneau
   verifierUserInscrit(crenau: Crenau){
-    console.log('a')
     if(crenau.users){
       let res;
-      crenau.users.map((element:any)=>{
-        if(this.userUid == element.idUser){
-          res = true
+      for (var i = 0; i < crenau.users.length; i++) {
+        if(this.userUid == crenau.users[i].idUser){
+          res = true;
+          break
         }else{
-          res = false
+          res = false;
         }
-      });
+      }
       return res
     }else{
       return false

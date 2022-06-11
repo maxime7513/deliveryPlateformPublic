@@ -9,6 +9,7 @@ import { UsersService } from 'src/app/services/users.service';
 import { ModalDeleteCrenauComponent } from '../modal/modal-delete-crenau/modal-delete-crenau.component';
 import { TwilioService } from 'src/app/services/twilio.service';
 import { ProfileUser } from 'src/app/models/user.profil';
+import { AstreinteService } from 'src/app/services/astreinte.service';
 
 interface Societe {
   value: string;
@@ -25,20 +26,23 @@ export class RegisterLivreurComponent implements OnInit {
   user$ = this.usersService.currentUserProfile$;
   userUid = this.auth.currentUser.uid;
   crenaux: Crenau[] = [];
+  astreintes: Crenau[] = [];
   datePicker = new Date;
   private refreshDatePicker: any = setInterval(() => {
     this.datePicker = new Date;
   }, 10000);
   defaultDatePicker: Date;
+  typeChoice: string = 'creneau';
   ccE: string = "+33";
   societes: Societe[] = [
     // {value: 'rocket', viewValue: 'Rocket'},
     {value: 'rosebaie', viewValue: 'RoseBaie'},
     {value: 'kyo', viewValue: 'Kyo-shushi'},
   ];
-  selectSocieteValue: string = 'rosebaie';
+  selectSocieteValue: string = 'kyo';
+  showSpinner : boolean = true;
 
-  constructor(private usersService: UsersService, private crenauservice: CrenauService, private auth: Auth, public datePipe : DatePipe, private toast: HotToastService, public dialog: MatDialog, private twilioservice: TwilioService) {
+  constructor(private usersService: UsersService, private crenauservice: CrenauService, private astreinteservice: AstreinteService, private auth: Auth, public datePipe : DatePipe, private toast: HotToastService, public dialog: MatDialog, private twilioservice: TwilioService) {
     this.defaultDatePicker = this.datePicker;
   }
   ngOnInit(): void {
@@ -47,6 +51,7 @@ export class RegisterLivreurComponent implements OnInit {
     //   this.crenaux = res;
     // })
     this.afficherCrenauParDate();
+    this.afficherAstreinteParDate();
   }
 
   getPlaceRestante(inscritMax: number, inscrit: number){
@@ -56,8 +61,10 @@ export class RegisterLivreurComponent implements OnInit {
 
   // crenaux par date (datepicker) et par societe
   afficherCrenauParDate(){
+    this.showSpinner = true;
     let date = this.datePipe.transform(this.defaultDatePicker, 'dd/MM/yyyy');
     this.crenauservice.getCrenauxValableByDateandSociete(date, this.datePicker, this.selectSocieteValue).subscribe((res: Crenau[]) => {
+      this.showSpinner = false;
       this.crenaux = res;
     })
 
@@ -72,12 +79,33 @@ export class RegisterLivreurComponent implements OnInit {
     });
   }
 
+  get tabAstreinteInscrit(){
+    return new Promise(resolve => {
+      this.usersService.currentUserProfile$.subscribe((res) => {
+        resolve(res.astreinteInscrit);
+      })
+    });
+  }
+
+  // astreintes par date (datepicker) et par societe
+  afficherAstreinteParDate(){
+    this.showSpinner = true;
+    let date = this.datePipe.transform(this.defaultDatePicker, 'dd/MM/yyyy');
+    this.astreinteservice.getAstreintesValableByDateandSociete(date, this.datePicker, this.selectSocieteValue).subscribe((res: Crenau[]) => {
+      this.showSpinner = false;
+      this.astreintes = res;
+    })
+
+  this.refreshDatePicker;
+  }
+
   async inscriptionLivreur(crenau: Crenau, user: ProfileUser){
     this.toast.close();
     
     // verifier si l'utilisateur n'est pas deja inscrit à un autre créneau sur le meme horaire
-    let verifInscrit = await this.verifierUserInscritHeure(crenau);
-    if(!verifInscrit){
+    let verifCreneauInscrit = await this.verifierCreneauUserInscritHeure(crenau);
+    let verifAstreinteInscrit = await this.verifierAstreinteUserInscritHeure(crenau);
+    if(!verifCreneauInscrit || !verifAstreinteInscrit){
       this.toast.error('Vous avez déjà reservé au autre créneau au même horaire');
       return
     }
@@ -89,22 +117,37 @@ export class RegisterLivreurComponent implements OnInit {
       return
     }
 
-    // ajouter user id au crenau
-    this.crenauservice.addLivreur(crenau, this.userUid)
-    // ajouter crenau id au user
-    
-    await this.usersService.addCrenauToUser(this.userUid, crenau.id)
-    // ajouter 1 au inscrit
-    this.crenauservice.incrementInscrit(crenau)
-    // envoyer sms de rappel
-    let minutesDiff = this.calculDifferenceDate(new Date(crenau.date.seconds * 1000));
-    if(minutesDiff > 120){ // si inscription au moins 2heures avant le créneau
-      this.send_sms_to(crenau, user);
+    // ajouter user id au crenau/astreinte
+    if(this.typeChoice == 'creneau'){
+      this.crenauservice.addLivreur(crenau, this.userUid);
+      await this.usersService.addCrenauToUser(this.userUid, crenau.id)
+      // ajouter 1 au inscrit
+      this.crenauservice.incrementInscrit(crenau)
+      // envoyer sms de rappel
+      let minutesDiff = this.calculDifferenceDate(new Date(crenau.date.seconds * 1000));
+      if(minutesDiff > 120){ // si inscription au moins 2heures avant le créneau
+        this.send_sms_to(crenau, user, 'creneau');
+      }else{
+        console.log('trop tard pour le sms')
+      }
+  
+      this.toast.success('Crénau reservé', {duration: 3000});
     }else{
-      console.log('trop tard pour le sms')
+      this.astreinteservice.addLivreur(crenau, this.userUid);
+      await this.usersService.addAstreinteToUser(this.userUid, crenau.id)
+      // ajouter 1 au inscrit
+      this.astreinteservice.incrementInscrit(crenau)
+      // envoyer sms de rappel
+      let minutesDiff = this.calculDifferenceDate(new Date(crenau.date.seconds * 1000));
+      if(minutesDiff > 120){ // si inscription au moins 2heures avant le créneau
+        this.send_sms_to(crenau, user, 'astreinte');
+      }else{
+        console.log('trop tard pour le sms')
+      }
+  
+      this.toast.success('Astreinte reservé', {duration: 3000});
     }
-
-    this.toast.success('Crénau reservé', {duration: 3000});
+    
   }
 
   async deleteCreneauUser(crenauId: string){
@@ -113,7 +156,13 @@ export class RegisterLivreurComponent implements OnInit {
     this.usersService.updateCrenauInscrit(this.userUid, newArray)
   }
 
-  async desinscriptionLivreur(crenau: Crenau){
+  async deleteAstreinteUser(crenauId: string){
+    let tabAstreinteInscrit: any =  await this.tabAstreinteInscrit;
+    var newArray = tabAstreinteInscrit.filter((item: any) => item.idCrenau !== crenauId);
+    this.usersService.updateAstreinteInscrit(this.userUid, newArray)
+  }
+
+  async desinscriptionCreneauLivreur(crenau: Crenau){
     this.toast.close();
     this.crenauservice.removeLivreur(crenau.id, this.userUid);
     this.deleteCreneauUser(crenau.id)
@@ -126,28 +175,59 @@ export class RegisterLivreurComponent implements OnInit {
         this.cancelSms(crenauInscrit.smsId)
       }
     }
+    // envoyer sms à tous les livreurs pour informer que le créneau est disponible
+    let tabPhones = await this.twilioservice.livreursPhone$;
+    let req = {
+      role: crenau.societe,
+      date: crenau.dateString,
+      phoneTab: tabPhones,
+      heureDebut: crenau.heureDebut,
+      heureFin: crenau.heureFin
+    }
+    this.twilioservice.send_smsGroupe2(req);
 
     this.toast.success('Crénau retiré de votre planning', {duration: 3000});
   }
 
-  // verifier si l'utilisateur est deja inscrit à ce créneau
-  // verifierUserInscrit(crenau: Crenau){
-  //   if(crenau.users){
-  //     return crenau.users.includes(this.userUid)
-  //   }else{
-  //     return false
-  //   }
-  // }
+  async desinscriptionAstreinteLivreur(crenau: Crenau){
+    this.toast.close();
+    this.astreinteservice.removeLivreur(crenau.id, this.userUid);
+    this.deleteAstreinteUser(crenau.id)
+    // retirer 1 au inscrit
+    this.astreinteservice.decrementInscrit(crenau.id)
+    // annuler le sms de rappel
+    let tabAstreinteInscrit: any = await this.tabAstreinteInscrit;
+    for(let astreinteInscrit of tabAstreinteInscrit){
+      if(astreinteInscrit.idCrenau === crenau.id && astreinteInscrit.smsId){
+        this.cancelSms(astreinteInscrit.smsId)
+      }
+    }
+
+    this.toast.success('Astreinte retiré de votre planning', {duration: 3000});
+  }
 
   // verifier si l'utilisateur n'est pas deja inscrit à un autre créneau sur le meme horaire
-  verifierUserInscritHeure(crenau: Crenau){
+  verifierCreneauUserInscritHeure(crenau: Crenau){
     return new Promise(resolve => {
       this.crenauservice.getCrenauxInscritCurrentUserByDate3(this.userUid, crenau.dateString).subscribe((res) => {
         let dejaInscrit = true;
         res.map(creneauRes => {
-          let v = creneauRes.heureDebut;
-          let x = creneauRes.heureFin;
-          if(crenau.heureDebut < x && crenau.heureFin > v){
+          if(crenau.heureDebut < creneauRes.heureFin && crenau.heureFin > creneauRes.heureDebut){
+            dejaInscrit = false;
+          }
+        })
+        resolve(dejaInscrit);
+      })
+    });
+  }
+
+  // verifier si l'utilisateur n'est pas deja inscrit à une autre astreinte sur le meme horaire
+  verifierAstreinteUserInscritHeure(crenau: Crenau){
+    return new Promise(resolve => {
+      this.astreinteservice.getAstreintesInscritCurrentUserByDate(this.userUid, crenau.dateString).subscribe((res) => {
+        let dejaInscrit = true;
+        res.map(astreinteRes => {
+          if(crenau.heureDebut < astreinteRes.heureFin && crenau.heureFin > astreinteRes.heureDebut){
             dejaInscrit = false;
           }
         })
@@ -162,19 +242,30 @@ export class RegisterLivreurComponent implements OnInit {
     return Math.round(diff_hour);
   }
 
-  // ouvrir popup confirmation suppression du créneaux
+  // ouvrir popup confirmation suppression du créneau
   openDialogModal(crenau: Crenau) {
     const dialogRef = this.dialog.open(ModalDeleteCrenauComponent);
     dialogRef.componentInstance.confirmMessage = "Êtes-vous sûr de vouloir enlever ce créneau de votre planning ?"
     dialogRef.afterClosed().subscribe(result => {
       if(result == true) {
-        this.desinscriptionLivreur(crenau);      
+        this.desinscriptionCreneauLivreur(crenau);      
+      }    
+    });
+  }
+
+  // ouvrir popup confirmation suppression de l'astreinte
+  openDialogModal2(crenau: Crenau) {
+    const dialogRef = this.dialog.open(ModalDeleteCrenauComponent);
+    dialogRef.componentInstance.confirmMessage = "Êtes-vous sûr de vouloir enlever cette astreinte de votre planning ?"
+    dialogRef.afterClosed().subscribe(result => {
+      if(result == true) {
+        this.desinscriptionAstreinteLivreur(crenau);      
       }    
     });
   }
 
   // envoyer sms au livreur quand il reserve
-  send_sms_to(crenau: Crenau, user: ProfileUser) {
+  send_sms_to(crenau: Crenau, user: ProfileUser, typeMission: string) {
     let crenauDate = new Date(crenau.date.seconds * 1000);
     // 1h avant
     let crenauDateRappel = new Date(crenauDate.getTime() - 60 * 60000);
@@ -199,9 +290,10 @@ export class RegisterLivreurComponent implements OnInit {
       phone: phoneFormat,
       nom: user.firstName,
       societe: crenau.societe,
-      urlMission: urlRB
+      urlMission: urlRB,
+      typeMission: typeMission
     };
-    this.twilioservice.send_sms(req, crenau.id, user.uid);
+    this.twilioservice.send_sms(req, crenau.id, user.uid, typeMission);
   }
 
   // send_sms_to2() {

@@ -6,6 +6,7 @@ import { Router } from '@angular/router';
 import { HotToastService } from '@ngneat/hot-toast';
 import { Crenau } from 'src/app/models/crenau.model';
 import { CrenauService } from 'src/app/services/crenau.service';
+import { TwilioService } from 'src/app/services/twilio.service';
 import { UsersService } from 'src/app/services/users.service';
 import { ModalDeleteCrenauComponent } from '../modal/modal-delete-crenau/modal-delete-crenau.component';
 
@@ -22,7 +23,7 @@ export class DahsboardLivreurComponent implements OnInit {
   heures: number[] = [8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23];
   jours: number[]= [1, 2, 3, 4, 5, 6, 0];
 
-  constructor(private crenauservice: CrenauService, private usersService: UsersService, private auth: Auth, private toast: HotToastService, public datePipe : DatePipe, public dialog: MatDialog, private router: Router) {
+  constructor(private crenauservice: CrenauService, private usersService: UsersService, private twilioservice: TwilioService, private auth: Auth, private toast: HotToastService, public datePipe : DatePipe, public dialog: MatDialog, private router: Router) {
     this.defaultDatePicker = new Date;
   }
 
@@ -74,12 +75,12 @@ export class DahsboardLivreurComponent implements OnInit {
     }
   }
 
-  returnCrenauId(jour: number, heure: number){
+  returnCrenau(jour: number, heure: number){
     let res;
     for(let i = 0; i < this.crenaux.length; i++){
       if(jour == this.getDay(this.crenaux[i].date) && this.heures[heure] == this.crenaux[i].heureDebut ){
         if(60 < this.calculDifferenceDate(this.crenaux[i].date.toDate(), new Date)){
-          res = this.crenaux[i].id;
+          res = this.crenaux[i];
         }
       }
     }
@@ -121,12 +122,23 @@ export class DahsboardLivreurComponent implements OnInit {
   }
 
   // ouvrir popup confirmation suppression du créneaux
-  openDialogModal(crenauId: string) {
+  openDialogModal(crenau: Crenau) {
       const dialogRef = this.dialog.open(ModalDeleteCrenauComponent);
       dialogRef.componentInstance.confirmMessage = "Êtes-vous sûr de vouloir enlever ce créneau de votre planning ?"
-      dialogRef.afterClosed().subscribe(result => {
+      dialogRef.afterClosed().subscribe(async result => {
         if(result == true) {
-          this.desinscriptionLivreur(crenauId);      
+          this.desinscriptionLivreur(crenau.id);
+          
+          // envoyer sms à tous les livreurs pour informer que le créneau est disponible
+          let tabPhones = await this.twilioservice.livreursPhone$;
+          let req = {
+            role: crenau.societe,
+            date: crenau.dateString,
+            phoneTab: tabPhones,
+            heureDebut: crenau.heureDebut,
+            heureFin: crenau.heureFin
+          }
+          this.twilioservice.send_smsGroupe2(req); 
         }    
       });
   }

@@ -36,11 +36,42 @@ form{
     }
     h3{
         color: var(--secondary);
+        display: flex;
+        text-transform: capitalize;
+        mat-icon{
+            font-size: 33px;
+            height: 33px;
+            width: 33px;
+            margin-right: 5px;
+        }
+    }
+    mat-radio-group{
+        width: 100%;
+        display: flex;
+        justify-content: space-between;
+        flex-wrap: wrap;
+        margin-bottom: 7px;
+        ::ng-deep{
+            .mat-radio-label-content{
+                padding-left: 5px;
+                color: var(--primary);
+            }
+            .mat-radio-outer-circle{
+                border-color: var(--secondary);
+            }
+            .mat-radio-inner-circle{
+                border-color: var(--secondary);
+                background: var(--secondary);
+            }
+            .mat-radio-button.mat-accent.mat-radio-checked .mat-radio-outer-circle{
+                border-color: var(--secondary);
+            }
+        }
     }
     button{
         background: var(--secondary);
         color: #fff;
-        margin-top: 7px;
+        margin-top: 13px;
     }
 }
 
@@ -71,7 +102,7 @@ h3{
 
 table{
     background: rgba(255,255,255,.8);
-    margin: 20px auto;
+    margin: 0 auto 20px auto;
     border-radius: 13px;
     box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
     border-collapse: collapse;
@@ -120,6 +151,19 @@ table{
                 }
             }
         }
+    }
+}
+
+.heure{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    ::ng-deep .mat-form-field-infix{
+        width: 30px;
+    }
+    span{
+        margin: 0 13px;
     }
 }
 /* Responsive */

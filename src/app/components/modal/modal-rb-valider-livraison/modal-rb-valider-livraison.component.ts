@@ -265,6 +265,8 @@ export class ModalRbValiderLivraisonComponent implements OnInit {
       vehicule: "camion",
       societe: "rosebaie",
       idDemandeCreneauRB: idDemandeCreneauRB,
+      astreinte: false,
+      astreinteInscrit: 0
     }
 
     this.crenauservice.addCrenau(req); // ajouter creneau(x) à firebase

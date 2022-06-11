@@ -1,0 +1,20 @@
+<div mat-dialog-content>
+  <h3 *ngIf="users.length < 2">Livreur disponible</h3>
+  <h3 *ngIf="1 < users.length">Livreurs disponible</h3>
+  <div *ngFor="let user of users" class="user">
+    <img [src]="user.photoURL ?? '/assets/images/avatar.svg'"/>
+    <span>{{user.lastName}}</span>
+    <span>{{user.firstName}} </span>
+    <div>
+      <mat-icon>phone_iphone</mat-icon>
+      <span>{{formatPhone(user.phone)}}</span>
+    </div>
+    <button (click)="dialogRef.close(user)" matTooltip="Appeler {{user.firstName}} en renfort">
+      <mat-icon>perm_phone_msg</mat-icon>
+    </button>
+  </div>
+  <p *ngIf="users.length == 0">Plus aucun livreur de disponible...</p>
+</div>
+<div mat-dialog-actions>
+  <button mat-button mat-dialog-close>Fermer</button>
+</div>

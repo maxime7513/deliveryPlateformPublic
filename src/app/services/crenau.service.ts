@@ -77,6 +77,14 @@ export class CrenauService {
     const crenauxRef = query(collection(this.firestore, 'crenau'), where("dateString", "==", date), orderBy("date"));
     return collectionData(crenauxRef, { idField: 'id' }) as Observable<Crenau[]>;
   }
+  getCrenauxByDate2(date: string, hour: number, societe: string): Observable<Crenau[]> {
+    const crenauxRef = query(collection(this.firestore, 'crenau'), where("dateString", "==", date), where ("heureDebut", "==", hour), where("societe", "==", societe));
+    return collectionData(crenauxRef, { idField: 'id' }) as Observable<Crenau[]>;
+  }
+  getCrenauxByDate3(date: string, hour: number, societe: string): Observable<Crenau[]> {
+    const crenauxRef = query(collection(this.firestore, 'crenau'), where("dateString", "==", date), where ("heureFin", "==", hour), where("societe", "==", societe));
+    return collectionData(crenauxRef, { idField: 'id' }) as Observable<Crenau[]>;
+  }
 
   // retourner les crenaux par date et supérieur à l'heure actuelle
   getCrenauxValableByDate(dateString: string, date: Date): Observable<Crenau[]> {
@@ -119,7 +127,6 @@ export class CrenauService {
     return collectionData(crenauxRef, { idField: 'id' }) as Observable<Crenau[]>;
   }
   getCrenauxInscritCurrentUserByDate3(userid: string, dateString: string): Observable<Crenau[]> {
-    // const crenauxRef = query(collection(this.firestore, 'crenau'), where("users", "array-contains", userid), where("dateString", "==", dateString));
     const crenauxRef = query(collection(this.firestore, 'crenau'), where("users", "array-contains", {idUser: userid}), where("dateString", "==", dateString));
 
     return collectionData(crenauxRef, { idField: 'id' }) as Observable<Crenau[]>;
@@ -133,6 +140,11 @@ export class CrenauService {
 
   async getAcceptAddCrenau(Usersociete: any, date: string, heureDebut: number) {
     const crenauxRef = query(collection(this.firestore, 'crenau'), where("societe", "==" , Usersociete), where("dateString", "==", date), where("heureDebut", "==", heureDebut));
+    let resLength = await getDocs(crenauxRef);
+    return resLength.size
+  }
+  async getAcceptAddCrenau2(Usersociete: any, date: any) {
+    const crenauxRef = query(collection(this.firestore, 'crenau'), where("societe", "==" , Usersociete), where("date", "==", date));
     let resLength = await getDocs(crenauxRef);
     return resLength.size
   }

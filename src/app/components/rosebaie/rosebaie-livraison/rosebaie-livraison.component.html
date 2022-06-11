@@ -15,7 +15,7 @@
         <!--<a routerLink="/missionRoseBaie/{{creneauRB.id}}">voir mission</a>-->
             <div>
                 <span>N° {{creneauRB.numeroMission}}</span>
-                <mat-icon *ngIf="!creneauRB.adresseEnlevement.recupere" (click)="openDialogModalDelete(creneauRB)" matTooltip="supprimer">delete_forever</mat-icon>
+                <mat-icon *ngIf="userRole == 'rosebaie' && !creneauRB.adresseEnlevement.recupere" (click)="openDialogModalDelete(creneauRB)" matTooltip="supprimer">delete_forever</mat-icon>
             </div>
             <h4><mat-icon>widgets</mat-icon>Adresse d'enlévement</h4>
             <p>
@@ -37,7 +37,12 @@
                     <span *ngIf="adresse.dateLivraisonEffectue">{{adresse.dateLivraisonEffectue.seconds * 1000 | date: 'HH'}}h{{adresse.dateLivraisonEffectue.seconds * 1000 | date: 'mm'}}</span>
                     <span *ngIf="adresse.incident" class="incident">{{adresse.incident}}</span>
                 </div>
-                <p *ngIf="!creneauRB.status" [innerHtml]="formatTime(creneauRB.time)" class="time"></p>
+                <p *ngIf="userRole == 'woozoo'" class="time">
+                    <mat-icon>widgets</mat-icon>
+                    <span [innerHtml]="calculNombreColis(creneauRB)"></span>
+                    colis
+                </p>
+                <p *ngIf="!creneauRB.status || userRole == 'woozoo'" [innerHtml]="formatTime(creneauRB.time)" class="time"></p>
             </div>
         </div>
     </div>

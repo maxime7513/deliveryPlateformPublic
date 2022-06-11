@@ -46,6 +46,31 @@ h1{
     }
 }
 
+mat-radio-group{
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin-bottom: 7px;
+    mat-radio-button:first-of-type{
+        margin-right: 25px;
+    }
+    ::ng-deep{
+        .mat-radio-label-content{
+            padding-left: 5px;
+        }
+        .mat-radio-outer-circle{
+            border-color: var(--secondary);
+        }
+        .mat-radio-inner-circle{
+            border-color: var(--secondary);
+            background: var(--secondary) !important;
+        }
+        .mat-radio-button.mat-accent.mat-radio-checked .mat-radio-outer-circle{
+            border-color: var(--secondary);
+        }
+    }
+}
+
 table{
     background: rgba(255,255,255,.8);
     margin: 20px auto;
@@ -137,6 +162,7 @@ table{
             background: transparent;
             border: 1px solid var(--primary);
             color: var(--primary);
+            cursor: default;
             span{
                 color: var(--secondary);
                 margin: 0 3px;
@@ -180,7 +206,7 @@ table{
         font-size: 1.7rem;
     }
 
-    h1, .date-picker, p, table{
+    h1, .date-picker, p, table, mat-radio-group{
         position: relative;
         z-index: 1;
     }

@@ -1,13 +1,15 @@
 import { DatePipe } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { AbstractControl, FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { Router } from '@angular/router';
 import { HotToastService } from '@ngneat/hot-toast';
 import { table } from 'console';
 import { UserProfile } from 'firebase/auth';
+import { type } from 'os';
 import { Crenau } from 'src/app/models/crenau.model';
 import { ProfileUser } from 'src/app/models/user.profil';
+import { AstreinteService } from 'src/app/services/astreinte.service';
 import { CrenauService } from 'src/app/services/crenau.service';
 import { TwilioService } from 'src/app/services/twilio.service';
 import { UsersService } from 'src/app/services/users.service';
@@ -42,25 +44,43 @@ export class CreateCrenauComponent implements OnInit {
   datePicker = new Date;
   defaultDatePicker: Date;
   crenaux: Crenau[] = [];
-  showCrenaux: boolean;
+  astreintes: Crenau[] = [];
+  showCrenaux: boolean = false;
+  showAstreinte: boolean = false;
   userRole: any;
   heures: Heure[] = [
     {value: 8, viewValue: '08h'},
+    {value: 8.5, viewValue: '08h30'},
     {value: 9, viewValue: '09h'},
+    {value: 9.5, viewValue: '09h30'},
     {value: 10, viewValue: '10h'},
+    {value: 10.5, viewValue: '10h30'},
     {value: 11, viewValue: '11h'},
+    {value: 11.5, viewValue: '11h30'},
     {value: 12, viewValue: '12h'},
+    {value: 12.5, viewValue: '12h30'},
     {value: 13, viewValue: '13h'},
+    {value: 13.5, viewValue: '13h30'},
     {value: 14, viewValue: '14h'},
+    {value: 14.5, viewValue: '14h30'},
     {value: 15, viewValue: '15h'},
+    {value: 15.5, viewValue: '15h30'},
     {value: 16, viewValue: '16h'},
+    {value: 16.5, viewValue: '16h30'},
     {value: 17, viewValue: '17h'},
+    {value: 17.5, viewValue: '17h30'},
     {value: 18, viewValue: '18h'},
+    {value: 18.5, viewValue: '18h30'},
     {value: 19, viewValue: '19h'},
+    {value: 19.5, viewValue: '19h30'},
     {value: 20, viewValue: '20h'},
+    {value: 20.5, viewValue: '20h30'},
     {value: 21, viewValue: '21h'},
+    {value: 21.5, viewValue: '21h30'},
     {value: 22, viewValue: '22h'},
+    {value: 22.5, viewValue: '22h30'},
     {value: 23, viewValue: '23h'},
+    {value: 23.5, viewValue: '23h30'},
     {value: 24, viewValue: '24h'},
   ];
   inscritsMax: inscritMax[] = [
@@ -86,10 +106,10 @@ export class CreateCrenauComponent implements OnInit {
     {value: 'woozoo', viewValue: 'WooZoo'},
   ];
   ccE: string = "+33";
+  typeChoice: string = 'creneau';
 
-  constructor(private crenauservice: CrenauService, private toast: HotToastService, private router: Router, public datePipe : DatePipe,  public dialog: MatDialog, private twilioservice: TwilioService, private usersservice: UsersService) {
+  constructor(private crenauservice: CrenauService, private astreinteservice: AstreinteService, private toast: HotToastService, private router: Router, public datePipe : DatePipe,  public dialog: MatDialog, private twilioservice: TwilioService, private usersservice: UsersService) {
     this.defaultDatePicker = this.datePicker;
-    this.showCrenaux = false;
   }
 
   async ngOnInit(): Promise<void> {
@@ -97,10 +117,11 @@ export class CreateCrenauComponent implements OnInit {
     this.validateform();
     this.submitCrenauForm = false;
     this.userRole =  await this.usersservice.canAccess$;
+    this.setValidators();
     // afficher crenaux par date
     this.afficherCrenauParDate();
+    this.afficherAstreinteParDate();
   }
-
 
   // init validator
   async validateform() {
@@ -111,12 +132,21 @@ export class CreateCrenauComponent implements OnInit {
         heureFin: new FormControl("", Validators.required),
         inscritMax: new FormControl('', Validators.required),
         vehicule: new FormControl(''),
-        societe: new FormControl('')
+        societe: new FormControl(''),
       }
     );
   }
 
-  // getter for mat error
+  setValidators() {
+    if(this.userRole === 'woozoo') {
+      this.societe.setValidators([Validators.required]);
+      // salaryControl.setValidators(null);
+    }
+        
+    this.societe.updateValueAndValidity();
+  }
+
+  // getter
   get date() {
     return this.crenauForm.get('date');
   }  
@@ -130,8 +160,9 @@ export class CreateCrenauComponent implements OnInit {
     return this.crenauForm.get('inscritMax');
   }
   get societe() {
-    return this.crenauForm.get('role');
+    return this.crenauForm.get('societe');
   }
+
 
   // crenaux par date (datepicker)
   async afficherCrenauParDate(){
@@ -148,7 +179,40 @@ export class CreateCrenauComponent implements OnInit {
         this.crenaux = res;
       })
     }
+  }
 
+  // astreinte par date (datepicker)
+  async afficherAstreinteParDate(){
+    let date = this.datePipe.transform(this.defaultDatePicker, 'dd/MM/yyyy');
+    if(this.userRole != 'woozoo'){
+      this.astreinteservice.getAstreintesByDateandSociete(this.userRole, date).subscribe((res: Crenau[]) => {
+        console.log(res)
+        this.astreintes = res.sort(function (a:any, b:any) {
+        return a.heureDebut - b.heureDebut
+        });
+      })
+    }else{
+      this.astreinteservice.getAstreintesByDate(date).subscribe((res: Crenau[]) => {
+        this.astreintes = res;
+      })
+    }
+  }
+
+  showHour(heureDebut: any, heureFin: any){
+    heureDebut = heureDebut.toString();
+    heureFin = heureFin.toString();
+    
+    if(heureDebut.includes('.')){
+      heureDebut = heureDebut.substring(0, heureDebut.length - 2) + 'h30';
+    }
+
+    if(heureFin.includes('.')){
+      heureFin = heureFin.substring(0, heureFin.length - 2) + 'h30';
+    }else{
+      heureFin += 'h'
+    }
+
+    return heureDebut + '-' + heureFin
   }
 
   calculDifferenceHeure(heureDebut: number, heureFin: number){
@@ -159,15 +223,19 @@ export class CreateCrenauComponent implements OnInit {
   // envoi du formulaire
   async onSubmit() {
     this.toast.close();
-    // this.toast.loading('Ajout du crénau ...');
     this.submitCrenauForm = true;
+
+    if(!this.typeChoice){
+      this.toast.error('Renseigner créneau ou astreinte');
+      return;
+    }
     if (!this.crenauForm.valid) {
       console.log('formulaire invalid');
       this.toast.error('Formulaire invalide');
       return;
     }
 
-    if(this.crenauForm.value.heureDebut > this.crenauForm.value.heureFin){
+    if(this.crenauForm.value.heureDebut >= this.crenauForm.value.heureFin){
       this.toast.error("Heure de début doit être supérieur à l'heure de fin");
       return;
     }
@@ -183,6 +251,9 @@ export class CreateCrenauComponent implements OnInit {
       
       // setHours de la date avec la valeur de heureDebut du formulaire
       this.crenauForm.value.date.setHours(this.crenauForm.value.heureDebut);
+      if(this.crenauForm.value.heureDebut % 1 != 0){
+        this.crenauForm.value.date.setMinutes(30);
+      }
       // inscrit => 0 à la création du créneau
       this.crenauForm.value.inscrit = 0;
       
@@ -190,18 +261,27 @@ export class CreateCrenauComponent implements OnInit {
         this.crenauForm.value.societe = this.userRole; // donner a societe la valeur du role de l'utilisateur connecté
       }
 
-      // verifier si creneau deja crée
-      let verifCrenau = await this.crenauservice.getAcceptAddCrenau(this.crenauForm.value.societe,this.crenauForm.value.dateString, this.crenauForm.value.heureDebut);
-      if(verifCrenau > 0){
-        this.toast.error('un créneau existe déjà pour '+ this.crenauForm.value.heureDebut +'h');
-        return
+      // verifier si creneau/astreinte deja crée
+      if(this.typeChoice == 'creneau'){
+        let verifCrenau = await this.crenauservice.getAcceptAddCrenau2(this.crenauForm.value.societe,this.crenauForm.value.date);
+        if(verifCrenau > 0){
+          this.toast.error('un créneau existe déjà pour '+ this.crenauForm.value.heureDebut +'h');
+          return
+        }
+        // ajouter creneau à firebase
+        this.crenauservice.addCrenau(this.crenauForm.value);
+      }else{
+        let verifCrenau = await this.astreinteservice.getAcceptAddAstreinte(this.crenauForm.value.societe,this.crenauForm.value.dateString, this.crenauForm.value.heureDebut);
+        if(verifCrenau > 0){
+          this.toast.error('une astreinte existe déjà pour '+ this.crenauForm.value.heureDebut +'h');
+          return
+        }
+        // ajouter astreinte à firebase
+        this.astreinteservice.addAstreinte(this.crenauForm.value);
       }
-
-      // ajouter creneau(x) à firebase
-      this.crenauservice.addCrenau(this.crenauForm.value);
     }
     
-    const toastValid = this.toast.success('Crénau ajouter',
+    const toastValid = this.toast.success(this.typeChoice + ' ajouter',
       {
         // dismissible: true,
         duration: 2500
@@ -229,23 +309,23 @@ export class CreateCrenauComponent implements OnInit {
     });
   }
 
-  // return array telephones des livreurs (Promise for use await dans la fonction send_smsGrouper())
-  get livreursPhone$(){
-    let tab: any = [];
-    return new Promise(resolve => {
-      this.usersservice.getUsersByRole('livreur').subscribe((res) => {
-        res.map(user => {
-          tab.push(this.ccE + user.phone)
-        })
-        resolve(tab);
-      })
+  // ouvrir popup confirmation suppression du créneaux
+  openDialogModal2(crenau: Crenau) {
+    const dialogRef = this.dialog.open(ModalDeleteCrenauComponent);
+    dialogRef.componentInstance.confirmMessage = "Êtes-vous sûr de vouloir supprimer cette astreinte ?"
+    dialogRef.afterClosed().subscribe(result => {
+      if(result == true) {
+        this.astreinteservice.deleteAstreinte(crenau).then(() => 
+          this.toast.success('Astreinte supprimé',{duration: 2500})
+        );
+      }    
     });
   }
 
   // envoyer sms à tous les livreurs
   async send_smsGrouper(dateCrenau: string) {
     let userRole = await this.usersservice.canAccess$;
-    let tabPhones = await this.livreursPhone$;
+    let tabPhones = await this.twilioservice.livreursPhone$;
 
     let req = {
       role: userRole,

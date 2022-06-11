@@ -1,0 +1,31 @@
+<div class="date">
+  <mat-form-field>
+    <mat-label>Choisir une date</mat-label>
+    <input readonly matInput [matDatepicker]="picker" (dateChange)="newPlanning()" [(ngModel)]="defaultDatePicker">
+    <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+    <mat-datepicker #picker></mat-datepicker>
+  </mat-form-field>
+</div>
+
+<mat-spinner *ngIf="showSpinner"></mat-spinner>
+
+<p *ngIf="livreursSemaine.length == 0" class="nocrenau">Aucune donnée pour cette semaine...</p>
+
+<table *ngIf="livreursSemaine.length != 0">
+    <thead>
+      <tr>
+        <th><mat-icon>account_circle</mat-icon></th>
+        <th *ngFor="let jour of joursSemaine">{{jour}}</th>
+        <th><mat-icon>history</mat-icon></th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let user of livreursSemaine">
+        <td [innerHTML]="user | returnUserProfil | async"></td>
+        <td *ngFor="let jour of jours; index as i" [innerHTML]="crenaux | returnHeureLivreur : user : jour">{{jour}}</td>
+        <td [innerHTML]="crenaux | totalHeureLivreurs : user"></td>
+      </tr>
+    <tbody>
+</table>
+
+<div class="blur"></div>

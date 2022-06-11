@@ -11,4 +11,8 @@ export interface Crenau {
     users?: any[];
     idDemandeCreneauRB?: string;
     smsId?: string;
+    astreinte: boolean;
+    astreinteInscrit: number;
+    nbLivreurAstreinte?: number;
+    usersAstreinte?: any[];
 }

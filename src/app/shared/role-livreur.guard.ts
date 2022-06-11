@@ -1,7 +1,5 @@
 import { Injectable } from '@angular/core';
 import { ActivatedRouteSnapshot, CanActivate, Router, RouterStateSnapshot, UrlTree } from '@angular/router';
-import { user } from 'rxfire/auth';
-import { Observable } from 'rxjs';
 import { UsersService } from '../services/users.service';
 
 @Injectable({
@@ -16,6 +14,9 @@ export class RoleLivreurGuard implements CanActivate {
     console.log(userRole);
     if( userRole == 'livreur'){
       return true;
+    }else if(userRole == 'kyo'){
+      this.router.navigate(['/planningKYO']);
+      return false;
     }else{
       this.router.navigate(['/planning']);
       return false;

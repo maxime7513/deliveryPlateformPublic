@@ -1,10 +1,11 @@
 <ng-container *ngIf="user$ | async as user">
   <!--<h1>Vous pouvez réserver vos créneaux {{user.firstName}} !</h1>-->
-  <h1>Réserver vos créneaux</h1>
+  <h1 *ngIf="typeChoice == 'creneau'">Réserver vos créneaux</h1>
+  <h1 *ngIf="typeChoice == 'astreinte'">Réserver vos astreintes</h1>
   <div class="date-picker">
     <mat-form-field>
       <mat-label>Choisi une date</mat-label>
-      <input [min]="datePicker" readonly matInput [matDatepicker]="picker" (dateChange)="afficherCrenauParDate()" [(ngModel)]="defaultDatePicker">
+      <input [min]="datePicker" readonly matInput [matDatepicker]="picker" (dateChange)="afficherCrenauParDate(); afficherAstreinteParDate()" [(ngModel)]="defaultDatePicker">
       <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
       <mat-datepicker #picker></mat-datepicker>
     </mat-form-field>
@@ -12,7 +13,7 @@
       <img src="/assets/images/icone_{{selectSocieteValue}}.png" alt="{{selectSocieteValue}}">
       <mat-form-field>
         <mat-label>Société</mat-label>
-        <mat-select [(ngModel)]="selectSocieteValue" (ngModelChange)="afficherCrenauParDate()">
+        <mat-select [(ngModel)]="selectSocieteValue" (ngModelChange)="afficherCrenauParDate(); afficherAstreinteParDate()">
           <mat-option *ngFor="let societe of societes" [value]="societe.value">
             {{societe.viewValue}}
           </mat-option>
@@ -21,9 +22,17 @@
     </div>
   </div>
 
-  <p *ngIf="crenaux.length == 0" class="nocrenau">Pas encore de crénau disponible pour le {{defaultDatePicker  | date: 'd MMMM y'}}</p>
+  <mat-radio-group [(ngModel)]="typeChoice" [ngModelOptions]="{standalone: true}">
+    <mat-radio-button value="creneau">Créneau</mat-radio-button>
+    <mat-radio-button value="astreinte">Astreinte</mat-radio-button>
+  </mat-radio-group>
+
+  <mat-spinner *ngIf="showSpinner"></mat-spinner>
+
+  <p *ngIf="typeChoice == 'creneau' && crenaux.length == 0" class="nocrenau">Pas encore de crénau disponible pour le {{defaultDatePicker  | date: 'd MMMM y'}}</p>
+  <p *ngIf="typeChoice == 'astreinte' && astreintes.length == 0" class="nocrenau">Pas d'astreinte disponible pour le {{defaultDatePicker  | date: 'd MMMM y'}}</p>
   
-  <table *ngIf="crenaux.length != 0">
+  <table *ngIf="typeChoice == 'creneau' && crenaux.length != 0">
     <thead>
      <tr>
        <th matTooltip="horaires"><mat-icon>schedule</mat-icon></th>
@@ -56,6 +65,38 @@
           </button>
           <button *ngIf="(crenau | verifierUserInscrit) && calculDifferenceDate(crenau.date.toDate()) < 60" class="dansmin">
             Dans<span>{{calculDifferenceDate(crenau.date.toDate())}}</span>min
+          </button>
+        </td>
+      </tr>
+     </tbody>
+  </table>
+
+  <table *ngIf="typeChoice == 'astreinte' && astreintes.length != 0">
+    <thead>
+     <tr>
+       <th matTooltip="horaires"><mat-icon>schedule</mat-icon></th>
+       <th matTooltip="nombre de place encore disponible"><mat-icon>group_add</mat-icon></th>
+       <th matTooltip="réserver astreinte/annuler"><mat-icon>more_time</mat-icon><span>/</span><mat-icon>event_busy</mat-icon></th>
+     </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let astreinte of astreintes">
+        <td>{{ astreinte.heureDebut }}<mat-icon class="hour-arrow">arrow_right_alt</mat-icon>{{ astreinte.heureFin }}h</td>
+        <td matTooltip="place encore disponible">{{ getPlaceRestante(astreinte.inscritMax, astreinte.inscrit) }}</td>
+        <td>
+          <button *ngIf="(astreinte.inscrit < astreinte.inscritMax) && !(astreinte | verifierUserInscrit)" (click)="inscriptionLivreur(astreinte,user)">
+            <mat-icon>more_time</mat-icon>
+            Réserver
+          </button>
+          <button *ngIf="(astreinte | verifierUserInscrit) && 60 < calculDifferenceDate(astreinte.date.toDate())" (click)="openDialogModal2(astreinte)" class="annule">
+            <mat-icon>event_busy</mat-icon>
+            Annuler
+          </button>
+          <button *ngIf="astreinte.inscritMax == astreinte.inscrit && !(astreinte | verifierUserInscrit)" class="complet">
+            Complet !
+          </button>
+          <button *ngIf="(astreinte | verifierUserInscrit) && calculDifferenceDate(astreinte.date.toDate()) < 60" class="dansmin">
+            Dans<span>{{calculDifferenceDate(astreinte.date.toDate())}}</span>min
           </button>
         </td>
       </tr>

@@ -25,7 +25,8 @@ import { MatNativeDateModule } from '@angular/material/core';
 import { MatSelectModule } from '@angular/material/select';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner'; 
-import { MatCheckboxModule } from '@angular/material/checkbox'; 
+import { MatCheckboxModule } from '@angular/material/checkbox';
+import { MatRadioModule } from '@angular/material/radio'; 
 import { ReactiveFormsModule } from '@angular/forms';
 import { FormsModule } from '@angular/forms';
 import { HotToastModule } from '@ngneat/hot-toast';
@@ -60,10 +61,11 @@ import { CarnetAdressesComponent } from './components/carnet-adresses/carnet-adr
 import { RosebaieCreateLivraisonAttenteComponent } from './components/rosebaie/rosebaie-create-livraison-attente/rosebaie-create-livraison-attente.component';
 import { RosebaieListLivraisonAttenteComponent } from './components/rosebaie/rosebaie-list-livraison-attente/rosebaie-list-livraison-attente.component';
 import { MissionRosebaieComponent } from './components/rosebaie/mission-rosebaie/mission-rosebaie.component';
-import { RosebaieCreateLivraisonComponent } from './components/rosebaie-create-livraison/rosebaie-create-livraison.component';
+import { ModalLivreursAstreinteComponent } from './components/modal/modal-livreurs-astreinte/modal-livreurs-astreinte.component';
 
 // Kyosushi
 import { PlanningKYOComponent } from './components/KYO/planning-kyo/planning-kyo.component';
+import { HeuresLivreursComponent } from './components/KYO/heures-livreurs/heures-livreurs.component';
 
 // Pipe
 import { ReturnLogoPipe } from './components/dahsboard-livreur/return-logo.pipe';
@@ -75,6 +77,10 @@ import { ReturnCompletLivreurPipe } from './components/dahsboard-livreur/return-
 import { ReturnMissionRbPipe } from './components/dahsboard-livreur/return-missionRB.pipe';
 import { ReturnLivreursPipe } from './components/KYO/planning-kyo/return-livreurs.pipe';
 import { verifierUserInscritPipe } from './components/register-livreur/verifierUserInscrit.pipe';
+import { ReturnUserProfilPipe } from './components/KYO/heures-livreurs/return-userProfil.pipe';
+import { ReturnHeureLivreurPipe } from './components/KYO/heures-livreurs/return-heureLivreur.pipe';
+import { TotalHeureLivreursPipe } from './components/KYO/heures-livreurs/totalHeureLivreurs.pipe';
+import { CheckFinServicePipe } from './components/KYO/planning-kyo/checkCreneauSuivant.pipe';
 
 // firebase
 import { provideFirebaseApp, initializeApp } from '@angular/fire/app';
@@ -98,7 +104,6 @@ registerLocaleData(localeFr, 'fr');
     ListeLivreurComponent,
     ModalUserInscritComponent,
     ModalDeleteCrenauComponent,
-    RosebaieCreateLivraisonComponent,
     MessagesComponent,
     ModalMessageComponent,
     CarnetAdressesComponent,
@@ -111,6 +116,10 @@ registerLocaleData(localeFr, 'fr');
     ReturnMissionRbPipe,
     ReturnLivreursPipe,
     verifierUserInscritPipe,
+    ReturnUserProfilPipe,
+    ReturnHeureLivreurPipe,
+    TotalHeureLivreursPipe,
+    CheckFinServicePipe,
     ModalCreateAdresseComponent,
     RosebaieLivraisonComponent,
     MissionRosebaieComponent,
@@ -120,6 +129,8 @@ registerLocaleData(localeFr, 'fr');
     ModalIncidentMissionComponent,
     ListeBonLivraisonComponent,
     PlanningKYOComponent,
+    ModalLivreursAstreinteComponent,
+    HeuresLivreursComponent,
   ],
   imports: [
     BrowserModule,
@@ -141,6 +152,7 @@ registerLocaleData(localeFr, 'fr');
     MatDialogModule,
     MatProgressSpinnerModule,
     MatCheckboxModule,
+    MatRadioModule,
     FormsModule,
     GooglePlaceModule,
     MatAutocompleteModule,

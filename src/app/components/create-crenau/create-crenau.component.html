@@ -1,5 +1,14 @@
 <form [formGroup]="crenauForm" (ngSubmit)="onSubmit()">
-  <h3>Ajouter un créneau</h3>
+  <h3>
+    <mat-icon>more_time</mat-icon>
+    {{typeChoice}}
+  </h3>
+  
+  <mat-radio-group [(ngModel)]="typeChoice" [ngModelOptions]="{standalone: true}">
+    <mat-radio-button value="creneau" checked>Créneau</mat-radio-button>
+    <mat-radio-button value="astreinte">Astreinte</mat-radio-button>
+  </mat-radio-group>
+
   <mat-form-field>
     <mat-label>Choisir une date</mat-label>
     <input matInput [min]="datePicker" [matDatepicker]="picker" formControlName="date">
@@ -10,29 +19,33 @@
     </mat-error>
   </mat-form-field>
 
-  <mat-form-field>
-    <mat-label>Heure de début</mat-label>
-    <mat-select formControlName="heureDebut">
-      <mat-option *ngFor="let heure of heures" [value]="heure.value">
-        {{heure.viewValue}}
-      </mat-option>
-    </mat-select>
-    <mat-error *ngIf="submitCrenauForm && heureDebut.hasError('required')">
-      L'heure de début est obligatoire
-    </mat-error>
-  </mat-form-field>
+  <div class="heure">
+    <mat-form-field>
+      <mat-label>Début</mat-label>
+      <mat-select formControlName="heureDebut">
+        <mat-option *ngFor="let heure of heures" [value]="heure.value">
+          {{heure.viewValue}}
+        </mat-option>
+      </mat-select>
+      <mat-error *ngIf="submitCrenauForm && heureDebut.hasError('required')">
+        L'heure de début est obligatoire
+      </mat-error>
+    </mat-form-field>
 
-  <mat-form-field>
-    <mat-label>Heure de fin</mat-label>
-    <mat-select formControlName="heureFin">
-      <mat-option *ngFor="let heure of heures" [value]="heure.value">
-        {{heure.viewValue}}
-      </mat-option>
-    </mat-select>
-    <mat-error *ngIf="submitCrenauForm && heureFin.hasError('required')">
-      L'heure de fin est obligatoire
-    </mat-error>
-  </mat-form-field>
+    <span>à</span>
+
+    <mat-form-field>
+      <mat-label>Fin</mat-label>
+      <mat-select formControlName="heureFin">
+        <mat-option *ngFor="let heure of heures" [value]="heure.value">
+          {{heure.viewValue}}
+        </mat-option>
+      </mat-select>
+      <mat-error *ngIf="submitCrenauForm && heureFin.hasError('required')">
+        L'heure de fin est obligatoire
+      </mat-error>
+    </mat-form-field>
+  </div>
 
   <mat-form-field>
     <mat-label>Livreur max</mat-label>
@@ -62,9 +75,9 @@
         {{societe.viewValue}}
       </mat-option>
     </mat-select>
-    <!--<mat-error *ngIf="submitCrenauForm && societe.hasError('required')">
+    <mat-error *ngIf="submitCrenauForm && societe.hasError('required')">
       La société est obligatoire
-    </mat-error>-->
+    </mat-error>
   </mat-form-field>
 
   <button type="submit" mat-raised-button>
@@ -96,7 +109,7 @@
       </thead>
       <tbody>
         <tr *ngFor="let crenau of crenaux">
-          <td>{{ crenau.heureDebut}}-{{ crenau.heureFin }}h</td>
+          <td [innerHtml]="showHour(crenau.heureDebut, crenau.heureFin)"></td>
           <td>{{ crenau.inscritMax }}</td>
           <td *ngIf="userRole == 'woozoo'">
             <img src="/assets/images/icone_{{crenau.societe}}.png" alt="{{crenau.societe}}">
@@ -109,7 +122,37 @@
         </tr>
       </tbody>
     </table>
-  </div>  
+  </div>
+
+  <h3 (click)="showAstreinte = !showAstreinte">
+    Liste des astreintes
+    <mat-icon [class.active]="showAstreinte">expand_more</mat-icon>
+  </h3>
+  <div *ngIf="showAstreinte">
+    <p *ngIf="astreintes.length == 0" class="nocrenau">Aucune astreinte pour le {{defaultDatePicker  | date: 'd MMMM y'}}</p>
+    <table *ngIf="astreintes.length != 0">
+      <thead>
+        <th><mat-icon>schedule</mat-icon></th>
+        <th matTooltip="livreurs max"><mat-icon>person</mat-icon></th>
+        <th matTooltip="société" *ngIf="userRole == 'woozoo'"><mat-icon>store</mat-icon></th>
+        <th matTooltip="supprimer créneau"><mat-icon>delete</mat-icon></th>
+      </thead>
+      <tbody>
+        <tr *ngFor="let astreinte of astreintes">
+          <td [innerHtml]="showHour(astreinte.heureDebut, astreinte.heureFin)"></td>
+          <td>{{ astreinte.inscritMax }}</td>
+          <td *ngIf="userRole == 'woozoo'">
+            <img src="/assets/images/icone_{{astreinte.societe}}.png" alt="{{astreinte.societe}}">
+          </td>
+          <td>
+            <button (click)="openDialogModal2(astreinte)" mat-raised-button matTooltip="supprimer">
+              <mat-icon>event_busy</mat-icon>
+            </button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
 </div>
 
 <div class="blur"></div>

@@ -23,6 +23,7 @@ export class MissionRosebaieComponent implements OnInit {
   private refreshdateNow: any = setInterval(() => {
     this.dateNow = new Date().getTime();
   }, 10000);
+  totalColis: number = 0;
   showSpinner : boolean = true;
 
   constructor(private route: ActivatedRoute, private demandeCrenauRbService: DemandeCrenauRBService, private imageUploadService: ImageUploadService, private bonLivraisonRosebaieService: BonLivraisonRosebaieService, private toast: HotToastService, public dialog: MatDialog) { }
@@ -33,9 +34,14 @@ export class MissionRosebaieComponent implements OnInit {
     // console.log(this.idMission);
 
     this.demandeCrenauRbService.getDemandeCrenauRBByID(this.idMission).subscribe(res => {
-      this.missionRB= res;
+      this.missionRB = res;
+      this.missionRB.adresseLivraison.map((element: any) => { // calculer nombre de colis au total
+        this.totalColis += element.nombreColis;
+      })
       this.showSpinner = false;
     });
+
+    // this.calculNbColis();
 
     this.refreshdateNow;
   }
@@ -110,18 +116,6 @@ export class MissionRosebaieComponent implements OnInit {
     // ajouter url bon de livraison signé à bonLivraisonRosebaie dans firebase
     this.bonLivraisonRosebaieService.setBonLivraisonSigne(tabAdresseLivraison[indice].id, photoURL)
   }
-
-  setBonLivraisonSigne(idBonLivraison: string){
-
-  }
-  // parcourirTabLivraison(tabLivraison: any){
-  //   for(let liv of tabLivraison){
-  //     if(!liv.urlBonLivraisonSigne && !liv.incident){
-  //       return false
-  //     }
-  //   }
-  //   return true
-  // }
 
   parcourirTabLivraison(tabLivraison: any){
     let status;

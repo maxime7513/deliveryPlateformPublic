@@ -6,6 +6,7 @@ export interface ProfileUser {
     phone?: string;
     photoURL?: string;
     crenauInscrit?: string[];
+    astreinteInscrit?: string[];
     role?: string;
     vehicule?: Array<string>;
   }

@@ -16,6 +16,7 @@ import { RosebaieCreateLivraisonAttenteComponent } from './components/rosebaie/r
 import { RosebaieListLivraisonAttenteComponent } from './components/rosebaie/rosebaie-list-livraison-attente/rosebaie-list-livraison-attente.component';
 import { ListeBonLivraisonComponent } from './components/rosebaie/liste-bon-livraison/liste-bon-livraison.component';
 import { PlanningKYOComponent } from './components/KYO/planning-kyo/planning-kyo.component';
+import { HeuresLivreursComponent } from './components/KYO/heures-livreurs/heures-livreurs.component';
 
 import { RoleWoozooGuard } from './shared/role-woozoo.guard';
 import { RoleLivreurGuard } from './shared/role-livreur.guard';
@@ -47,6 +48,7 @@ const routes: Routes = [
   { path: 'missionRoseBaie/:id', component: MissionRosebaieComponent, ...canActivate(redirectUnauthorizedToLogin)},
   { path: 'bonLivraisonRoseBaie', component: ListeBonLivraisonComponent, ...canActivate(redirectUnauthorizedToLogin)},
   { path: 'planningKYO', component: PlanningKYOComponent, ...canActivate(redirectUnauthorizedToLogin), canActivate:[RoleProGuard]},
+  { path: 'heuresLivreursKYO', component: HeuresLivreursComponent, ...canActivate(redirectUnauthorizedToLogin), canActivate:[RoleProGuard]},
 ];
 
 @NgModule({

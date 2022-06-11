@@ -7,6 +7,7 @@ import { DemandecrenauRB } from 'src/app/models/demandeCrenauRB.model';
 import { CrenauService } from 'src/app/services/crenau.service';
 import { DemandeCrenauRBService } from 'src/app/services/demande-crenau-rb.service';
 import { RBAdresseAttenteService } from 'src/app/services/rb-adresse-attente.service';
+import { UsersService } from 'src/app/services/users.service';
 import { ModalDeleteCrenauComponent } from '../../modal/modal-delete-crenau/modal-delete-crenau.component';
 
 @Component({
@@ -21,18 +22,21 @@ export class RosebaieLivraisonComponent implements OnInit {
   // pagination
   lowValueSlice: number = 0;
   highValueSlice: number = 10;
-  
+  userRole: any;
+  totalColis: number = 0;
   showSpinner : boolean = true;
 
-  constructor(private demandeCrenauRBService: DemandeCrenauRBService, private crenauService: CrenauService, private rbAdresseAttenteService: RBAdresseAttenteService, private toast: HotToastService, public dialog: MatDialog) {
+  constructor(private demandeCrenauRBService: DemandeCrenauRBService, private crenauService: CrenauService, private usersService: UsersService, private rbAdresseAttenteService: RBAdresseAttenteService, private toast: HotToastService, public dialog: MatDialog) {
     this.showDetails = false;
   }
 
-  ngOnInit(): void {
+  async ngOnInit(): Promise<void> {
     this.demandeCrenauRBService.getDemandeCrenauRB().subscribe(res => {
       this.creneauxRB = res;
       this.showSpinner = false;
     })
+
+    this.userRole =  await this.usersService.canAccess$;
   }
 
   formatTime(time: number){
@@ -58,6 +62,14 @@ export class RosebaieLivraisonComponent implements OnInit {
     return incident
   }
 
+  calculNombreColis(crenauRb: any){
+    let totalColis = 0;
+    crenauRb.adresseLivraison.map((element: any) => {
+      totalColis += element.nombreColis;
+    })
+    return totalColis
+  }
+  
   deleteLivraison(creneau: DemandecrenauRB){
     // delete demandeCrenauRB
     this.crenauService.getCrenauRB(creneau).subscribe((res: any) => {

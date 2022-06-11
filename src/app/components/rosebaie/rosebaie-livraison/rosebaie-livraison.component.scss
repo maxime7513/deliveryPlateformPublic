@@ -125,7 +125,15 @@ h1{
         .time{
             color: var(--secondary);
             text-align: center;
-            margin-top: 20px;
+            margin-top: 7px;
+            text-transform: none;
+            &:first-of-type{
+                margin-top: 20px;                
+            }
+            mat-icon{
+                vertical-align: bottom;
+                margin-right: 3px;
+            }
         }
         > div:first-of-type{
             display: flex;
@@ -145,7 +153,7 @@ h1{
         }
         > div:last-of-type{
             margin-top: 20px;
-            > div {
+            > div:not(.time) {
                 display: flex;
                 align-items: center;
                 padding: 20px 0 0 10px;

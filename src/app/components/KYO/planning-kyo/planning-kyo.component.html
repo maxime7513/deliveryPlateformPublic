@@ -7,31 +7,51 @@
   <mat-datepicker #picker></mat-datepicker>
 </mat-form-field>
 
-<mat-spinner *ngIf="showSpinner"></mat-spinner>
+<mat-spinner *ngIf="showSpinner || showSpinner2"></mat-spinner>
 
-<p *ngIf="crenaux.length == 0" class="nocrenau">Aucun créneau pour le {{defaultDatePicker  | date: 'd MMMM y'}}</p>
+<p *ngIf="crenaux.length == 0 && !showSpinner && !showSpinner2" class="nocrenau">Aucun créneau pour le {{defaultDatePicker  | date: 'd MMMM y'}}</p>
 
-<table *ngIf="crenaux.length != 0">
-  <thead>
-   <tr>
-        <th><mat-icon>schedule</mat-icon></th>
-        <th><mat-icon>person</mat-icon></th>
-   </tr>
-  </thead>
-  <tbody>
-    <tr *ngFor="let crenau of crenaux">
-      <td>{{ crenau.heureDebut }}<mat-icon class="hour-arrow">arrow_right_alt</mat-icon>{{ crenau.heureFin }}h</td>
-      <td>
-        <div *ngFor="let user of crenau.users">
-          <p [innerHTML]="user.idUser | returnLivreurs | async" [ngClass]="{'priseService': user.priseService && !user.finService, 'termine': user.finService, 'retard': crenau.date.toDate() < datePicker && !user.priseService}"></p>
-          <button *ngIf="!user.priseService && !dateDepasse(crenau)" (click)="updateService(user.idUser, crenau, 'priseService')" mat-raised-button>Prise de service</button>
-          <button *ngIf="user.priseService && !user.finService" (click)="updateService(user.idUser, crenau, 'finService')" mat-raised-button class="fin_service">Fin de service</button>
-          <span *ngIf="user.finService"><u>{{user.priseService.seconds * 1000 | date: 'HH'}}h{{user.priseService.seconds * 1000 | date: 'mm'}}</u><mat-icon class="hour-arrow">arrow_right_alt</mat-icon>{{user.finService.seconds * 1000 | date: 'HH'}}h{{user.finService.seconds * 1000 | date: 'mm'}}</span>
-          <span *ngIf="dateDepasse(crenau) && !user.priseService" class="absent">Absent</span>
-        </div>
-      </td>
-    </tr>
-  </tbody>
-</table>
+<div *ngIf="crenaux.length != 0 && !showSpinner && !showSpinner2">
+  <table>
+    <thead>
+     <tr>
+          <th><mat-icon>schedule</mat-icon></th>
+          <th><mat-icon>person</mat-icon></th>
+     </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let crenau of crenaux">
+        <td>{{ crenau.heureDebut }}<mat-icon class="hour-arrow">arrow_right_alt</mat-icon>{{ crenau.heureFin }}h</td>
+        <td>
+          <!-- creneau -->
+          <div *ngFor="let user of crenau.users" class="creneau">
+            <p [innerHTML]="user.idUser | returnLivreurs | async" [ngClass]="{'priseService': user.priseService && !user.finService, 'termine': user.finService, 'retard': crenau.date.toDate() < datePicker && !user.priseService}"></p>
+            <button *ngIf="!user.priseService && !dateFinDepasse(crenau) && (crenau | checkFinService : user.idUser : 'precedent' | async)" (click)="updateCreneauService(user.idUser, crenau, 'priseService','now')" mat-raised-button>Prise de service</button>
+            <button *ngIf="user.priseService && !user.finService && (crenau | checkFinService : user.idUser : 'suivant' | async)" (click)="updateCreneauService(user.idUser, crenau, 'finService','now')" mat-raised-button class="fin_service">Fin de service</button>
+            <span *ngIf="user.finService"><u>{{user.priseService.seconds * 1000 | date: 'HH'}}h{{user.priseService.seconds * 1000 | date: 'mm'}}</u><mat-icon class="hour-arrow">arrow_right_alt</mat-icon>{{user.finService.seconds * 1000 | date: 'HH'}}h{{user.finService.seconds * 1000 | date: 'mm'}}</span>
+            <span *ngIf="dateFinDepasse(crenau) && !user.priseService" class="absent">Absent</span>
+          </div>
+          <!-- astreinte -->
+          <div *ngFor="let astreinte of astreintes">
+            <div *ngFor="let user of astreinte.users">
+              <div *ngIf="astreinte.heureDebut == crenau.heureDebut && user.call" class="astreinte">
+                <div>
+                  <p [innerHTML]="user.idUser | returnLivreurs | async" [ngClass]="{'priseService': user.priseService && !user.finService, 'termine': user.finService, 'retard': crenau.date.toDate() < datePicker && !user.priseService}"></p>
+                  <span>astreinte</span>
+                </div>
+                <button *ngIf="!user.priseService && !dateFinDepasse(crenau)" (click)="updateAstreinteService(user.idUser, astreinte, 'priseService')" mat-raised-button>Prise de service</button>
+                <button *ngIf="user.priseService && !user.finService" (click)="updateAstreinteService(user.idUser, astreinte, 'finService')" mat-raised-button class="fin_service">Fin de service</button>
+                <span *ngIf="user.finService"><u>{{user.priseService.seconds * 1000 | date: 'HH'}}h{{user.priseService.seconds * 1000 | date: 'mm'}}</u><mat-icon class="hour-arrow">arrow_right_alt</mat-icon>{{user.finService.seconds * 1000 | date: 'HH'}}h{{user.finService.seconds * 1000 | date: 'mm'}}</span>
+                <span *ngIf="dateFinDepasse(crenau) && !user.priseService" class="absent">Absent</span>
+              </div>
+            </div>
+          </div>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+  
+  <button class="call_astreinte" (click)="openDialogModal()"><mat-icon>call</mat-icon>Besoin d'un livreur</button>
+</div>
 
 <div class="blur"></div>
