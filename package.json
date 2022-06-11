@@ -27,13 +27,14 @@
     "@types/googlemaps": "^3.43.3",
     "firebase": "^9.6.6",
     "ngx-google-places-autocomplete": "^2.0.5",
+    "npm": "^8.4.1",
     "rxfire": "^6.0.0",
     "rxjs": "~7.4.0",
     "tslib": "^2.3.0",
     "zone.js": "~0.11.4"
   },
   "devDependencies": {
-    "@angular-devkit/build-angular": "~13.1.2",
+    "@angular-devkit/build-angular": "^13.3.7",
     "@angular/cli": "~13.1.2",
     "@angular/compiler-cli": "~13.1.0",
     "@types/jasmine": "~3.10.0",
