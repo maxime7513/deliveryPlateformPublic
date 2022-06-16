@@ -15,7 +15,7 @@
           <mat-form-field>
               <mat-label>Heure d'enlévement</mat-label>
               <mat-select formControlName="heureEnlevement">
-                <mat-option *ngFor="let heure of heures" [value]="heure.value">
+                <mat-option *ngFor="let heure of heures" [value]="heure">
                   {{heure.viewValue}}
                 </mat-option>
               </mat-select>
@@ -50,7 +50,7 @@
           </span>
           <span>
             <mat-icon>schedule</mat-icon>
-            {{rbForm.value.heureEnlevement}}h00
+            {{rbForm.value.heureEnlevement.viewValue}}00
           </span>
         </div>
 

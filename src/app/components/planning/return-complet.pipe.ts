@@ -24,18 +24,18 @@ export class ReturnCompletPipe implements PipeTransform {
   
   returnComplet(crenaux: Crenau[], jour: number, heure: number){
     for(let crenau of crenaux){
-      let nombreCreneau = crenau.heureFin - crenau.heureDebut;
+      let nombreCreneau = crenau.heureFin.value - crenau.heureDebut.value;
       
       if(jour == this.getDay(crenau.date)){
         if(nombreCreneau == 1){
-          if(this.heures[heure] == crenau.heureDebut ){
+          if(this.heures[heure] == crenau.heureDebut.value ){
             if(crenau.inscritMax - crenau.inscrit == 0){
               return true
             }
           }
         }else{
           for(let i = 0; i < nombreCreneau; i++){
-            if(this.heures[heure] == crenau.heureDebut + i ){
+            if(this.heures[heure] == crenau.heureDebut.value + i ){
               if(crenau.inscritMax - crenau.inscrit == 0){
                 return true
               }

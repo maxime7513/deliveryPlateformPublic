@@ -2,6 +2,7 @@ import { DatePipe } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { HotToastService } from '@ngneat/hot-toast';
+import { iif } from 'rxjs';
 import { Crenau } from 'src/app/models/crenau.model';
 import { ProfileUser } from 'src/app/models/user.profil';
 import { AstreinteService } from 'src/app/services/astreinte.service';
@@ -25,6 +26,8 @@ export class PlanningKYOComponent implements OnInit {
   showSpinner2 : boolean = false;
   userRole: any;
   astreinteAffiche: Crenau[];
+  astreintesCall: Crenau[] = [];
+  typeChoice: string = 'disposition';
 
   constructor(private crenauservice: CrenauService, private astreinteservice: AstreinteService, private usersService: UsersService, private twilioService: TwilioService, public dialog: MatDialog, public datePipe : DatePipe, private toast: HotToastService) {
     this.defaultDatePicker = this.datePicker;
@@ -33,12 +36,13 @@ export class PlanningKYOComponent implements OnInit {
   async ngOnInit(): Promise<void> {
     this.afficherCrenauParDate();
     this.userRole = await this.usersService.canAccess$;
-    this.creneauNowAstreinte();
+    await this.creneauNowAstreinte();
+    this.astreinteCall();
   }
 
   returnCrenauSuivant(crenau: Crenau){
     return new Promise<Crenau[]>(resolve => {
-      this.crenauservice.getCrenauxByDate2(crenau.dateString, crenau.heureFin, 'kyo').subscribe(res => {
+      this.crenauservice.getCrenauxByDate2(crenau.dateString, crenau.heureFin.value, 'kyo').subscribe(res => {
         resolve(res)
       })
     });
@@ -46,7 +50,7 @@ export class PlanningKYOComponent implements OnInit {
 
   returnCrenauPrecedent(crenau: Crenau){
     return new Promise<Crenau[]>(resolve => {
-      this.crenauservice.getCrenauxByDate3(crenau.dateString, crenau.heureDebut, 'kyo').subscribe(res => {
+      this.crenauservice.getCrenauxByDate3(crenau.dateString, crenau.heureDebut.value, 'kyo').subscribe(res => {
         resolve(res)
       })
     });
@@ -104,8 +108,12 @@ export class PlanningKYOComponent implements OnInit {
   autoValideFinService(){
     this.crenaux.map( creneau => {
       let dateDebutService = creneau.date.toDate(),
-      dateFinService = new Date(creneau.date.toDate().setHours(creneau.heureFin));
-      
+      dateFinService = new Date(creneau.date.toDate().setHours(creneau.heureFin.value));
+      // setMinutes si fin de créneau par demi-heure
+      if(creneau.heureFin.value % 1 != 0){
+        dateFinService.setMinutes(30);
+      }
+
       if(this.dateDebutDepasse(creneau)){
         creneau.users.map(async user => {
           if(await this.checkFinService(creneau, user.idUser, 'precedent') == false && await this.checkIfPrecedentPs(creneau, user.idUser) == true && !user.priseService){
@@ -129,7 +137,7 @@ export class PlanningKYOComponent implements OnInit {
     this.crenauservice.getCrenauxByDateandSociete("kyo", date).subscribe((res: Crenau[]) => {
       // trier par heure
       this.crenaux = res.sort(function (a:any, b:any) {
-      return a.heureDebut - b.heureDebut
+      return a.heureDebut.value - b.heureDebut.value
       });
       this.autoValideFinService();
       this.showSpinner = false; // loading
@@ -137,8 +145,9 @@ export class PlanningKYOComponent implements OnInit {
     this.astreinteservice.getAstreinteByDateandSociete("kyo", date).subscribe((res: Crenau[]) => {
       // trier par heure
       this.astreintes = res.sort(function (a:any, b:any) {
-      return a.heureDebut - b.heureDebut
+      return a.heureDebut.value - b.heureDebut.value
       });
+      this.astreinteCall();
     })
   }
 
@@ -204,6 +213,7 @@ export class PlanningKYOComponent implements OnInit {
       }
     }
     this.crenauservice.updatePriseService(creneau.id, tabUsersCreneau).then(() => {
+      this.toast.close();
       if(choix == 'priseService'){
         this.toast.success('Prise de service validée')
       }else{
@@ -255,7 +265,7 @@ export class PlanningKYOComponent implements OnInit {
   }
 
   dateFinDepasse(crenau: Crenau){
-    let dateFinService = new Date(crenau.date.toDate().setHours(crenau.heureFin));
+    let dateFinService = new Date(crenau.date.toDate().setHours(crenau.heureFin.value));
     if(new Date > dateFinService){
       return true
     }else{
@@ -263,14 +273,22 @@ export class PlanningKYOComponent implements OnInit {
     }
   }
   
-  async callAstreinte(astreinte: Crenau, user: ProfileUser){
-    for(let astreinteUser of astreinte.users){
-      if(astreinteUser.idUser === user.uid){
-        astreinteUser.call = true;
+  async callAstreinte(astreintes: Crenau[], user: ProfileUser){
+    astreintes.map(astreinte => {
+      if(astreinte.users){
+        for(let astreinteUser of astreinte.users){
+          if(astreinteUser.idUser === user.uid){
+            // astreinteUser.call = true;
+            this.astreinteservice.setAstreinteCall(astreinte.id)
+            astreinteUser.dateCall = new Date;
+          }
+        }
+        this.astreinteservice.updateAstreinte(astreinte.id, astreinte.users);
       }
-    }
-    this.astreinteservice.updateAstreinte(astreinte.id, astreinte.users);
+    })
     
+    this.typeChoice = "astreinte";
+
     // envoyer sms au livreur
     let phoneFormat = user.phone.replace(/ /g, ""); // supprimer tous les espaces      
     if(phoneFormat.indexOf("+330") == 0){ // enlever +330 ou +33 phone expediteur
@@ -282,12 +300,24 @@ export class PlanningKYOComponent implements OnInit {
     let req = {
       nom: user.firstName,
       phone: phoneFormat,
-      role: astreinte.societe
+      role: 'Kyo-sushi'
     }
-
     this.twilioService.send_smsAstreinte(req);
 
     this.toast.success("Livreur appelé en renfort")
+  }
+
+  astreinteCall(){
+    this.astreintesCall = [];
+    this.astreintes.map(astreinte => {
+      if(astreinte.call){
+        // astreinte.users.map(user => {
+          // if(user.call){
+            this.astreintesCall.push(astreinte)
+          // }
+        // })
+      }
+    })
   }
 
   // ouvrir popup avec livreur disponible en astreinte
@@ -299,27 +329,40 @@ export class PlanningKYOComponent implements OnInit {
       this.toast.error('Aucun livreur de disponible pour cette horaire')
       return
     }
-    const users = await this.usersAstreinte(this.astreinteAffiche[0]);
+    // const users = await this.usersAstreinte(this.astreinteAffiche[0]);
+    const users = await this.usersAstreinte(this.astreinteAffiche);
     this.toast.close()
     const dialogRef = this.dialog.open(ModalLivreursAstreinteComponent);
     dialogRef.componentInstance.users = users;
 
     dialogRef.afterClosed().subscribe(result => {
       if(result != ''){
-        this.callAstreinte(this.astreinteAffiche[0], result)
+        this.callAstreinte(this.astreinteAffiche, result)
       }
     });
   }
 
   // return usersAstreinte(Promise pour attendre les données users avant d'ouvrir la popup)
-  usersAstreinte(astreinte: Crenau){
+  usersAstreinte(astreintes: any[]){
+    let dateNow = new Date;
+    let hourDateNow = dateNow.getHours(),
+    minutesCentiemes = dateNow.getMinutes() / 60,
+    hour = hourDateNow + minutesCentiemes;
+    // hour = 14.5;
+
+    let usersAstreinte: any[] = [];
+    astreintes.map(astreinte => {
+      if(astreinte.users && astreinte.heureFin.value >= hour){
+        astreinte.users.map((element: any)=>{
+          if(!element.dateCall){
+            usersAstreinte.push(element.idUser)
+          }
+        });
+      }
+    })
+
+
     return new Promise<ProfileUser[]>(resolve => {
-      let usersAstreinte: any[] = [];
-      astreinte.users.map((element: any)=>{
-        if(!element.call){
-          usersAstreinte.push(element.idUser)
-        }
-      });
       let tab: any[] = [];
       for(let user of usersAstreinte){
         this.usersService.getUserByID(user).subscribe((res) => {
@@ -331,21 +374,27 @@ export class PlanningKYOComponent implements OnInit {
   }
 
   creneauNowAstreinte(){
-    let dateNow = new Date;
-    let hourDateNow = dateNow.getHours();
-    let dayDateNow = dateNow.getDate();
-    let monthDateNow = (dateNow.getMonth() + 1).toString();
-    let yearDateNow = dateNow.getFullYear();
+    let dateNow = new Date,
+    minutesCentiemes = dateNow.getMinutes() / 60,
+    hourDateNow = dateNow.getHours(),
+    dayDateNow = dateNow.getDate(),
+    monthDateNow = (dateNow.getMonth() + 1).toString(),
+    yearDateNow = dateNow.getFullYear();
     if(monthDateNow.length < 2){
       monthDateNow = "0" + monthDateNow;
     }
     let dateString =  dayDateNow + '/' + monthDateNow + '/' + yearDateNow;
-    let dateTest = '03/06/2022'
-    let heureTest = 12
-    this.astreinteservice.getAstreintesByDate2(dateString, hourDateNow, this.userRole).subscribe((res: Crenau[]) => {
-    // this.astreinteservice.getAstreintesByDate2(dateTest, heureTest, this.userRole).subscribe((res: Crenau[]) => {
-      this.astreinteAffiche = res;
-    })
+    let hour = hourDateNow + minutesCentiemes
+    let dateTest = '13/06/2022'
+    let heureTest = 14.5
+
+    return new Promise(resolve => {
+      this.astreinteservice.getAstreintesByDate2(dateString, hour, this.userRole).subscribe((res: Crenau[]) => {
+      // this.astreinteservice.getAstreintesByDate2(dateTest, heureTest, this.userRole).subscribe((res: Crenau[]) => {
+        resolve(this.astreinteAffiche = res);
+      })
+    });
   }
+
 
 }

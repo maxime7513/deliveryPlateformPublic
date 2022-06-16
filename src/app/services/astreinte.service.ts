@@ -84,7 +84,7 @@ export class AstreinteService {
   }
 
   getAstreintesByDate2(date: string, hour: number, societe: string): Observable<Crenau[]> {
-    const astreintesRef = query(collection(this.firestore, 'astreinte'), where("dateString", "==", date), where ("heureDebut", "==", hour), where("societe", "==", societe));
+    const astreintesRef = query(collection(this.firestore, 'astreinte'), where("dateString", "==", date), where("societe", "==", societe), where("heureDebut.value", "<=", hour));
     return collectionData(astreintesRef, { idField: 'id' }) as Observable<Crenau[]>;
   }
 
@@ -103,8 +103,21 @@ export class AstreinteService {
 
   // ajouter priseServiceKYO 
   updatePriseService(astreinteId: string, tabAstreinteInscrit: any) {
-    const crenauDocRef = doc(this.firestore, `astreinte/${astreinteId}`);
+    const astreintesRef = doc(this.firestore, `astreinte/${astreinteId}`);
     let priseService = {'users': tabAstreinteInscrit}
-    return setDoc(crenauDocRef, priseService, { merge: true });
+    return setDoc(astreintesRef, priseService, { merge: true });
+  }
+
+  async setAstreinteCall(id: string){
+    const astreintesRef = doc(this.firestore, 'astreinte', id);
+    let call = {'call': true};
+
+    await setDoc(astreintesRef, call, { merge: true });
+  }
+
+  // retourner toutes les astreintes par semaine et par entreprise
+  getAstreinteBySemaineAndSociete(Usersociete: any, tabDate: string[]): Observable<Crenau[]> {
+    const astreinteRef = query(collection(this.firestore, 'astreinte'), where("societe", "==" , Usersociete), where("dateString", 'in', [tabDate[0], tabDate[1], tabDate[2], tabDate[3], tabDate[4], tabDate[5], tabDate[6]]));
+    return collectionData(astreinteRef, { idField: 'id' }) as Observable<Crenau[]>;
   }
 }

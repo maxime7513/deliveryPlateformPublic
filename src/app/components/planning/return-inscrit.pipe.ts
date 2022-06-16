@@ -24,7 +24,7 @@ export class ReturnInscritPipe implements PipeTransform {
   
   returnInscrit(crenaux: Crenau[], jour: number, heure: number){
     for(let crenau of crenaux){
-        if(jour == this.getDay(crenau.date) && this.heures[heure] == crenau.heureDebut && crenau.inscrit > 0){
+        if(jour == this.getDay(crenau.date) && this.heures[heure] == crenau.heureDebut.value && crenau.inscrit > 0){
             return true
         }
     }

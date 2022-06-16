@@ -2,8 +2,8 @@ export interface Crenau {
     id?: string;
     date: any;
     dateString : string;
-    heureDebut : number;
-    heureFin : number;
+    heureDebut : any;
+    heureFin : any;
     inscrit : number;
     inscritMax : number;
     vehicule? : string;
@@ -15,4 +15,5 @@ export interface Crenau {
     astreinteInscrit: number;
     nbLivreurAstreinte?: number;
     usersAstreinte?: any[];
+    call?: boolean;
 }

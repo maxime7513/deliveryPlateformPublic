@@ -177,12 +177,14 @@ export class RegisterLivreurComponent implements OnInit {
     }
     // envoyer sms à tous les livreurs pour informer que le créneau est disponible
     let tabPhones = await this.twilioservice.livreursPhone$;
+
     let req = {
+      typeMission: 'creneau',
       role: crenau.societe,
       date: crenau.dateString,
       phoneTab: tabPhones,
-      heureDebut: crenau.heureDebut,
-      heureFin: crenau.heureFin
+      heureDebut: crenau.heureDebut.viewValue,
+      heureFin: crenau.heureFin.viewValue
     }
     this.twilioservice.send_smsGroupe2(req);
 
@@ -202,7 +204,18 @@ export class RegisterLivreurComponent implements OnInit {
         this.cancelSms(astreinteInscrit.smsId)
       }
     }
-
+    // envoyer sms à tous les livreurs pour informer que l'astreinte est disponible
+    let tabPhones = await this.twilioservice.livreursPhone$;
+    let req = {
+      typeMission: 'astreinte',
+      role: crenau.societe,
+      date: crenau.dateString,
+      phoneTab: tabPhones,
+      heureDebut: crenau.heureDebut.viewValue,
+      heureFin: crenau.heureFin.viewValue
+    }
+    this.twilioservice.send_smsGroupe2(req);
+    
     this.toast.success('Astreinte retiré de votre planning', {duration: 3000});
   }
 
@@ -212,7 +225,7 @@ export class RegisterLivreurComponent implements OnInit {
       this.crenauservice.getCrenauxInscritCurrentUserByDate3(this.userUid, crenau.dateString).subscribe((res) => {
         let dejaInscrit = true;
         res.map(creneauRes => {
-          if(crenau.heureDebut < creneauRes.heureFin && crenau.heureFin > creneauRes.heureDebut){
+          if(crenau.heureDebut.value < creneauRes.heureFin.value && crenau.heureFin.value > creneauRes.heureDebut.value){
             dejaInscrit = false;
           }
         })
@@ -227,7 +240,7 @@ export class RegisterLivreurComponent implements OnInit {
       this.astreinteservice.getAstreintesInscritCurrentUserByDate(this.userUid, crenau.dateString).subscribe((res) => {
         let dejaInscrit = true;
         res.map(astreinteRes => {
-          if(crenau.heureDebut < astreinteRes.heureFin && crenau.heureFin > astreinteRes.heureDebut){
+          if(crenau.heureDebut.value < astreinteRes.heureFin.value && crenau.heureFin.value > astreinteRes.heureDebut.value){
             dejaInscrit = false;
           }
         })
@@ -285,8 +298,8 @@ export class RegisterLivreurComponent implements OnInit {
 
     let req = {
       crenauDate: crenauDateRappel,
-      crenauHeureDebut: crenau.heureDebut,
-      crenauHeureFin: crenau.heureFin,
+      crenauHeureDebut: crenau.heureDebut.viewValue,
+      crenauHeureFin: crenau.heureFin.viewValue,
       phone: phoneFormat,
       nom: user.firstName,
       societe: crenau.societe,

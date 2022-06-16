@@ -1,6 +1,7 @@
 import { DatePipe } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { Crenau } from 'src/app/models/crenau.model';
+import { AstreinteService } from 'src/app/services/astreinte.service';
 import { CrenauService } from 'src/app/services/crenau.service';
 import { UsersService } from 'src/app/services/users.service';
 
@@ -12,13 +13,16 @@ import { UsersService } from 'src/app/services/users.service';
 export class HeuresLivreursComponent implements OnInit {
 
   crenaux: Crenau[] = [];
+  astreintes: Crenau[] = [];
   defaultDatePicker: Date;
   jours: number[]= [1, 2, 3, 4, 5, 6, 0];
   livreursSemaine: any[]= [];
+  livreursAstreinteSemaine: any[]= [];
   joursSemaine: string[]= [];
+  typeChoice: string = 'disposition';
   showSpinner : boolean = true;
 
-  constructor(private crenauService: CrenauService, private usersService: UsersService, public datePipe : DatePipe) { 
+  constructor(private crenauService: CrenauService, private astreinteService: AstreinteService, public datePipe : DatePipe) { 
     this.defaultDatePicker = new Date;
   }
 
@@ -70,13 +74,39 @@ export class HeuresLivreursComponent implements OnInit {
     })
   }
 
+  // astreintes par semaine (datepicker)
+  async afficherAstreinteParSemaine(){
+    return new Promise(resolve => {
+      let dateLundi = this.setToMonday(this.defaultDatePicker);
+      let tab = this.createSemaineTab(dateLundi);
+      this.astreinteService.getAstreinteBySemaineAndSociete('kyo', tab).subscribe((res: Crenau[]) => {
+        resolve(this.astreintes = res);
+        this.tabUsersAstreinteParSemaine();
+        this.joursSemaineAffiche();
+      })
+    })
+  }
+
   tabUsersParSemaine(){
     this.crenaux.map(creneau => {
-      creneau.users.map(user => {
-        if(!this.livreursSemaine.includes(user.idUser) && user.finService){
-          this.livreursSemaine.push(user.idUser)
-        }      
-      })
+      if(creneau.users){
+        creneau.users.map(user => {
+          if(!this.livreursSemaine.includes(user.idUser) && user.finService){
+            this.livreursSemaine.push(user.idUser)
+          }      
+        })
+      }
+    })
+  }
+  tabUsersAstreinteParSemaine(){
+    this.astreintes.map(astreinte => {
+      if(astreinte.users){
+        astreinte.users.map(user => {
+          if(!this.livreursAstreinteSemaine.includes(user.idUser) && user.finService){
+            this.livreursAstreinteSemaine.push(user.idUser)
+          }      
+        })
+      }
     })
   }
 
@@ -84,6 +114,8 @@ export class HeuresLivreursComponent implements OnInit {
     this.showSpinner = true;
     this.livreursSemaine = [];
     await this.afficherCrenauParSemaine();
+    this.livreursAstreinteSemaine = [];
+    await this.afficherAstreinteParSemaine();
     this.showSpinner = false;
   }
 }

@@ -22,9 +22,34 @@ mat-form-field{
     justify-content: center;
 }
 
+mat-radio-group{
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin-bottom: 17px;
+    mat-radio-button:first-of-type{
+        margin-right: 25px;
+    }
+    ::ng-deep{
+        .mat-radio-label-content{
+            padding-left: 5px;
+        }
+        .mat-radio-outer-circle{
+            border-color: var(--secondary);
+        }
+        .mat-radio-inner-circle{
+            border-color: var(--secondary);
+            background: var(--secondary) !important;
+        }
+        .mat-radio-button.mat-accent.mat-radio-checked .mat-radio-outer-circle{
+            border-color: var(--secondary);
+        }
+    }
+}
+
 .nocrenau{
     text-align: center;
-    margin-top: 20px;
+    margin: 50px auto;
     font-size: 1.1rem;
     color: var(--secondary);
 }
@@ -70,88 +95,84 @@ table{
             &:first-child{
                 background: var(--primary);
                 color: #fff;
-                padding: 20px;
+                padding: 15px;
+                text-align: center;
                 white-space: nowrap;
                 .hour-arrow{
                     vertical-align: bottom;
                     color: var(--secondary);
                 }
             }
-            &:last-of-type{
-                .creneau, .astreinte{
-                    display: flex;
-                    flex-direction: row;
-                    align-items: center;
-                    justify-content: space-between;
-                    margin: 13px 0;
-                    p{
-                        margin-left: 5px;
-                        position: relative;
-                        &:before{
-                            content: '';
-                            width: 8px;
-                            height: 8px;
-                            border-radius: 100%;
-                            background: #ccc;
-                            position: absolute;
-                            left: -15px;
-                            top: calc(50% - 4px);
-                        }
-                        &.priseService::before{
-                            background: var(--secondary);
-                        }
-                        &.termine::before{
-                            content: url(/assets/images/done.svg);
-                            background: none !important;
-                            width: 15px;
-                            height: auto;
-                            top: calc(50% - 11px);
-                            left: -18px;
-                        }
-                        &.retard::before{
-                            background: orangered;
-                        }
+            &.creneau{
+                display: flex;
+                flex-direction: row;
+                align-items: center;
+                justify-content: space-between;
+                margin: 13px 0;
+                p{
+                    margin-left: 5px;
+                    position: relative;
+                    &:before{
+                        content: '';
+                        width: 8px;
+                        height: 8px;
+                        border-radius: 100%;
+                        background: #ccc;
+                        position: absolute;
+                        left: -15px;
+                        top: calc(50% - 4px);
                     }
-                    button{
+                    &.priseService::before{
                         background: var(--secondary);
-                        color: #fff;
-                        margin-left: 20px;
-                        &.fin_service{
-                            background: var(--primary);
-                        }
                     }
-                    span{
-                        color: var(--primary);
-                        font-weight: 500;
-                        margin-left: 20px;
-                        white-space: nowrap;
-                        u{
-                            color: var(--secondary);
-                            text-decoration: none;
-                        }
-                        mat-icon{
-                            vertical-align: bottom;
-                        }
-                        &.absent{
-                            color: red;
-                            font-weight: 400;
-                            margin-left: 20px;
-                        }
+                    &.termine::before{
+                        content: url(/assets/images/done.svg);
+                        background: none !important;
+                        width: 15px;
+                        height: auto;
+                        top: calc(50% - 11px);
+                        left: -18px;
+                    }
+                    &.retard::before{
+                        background: orangered;
                     }
                 }
-                .astreinte{
-                    div{
-                        display: flex;
-                        flex-direction: row;
-                        align-items: center;
-                        span{
-                            font-style: italic;
-                            color: var(--secondary);
-                            margin-left: 5px;
-                            margin-bottom: -3px;
-                            font-size: 13px;
-                        }
+                button{
+                    background: var(--secondary);
+                    color: #fff;
+                    margin-left: 20px;
+                    &.fin_service{
+                        background: var(--primary);
                     }
+                }
+                span{
+                    color: var(--primary);
+                    font-weight: 500;
+                    margin-left: 20px;
+                    white-space: nowrap;
+                    u{
+                        color: var(--secondary);
+                        text-decoration: none;
+                    }
+                    mat-icon{
+                        vertical-align: bottom;
+                    }
+                    &.absent{
+                        color: red;
+                        font-weight: 400;
+                        margin-left: 20px;
+                    }
+                }
+            }
+            .astreinte{
+                display: flex;
+                flex-direction: column;
+                p{
+                    margin-bottom: 0;
+                }
+                span{
+                    font-size: 13px;
+                    margin-left: 5px;
                 }
             }
         }
@@ -214,6 +235,10 @@ table{
         }
     }
 
+    .blur{
+        z-index: 0;
+    }
+
     table{
         display: block;
         max-width: max-content;
@@ -225,6 +250,10 @@ table{
             right: 0;
             animation: 4s swipeRight;
             opacity: 0;
+        }
+        button{
+            min-width: auto;
+
         }
     }
 }

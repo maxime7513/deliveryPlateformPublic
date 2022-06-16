@@ -20,7 +20,7 @@ export class ReturnMissionRbPipe implements PipeTransform {
   returnMissionRB(crenaux: Crenau[], jour: number, heure: number){
     let res;
     for(let crenau of crenaux){
-      if(jour == this.getDay(crenau.date) && this.heures[heure] == crenau.heureDebut && crenau.societe == 'rosebaie'){
+      if(jour == this.getDay(crenau.date) && this.heures[heure] == crenau.heureDebut.value && crenau.societe == 'rosebaie'){
           res= "content_paste_search"
       }
     }

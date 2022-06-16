@@ -78,7 +78,7 @@ export class PlanningComponent implements OnInit {
     this.crenauservice.getCrenauxBySemaineAndSociete(el,tab).subscribe((res: Crenau[]) => {
       // trier par heure
       this.crenaux = res.sort(function (a:any, b:any) {
-      return a.heureDebut - b.heureDebut
+      return a.heureDebut.value - b.heureDebut.value
       });
     })
   }
@@ -86,7 +86,7 @@ export class PlanningComponent implements OnInit {
   returnCrenauId(jour: number, heure: number){
     let res;
     for(let crenau of this.crenaux){
-      if(jour == this.getDay(crenau.date) && this.heures[heure] == crenau.heureDebut ){
+      if(jour == this.getDay(crenau.date) && this.heures[heure] == crenau.heureDebut.value ){
         res = crenau;
       }
     }

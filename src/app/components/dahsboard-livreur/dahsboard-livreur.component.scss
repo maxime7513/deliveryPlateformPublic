@@ -90,30 +90,40 @@ table{
         }
         td{
             position: relative;
-            padding: 10px 20px;
+            padding: 0;
             text-align: center;
             &:first-of-type{
                 background: #324960;
                 color: #fff;
                 font-weight: 500;
+                padding: 10px 20px;
             }
             &:not(:last-of-type){
                 border-right: 1px solid #ccc;
             }
-            &.assignment_turned_in{
+            mat-icon{
+                pointer-events: none;
+                position: absolute;
+                width: 25px;
+                height: 25px;
+                top: 2px;
+                right: 2px;
+                z-index: 10;
+            }
+            .assignment_turned_in{
                 background: rgba(79, 195, 161, 0.35);
                 mat-icon:not(.voirmission){
                     color: var(--secondary);
-                    pointer-events: none;
                 }
             }
-            &.hourglass_bottom{
+            .hourglass_bottom{
+                background: rgba(255, 166, 0, 0.41);
                 mat-icon:not(.voirmission){
                     color: var(--secondary);
-                    pointer-events: none;
+                    color: orange;
                 }  
             }
-            &.event_busy{
+            .event_busy{
                 mat-icon:not(.voirmission){
                     color: #f22;
                     pointer-events: all;
@@ -129,6 +139,7 @@ table{
                 color: var(--primary);
                 top: 2px;
                 left: 2px;
+                pointer-events: all;
                 cursor: pointer;
             }
         }
@@ -136,8 +147,13 @@ table{
 }
 
 ::ng-deep .creneau_td{
-    div{
-        height: 40px;
+    height: 65px;
+    > div:first-of-type{
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 100%;
+        height: 100%;
         img{
             width: 40px;
             height: 40px;
@@ -147,14 +163,53 @@ table{
             background: #fff;
         }
     }
-    mat-icon{
+    .demi_haut, .demi_bas{
         position: absolute;
-        width: 25px;
-        height: 25px;
-        bottom: 2px;
-        right: 2px;
+        width: 100%;
+        height: 50%;
+        left: 0;
+        div{
+            height: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        img{
+            width: 27px;
+            height: 27px;
+            border-radius: 100%;
+            object-fit: cover;
+            object-position: center;
+            background: #fff;
+            position: relative;
+        }
+    }
+    .demi_haut{
+        top: 0;
+    }
+    .demi_bas{
+        bottom: 0;
+    }
+    .dashed_bas::after{
+        content: '';
+        position: absolute;
+        left: 0;
+        right: 0;
+        top: 0;
+        bottom: 0;
+        border-bottom: 1.5px dashed #ccc;
+    }
+    .dashed_haut::before{
+        content: '';
+        position: absolute;
+        left: 0;
+        right: 0;
+        top: -1px;
+        bottom: 0;
+        border-top: 1.5px dashed #ccc;
     }
 }
+
 
 .explic{
     display: flex;
@@ -164,14 +219,20 @@ table{
         align-items: center;
         margin-right: 20px;
         font-size: 15px;
-        color: var(--primary);
         mat-icon{
             color: var(--secondary);
             margin-right: 3px;
+            &.effectue{
+                color: var(--secondary);
+            }
+            &.en_cours{
+                color: orange;
+            }
             &.reserve{
                 color: #f22;
             }
         }
+
     }
 }
 
@@ -291,7 +352,7 @@ table{
                     display: flex;
                     align-items: center;
                     justify-content: center;
-                    padding: 10px;
+                    // padding: 10px;
                     height: 60px;
                     box-sizing: border-box;
                     overflow-x: hidden;
@@ -319,6 +380,27 @@ table{
                 }
             }
         }
+    }
+    ::ng-deep .creneau_td{
+        .demi_haut, .demi_bas{
+            width: 50%;
+            height: 100%;
+        }
+        .demi_bas{
+            left: auto;
+            right: 0;
+        }
+        .dashed_bas::after{
+            border-right: 1.5px dashed #ccc;
+            border-bottom: none;
+        }
+        .dashed_haut::before{
+            top: 0;
+            left: -1px;
+            border-left: 1.5px dashed #ccc;
+            border-top: none;
+        }
+    
     }
    
 }

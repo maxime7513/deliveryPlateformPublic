@@ -255,11 +255,16 @@ export class ModalRbValiderLivraisonComponent implements OnInit {
 
   async addCreneau(idDemandeCreneauRB: any){
     const nombreCrenau = Math.ceil(this.rbForm.value.time);
+    let calculHeureFin = this.rbForm.value.heureEnlevement.value + nombreCrenau;
     const req: Crenau = {
       date: this.rbForm.value.date,
       dateString: this.datePipe.transform(this.rbForm.value.date, 'dd/MM/yyyy'),
       heureDebut: this.rbForm.value.heureEnlevement,
-      heureFin: this.rbForm.value.heureEnlevement + nombreCrenau,
+      // heureFin: this.rbForm.value.heureEnlevement.value + nombreCrenau,
+      heureFin: {
+        value: calculHeureFin,
+        viewValue: calculHeureFin + 'h'
+      },
       inscrit: 0,
       inscritMax: 1,
       vehicule: "camion",
@@ -278,6 +283,7 @@ export class ModalRbValiderLivraisonComponent implements OnInit {
     let tabPhones = await this.livreursPhone$;
 
     let req = {
+      typeMission: 'creneau',
       role: 'rosebaie',
       date: dateCrenau,
       phoneTab: tabPhones
@@ -316,7 +322,7 @@ export class ModalRbValiderLivraisonComponent implements OnInit {
     this.rbForm.value.time = (timeLivraison + heuresEnlevementColis + tempsLivraison).toFixed(2);
 
     // // setHours de la date avec la valeur de heureDebut du formulaire
-    this.rbForm.value.date.setHours(this.rbForm.value.heureEnlevement);
+    this.rbForm.value.date.setHours(this.rbForm.value.heureEnlevement.value);
 
     this.rbForm.value.adresseLivraison = await this.newTabOrdering(this.rbForm.value.adresseEnlevement.location, tabLivraisonLocation);
     this.recapLivraison = true;

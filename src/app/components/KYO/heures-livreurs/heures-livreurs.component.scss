@@ -15,6 +15,31 @@
     margin: 25px auto auto;
 }
 
+mat-radio-group{
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin-bottom: 23px;
+    mat-radio-button:first-of-type{
+        margin-right: 25px;
+    }
+    ::ng-deep{
+        .mat-radio-label-content{
+            padding-left: 5px;
+        }
+        .mat-radio-outer-circle{
+            border-color: var(--secondary);
+        }
+        .mat-radio-inner-circle{
+            border-color: var(--secondary);
+            background: var(--secondary) !important;
+        }
+        .mat-radio-button.mat-accent.mat-radio-checked .mat-radio-outer-circle{
+            border-color: var(--secondary);
+        }
+    }
+}
+
 .nocrenau{
     text-align: center;
     margin-top: 50px;
@@ -24,7 +49,7 @@
 
 table{
     border-collapse: collapse;
-    margin: 10px auto 0 auto;
+    margin: 0 auto;
     background: rgba(255,255,255,.8);
     border-radius: 13px;
     box-shadow: rgba(0, 0, 0, 0.1) 0px 20px 25px -5px, rgba(0, 0, 0, 0.04) 0px 10px 10px -5px;
@@ -93,6 +118,63 @@ table{
                     color: #fff;
                 }
             }
+        }
+    }
+}
+
+@keyframes swipeRight{
+    0% {transform: translateX(0);opacity: 1;}
+    10% {transform: translateX(-30px);}
+    25% {transform: translateX(0);}
+    35% {transform: translateX(-30px);}
+    50% {transform: translateX(0px);}
+    60% {transform: translateX(-30px);}
+    75% {transform: translateX(0px);}
+    85% {transform: translateX(-30px);opacity: 1;}
+    100% {transform: translateX(0px);}
+}
+
+/* Responsive */
+
+@media (max-width: 815px) {
+    :host{
+        padding: 64px 10px 40px 10px;
+        background: none;
+        &:before {
+            content: "";
+            position: fixed;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -10;
+            background: url(/assets/images/woozoo-background.jpg) no-repeat;
+            -webkit-background-size: cover;
+            -moz-background-size: cover;
+            -o-background-size: cover;
+            background-size: cover;
+        }
+        > *:not(.blur){
+            position: relative;
+            z-index: 1;
+        }
+    }
+    
+    .blur{
+        z-index: 0;
+    }
+
+    table{
+        display: block;
+        max-width: max-content;
+        overflow-x: auto;
+        &:before{
+            content: url("/assets/images/swipe2.svg");
+            position: absolute;
+            top: 3px;
+            right: 0;
+            animation: 4s swipeRight;
+            opacity: 0;
         }
     }
 }

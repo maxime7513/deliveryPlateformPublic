@@ -7,11 +7,36 @@
   </mat-form-field>
 </div>
 
+<mat-radio-group [(ngModel)]="typeChoice" [ngModelOptions]="{standalone: true}">
+  <mat-radio-button value="disposition">Mise à disposition</mat-radio-button>
+  <mat-radio-button value="astreinte">Astreinte</mat-radio-button>
+</mat-radio-group>
+
 <mat-spinner *ngIf="showSpinner"></mat-spinner>
 
-<p *ngIf="livreursSemaine.length == 0" class="nocrenau">Aucune donnée pour cette semaine...</p>
+<ng-container *ngIf="typeChoice == 'disposition' && !showSpinner">
+  <p *ngIf="livreursSemaine.length == 0" class="nocrenau">Aucune donnée pour cette semaine...</p>
+  <table *ngIf="livreursSemaine.length != 0">
+      <thead>
+        <tr>
+          <th><mat-icon>account_circle</mat-icon></th>
+          <th *ngFor="let jour of joursSemaine">{{jour}}</th>
+          <th><mat-icon>history</mat-icon></th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let user of livreursSemaine">
+          <td [innerHTML]="user | returnUserProfil | async"></td>
+          <td *ngFor="let jour of jours" [innerHTML]="crenaux | returnHeureLivreur : user : jour">{{jour}}</td>
+          <td [innerHTML]="crenaux | totalHeureLivreurs : user"></td>
+        </tr>
+      <tbody>
+  </table>
+</ng-container>
 
-<table *ngIf="livreursSemaine.length != 0">
+<ng-container *ngIf="typeChoice == 'astreinte' && !showSpinner">
+  <p *ngIf="livreursAstreinteSemaine.length == 0" class="nocrenau">Aucune astreinte pour cette semaine...</p>
+  <table *ngIf="livreursAstreinteSemaine.length != 0">
     <thead>
       <tr>
         <th><mat-icon>account_circle</mat-icon></th>
@@ -20,12 +45,13 @@
       </tr>
     </thead>
     <tbody>
-      <tr *ngFor="let user of livreursSemaine">
+      <tr *ngFor="let user of livreursAstreinteSemaine">
         <td [innerHTML]="user | returnUserProfil | async"></td>
-        <td *ngFor="let jour of jours; index as i" [innerHTML]="crenaux | returnHeureLivreur : user : jour">{{jour}}</td>
-        <td [innerHTML]="crenaux | totalHeureLivreurs : user"></td>
+        <td *ngFor="let jour of jours" [innerHTML]="astreintes | returnHeureLivreur : user : jour">{{jour}}</td>
+        <td [innerHTML]="astreintes | totalHeureLivreurs : user"></td>
       </tr>
     <tbody>
-</table>
+  </table>
+</ng-container>
 
 <div class="blur"></div>

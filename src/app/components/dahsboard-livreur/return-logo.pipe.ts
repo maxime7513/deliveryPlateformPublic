@@ -13,33 +13,50 @@ export class ReturnLogoPipe implements PipeTransform {
 
   constructor(private sanitizer: DomSanitizer){}
 
-  transform(value: Crenau[], arg1 : number, arg2 : number):any {
-    return this.returnLogo(value, arg1, arg2);
+  transform(value: Crenau[], arg1 : number, arg2 : number, arg3: string):any {
+    return this.returnLogo(value, arg1, arg2, arg3);
   }
 
-  returnLogo(crenaux: Crenau[], jour: number, heure: number){
+  returnLogo(crenaux: Crenau[], jour: number, heure: number, tranche: string){
     let res: SafeHtml;
+
     for(let crenau of crenaux){
-      let nombreCreneau = crenau.heureFin - crenau.heureDebut;
+      let nombreCreneau = crenau.heureFin.value - crenau.heureDebut.value;
 
       if(jour == this.getDay(crenau.date)){
-        if(nombreCreneau == 1){
-          if(this.heures[heure] == crenau.heureDebut){
-            res = this.sanitizer.bypassSecurityTrustHtml(
-              `<img class="logo_societe" src="/assets/images/icone_`+ crenau.societe +`.png">`
-            );
-          }
-        }else{
-          for(let i = 0; i < nombreCreneau; i++){
-            if(this.heures[heure] == crenau.heureDebut + i){
-              res = this.sanitizer.bypassSecurityTrustHtml(
-                `<img class="logo_societe" src="/assets/images/icone_`+ crenau.societe +`.png">`
-              );
+        for(let i = 0; i < nombreCreneau; i++){
+          if(tranche == 'heure'){
+            if(crenau.heureDebut.value % 1 == 0){
+              if(this.heures[heure] == crenau.heureDebut.value + i && crenau.heureFin.value >= this.heures[heure + 1]){
+                res = this.sanitizer.bypassSecurityTrustHtml(
+                  `<img src="/assets/images/icone_`+ crenau.societe +`.png">`
+                );
+              }
             }
+            else{
+              if(this.heures[heure] == crenau.heureDebut.value + i + 0.5 && crenau.heureFin.value >= this.heures[heure + 1]){
+                res = this.sanitizer.bypassSecurityTrustHtml(
+                  `<img src="/assets/images/icone_`+ crenau.societe +`.png">`
+                );
+              }
+            }
+          }
+          if(tranche == '0/30'){
+              if(this.heures[heure] + 0.5 == crenau.heureFin.value){
+                res = this.sanitizer.bypassSecurityTrustHtml(
+                  `<div class="dashed_bas"><img src="/assets/images/icone_`+ crenau.societe +`.png"></div>`
+                );
+              }
+          }
+          if(tranche == '30/60'){
+              if(this.heures[heure] + 0.5 == crenau.heureDebut.value){
+                res = this.sanitizer.bypassSecurityTrustHtml(
+                  `<div class="dashed_haut"><img src="/assets/images/icone_`+ crenau.societe +`.png"></div>`
+                );
+              }
           }
         }
       }
-      
     }
     return res
   }

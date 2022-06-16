@@ -78,11 +78,11 @@ export class CrenauService {
     return collectionData(crenauxRef, { idField: 'id' }) as Observable<Crenau[]>;
   }
   getCrenauxByDate2(date: string, hour: number, societe: string): Observable<Crenau[]> {
-    const crenauxRef = query(collection(this.firestore, 'crenau'), where("dateString", "==", date), where ("heureDebut", "==", hour), where("societe", "==", societe));
+    const crenauxRef = query(collection(this.firestore, 'crenau'), where("dateString", "==", date), where ("heureDebut.value", "==", hour), where("societe", "==", societe));
     return collectionData(crenauxRef, { idField: 'id' }) as Observable<Crenau[]>;
   }
   getCrenauxByDate3(date: string, hour: number, societe: string): Observable<Crenau[]> {
-    const crenauxRef = query(collection(this.firestore, 'crenau'), where("dateString", "==", date), where ("heureFin", "==", hour), where("societe", "==", societe));
+    const crenauxRef = query(collection(this.firestore, 'crenau'), where("dateString", "==", date), where ("heureFin.value", "==", hour), where("societe", "==", societe));
     return collectionData(crenauxRef, { idField: 'id' }) as Observable<Crenau[]>;
   }
 
@@ -115,17 +115,6 @@ export class CrenauService {
     return collectionData(crenauxRef, { idField: 'id' }) as Observable<Crenau[]>;
   }
 
-  // retourner les crenaux que l'user connecté à réservé et par jour(string)
-  getCrenauxInscritCurrentUserByDate(userid: string, date: string): Observable<Crenau[]> {
-    const crenauxRef = query(collection(this.firestore, 'crenau'), where("users", "array-contains", userid), where("dateString", "==", date));
-    return collectionData(crenauxRef, { idField: 'id' }) as Observable<Crenau[]>;
-  }
-
-  // retourner les crenaux que l'user connecté à réservé et par jour(format date)
-  getCrenauxInscritCurrentUserByDate2(userid: string, date: Date): Observable<Crenau[]> {
-    const crenauxRef = query(collection(this.firestore, 'crenau'), where("users", "array-contains", userid), where("date", "==", date));
-    return collectionData(crenauxRef, { idField: 'id' }) as Observable<Crenau[]>;
-  }
   getCrenauxInscritCurrentUserByDate3(userid: string, dateString: string): Observable<Crenau[]> {
     const crenauxRef = query(collection(this.firestore, 'crenau'), where("users", "array-contains", {idUser: userid}), where("dateString", "==", dateString));
 

@@ -4,6 +4,7 @@ import { Auth } from '@angular/fire/auth';
 import { MatDialog } from '@angular/material/dialog';
 import { Router } from '@angular/router';
 import { HotToastService } from '@ngneat/hot-toast';
+import { Console } from 'console';
 import { Crenau } from 'src/app/models/crenau.model';
 import { CrenauService } from 'src/app/services/crenau.service';
 import { TwilioService } from 'src/app/services/twilio.service';
@@ -18,10 +19,11 @@ import { ModalDeleteCrenauComponent } from '../modal/modal-delete-crenau/modal-d
 export class DahsboardLivreurComponent implements OnInit {
 
   userUid = this.auth.currentUser.uid;
-  crenaux: Crenau[] = [];
+  creneaux: Crenau[] = [];
   defaultDatePicker: Date;
   heures: number[] = [8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23];
   jours: number[]= [1, 2, 3, 4, 5, 6, 0];
+  showSpinner: boolean = true;
 
   constructor(private crenauservice: CrenauService, private usersService: UsersService, private twilioservice: TwilioService, private auth: Auth, private toast: HotToastService, public datePipe : DatePipe, public dialog: MatDialog, private router: Router) {
     this.defaultDatePicker = new Date;
@@ -69,18 +71,26 @@ export class DahsboardLivreurComponent implements OnInit {
 
   returnUrlMissionRB(crenaux: Crenau[], jour: number, heure: number){
     for(let crenau of crenaux){
-      if(jour == this.getDay(crenau.date) && this.heures[heure] == crenau.heureDebut && crenau.societe == 'rosebaie'){
+      if(jour == this.getDay(crenau.date) && this.heures[heure] == crenau.heureDebut.value && crenau.societe == 'rosebaie'){
           this.router.navigate(['/missionRoseBaie/'+ crenau.idDemandeCreneauRB]);
       }
     }
   }
 
-  returnCrenau(jour: number, heure: number){
+  returnCrenau(jour: number, heure: number, tranche: string){
     let res;
-    for(let i = 0; i < this.crenaux.length; i++){
-      if(jour == this.getDay(this.crenaux[i].date) && this.heures[heure] == this.crenaux[i].heureDebut ){
-        if(60 < this.calculDifferenceDate(this.crenaux[i].date.toDate(), new Date)){
-          res = this.crenaux[i];
+    for(let i = 0; i < this.creneaux.length; i++){
+      if(tranche == 'heure'){
+        if(jour == this.getDay(this.creneaux[i].date) && this.heures[heure] == this.creneaux[i].heureDebut.value ){
+          if(60 < this.calculDifferenceDate(this.creneaux[i].date.toDate(), new Date)){
+            res = this.creneaux[i];
+          }
+        }
+      }else{
+        if(jour == this.getDay(this.creneaux[i].date) && this.heures[heure] + 0.5 == this.creneaux[i].heureDebut.value ){
+          if(60 < this.calculDifferenceDate(this.creneaux[i].date.toDate(), new Date)){
+            res = this.creneaux[i];
+          }
         }
       }
     }
@@ -88,14 +98,36 @@ export class DahsboardLivreurComponent implements OnInit {
   }
 
   // crenaux par semaine (datepicker)
+  // afficherCrenauParSemaine(){
+  //   let dateLundi = this.setToMonday(this.defaultDatePicker);
+  //   let tab = this.createSemaineTab(dateLundi);
+  //   this.crenauservice.getCrenauxInscritCurrentUserBySemaine(this.userUid, tab).subscribe((res: Crenau[]) => {
+  //     // trier par heure
+  //     this.crenaux = res.sort(function (a:any, b:any) {
+  //     return a.heureDebut.value - b.heureDebut.value
+  //     });
+  //   })
+  // }
+
   afficherCrenauParSemaine(){
-    let dateLundi = this.setToMonday(this.defaultDatePicker);
-    let tab = this.createSemaineTab(dateLundi);
-    this.crenauservice.getCrenauxInscritCurrentUserBySemaine(this.userUid, tab).subscribe((res: Crenau[]) => {
-      // trier par heure
-      this.crenaux = res.sort(function (a:any, b:any) {
-      return a.heureDebut - b.heureDebut
+    this.showSpinner = true;
+    return new Promise(resolve => {
+      let dateLundi = this.setToMonday(this.defaultDatePicker);
+      let tab = this.createSemaineTab(dateLundi);
+      this.crenauservice.getCrenauxBySemaine(tab).subscribe((res: Crenau[]) => {
+        let tabCreneauxCurrentInscrit: Crenau[] = [];
+        res.map(creneau => {
+          if(creneau.users){
+            creneau.users.map(creneauUser => {
+              if(creneauUser.idUser == this.userUid){
+                tabCreneauxCurrentInscrit.push(creneau)
+              }
+            })
+          }
+        })
+        resolve(this.creneaux = tabCreneauxCurrentInscrit)
       });
+      this.showSpinner = false;
     })
   }
 
@@ -105,13 +137,33 @@ export class DahsboardLivreurComponent implements OnInit {
     this.usersService.updateCrenauInscrit(this.userUid, newArray)
   }
 
-  desinscriptionLivreur(crenauId: string){
+  async desinscriptionLivreur(crenau: Crenau){
     this.toast.close();
-    this.crenauservice.removeLivreur(crenauId, this.userUid);
-    // this.usersService.removeCrenauToUser(this.userUid, crenauId)
-    this.deleteCreneauUser(crenauId)
+    this.crenauservice.removeLivreur(crenau.id, this.userUid);
+    this.deleteCreneauUser(crenau.id)
     // retirer 1 au inscrit
-    this.crenauservice.decrementInscrit(crenauId)
+    this.crenauservice.decrementInscrit(crenau.id);
+    
+    // annuler le sms de rappel
+    let tabCrenauInscrit: any = await this.tabCrenauInscrit;
+    for(let crenauInscrit of tabCrenauInscrit){
+      if(crenauInscrit.idCrenau === crenau.id && crenauInscrit.smsId){
+        this.cancelSms(crenauInscrit.smsId)
+      }
+    }
+
+    // envoyer sms à tous les livreurs pour informer que le créneau est disponible
+    let tabPhones = await this.twilioservice.livreursPhone$;
+    let req = {
+      typeMission: 'creneau',
+      role: crenau.societe,
+      date: crenau.dateString,
+      phoneTab: tabPhones,
+      heureDebut: crenau.heureDebut.viewValue,
+      heureFin: crenau.heureFin.viewValue
+    }
+    this.twilioservice.send_smsGroupe2(req); 
+
     this.toast.success('Crénau retiré de votre planning', {duration: 3000});
   }
 
@@ -127,20 +179,16 @@ export class DahsboardLivreurComponent implements OnInit {
       dialogRef.componentInstance.confirmMessage = "Êtes-vous sûr de vouloir enlever ce créneau de votre planning ?"
       dialogRef.afterClosed().subscribe(async result => {
         if(result == true) {
-          this.desinscriptionLivreur(crenau.id);
-          
-          // envoyer sms à tous les livreurs pour informer que le créneau est disponible
-          let tabPhones = await this.twilioservice.livreursPhone$;
-          let req = {
-            role: crenau.societe,
-            date: crenau.dateString,
-            phoneTab: tabPhones,
-            heureDebut: crenau.heureDebut,
-            heureFin: crenau.heureFin
-          }
-          this.twilioservice.send_smsGroupe2(req); 
+          this.desinscriptionLivreur(crenau);
+          this.afficherCrenauParSemaine();
         }    
       });
   }
   
+  cancelSms(messageId: string){
+    let req = {
+      messageId: messageId
+    }
+    this.twilioservice.cancel_sms(req);
+  }
 }

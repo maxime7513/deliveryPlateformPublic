@@ -17,7 +17,7 @@ export class CheckFinServicePipe implements PipeTransform {
 
   returnCrenauSuivant(crenau: Crenau){
     return new Promise<Crenau[]>(resolve => {
-      this.crenauService.getCrenauxByDate2(crenau.dateString, crenau.heureFin, 'kyo').subscribe(res => {
+      this.crenauService.getCrenauxByDate2(crenau.dateString, crenau.heureFin.value, 'kyo').subscribe(res => {
         resolve(res)
       })
     });
@@ -25,7 +25,7 @@ export class CheckFinServicePipe implements PipeTransform {
 
   returnCrenauPrecedent(crenau: Crenau){
     return new Promise<Crenau[]>(resolve => {
-      this.crenauService.getCrenauxByDate3(crenau.dateString, crenau.heureDebut, 'kyo').subscribe(res => {
+      this.crenauService.getCrenauxByDate3(crenau.dateString, crenau.heureDebut.value, 'kyo').subscribe(res => {
         resolve(res)
       })
     });

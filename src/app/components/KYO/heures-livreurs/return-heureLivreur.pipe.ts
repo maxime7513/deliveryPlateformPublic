@@ -24,7 +24,7 @@ export class ReturnHeureLivreurPipe implements PipeTransform {
     let x = 0;
     let res;
     for(let crenau of crenaux){
-        if(jour == this.getDay(crenau.date)){
+        if(jour == this.getDay(crenau.date) && crenau.users){
             crenau.users.map(user => {
               if(user.idUser == userId){
                 if(user.priseService && user.finService){

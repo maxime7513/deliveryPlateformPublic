@@ -23,7 +23,7 @@
     <mat-form-field>
       <mat-label>Début</mat-label>
       <mat-select formControlName="heureDebut">
-        <mat-option *ngFor="let heure of heures" [value]="heure.value">
+        <mat-option *ngFor="let heure of heures" [value]="heure">
           {{heure.viewValue}}
         </mat-option>
       </mat-select>
@@ -37,7 +37,7 @@
     <mat-form-field>
       <mat-label>Fin</mat-label>
       <mat-select formControlName="heureFin">
-        <mat-option *ngFor="let heure of heures" [value]="heure.value">
+        <mat-option *ngFor="let heure of heures" [value]="heure">
           {{heure.viewValue}}
         </mat-option>
       </mat-select>
@@ -89,7 +89,7 @@
 <div>
   <mat-form-field>
     <mat-label>Choisi une date</mat-label>
-    <input readonly matInput [matDatepicker]="picker2" (dateChange)="afficherCrenauParDate(); showCrenaux = true" [(ngModel)]="defaultDatePicker">
+    <input readonly matInput [matDatepicker]="picker2" (dateChange)="afficherCrenauParDate(); afficherAstreinteParDate(); showCrenaux = true" [(ngModel)]="defaultDatePicker">
     <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
     <mat-datepicker #picker2></mat-datepicker>
   </mat-form-field>
@@ -109,7 +109,8 @@
       </thead>
       <tbody>
         <tr *ngFor="let crenau of crenaux">
-          <td [innerHtml]="showHour(crenau.heureDebut, crenau.heureFin)"></td>
+          <td>{{crenau.heureDebut.viewValue}}-{{crenau.heureFin.viewValue}}</td>
+          <!-- <td [innerHtml]="showHour(crenau.heureDebut, crenau.heureFin)"></td> -->
           <td>{{ crenau.inscritMax }}</td>
           <td *ngIf="userRole == 'woozoo'">
             <img src="/assets/images/icone_{{crenau.societe}}.png" alt="{{crenau.societe}}">
@@ -139,7 +140,8 @@
       </thead>
       <tbody>
         <tr *ngFor="let astreinte of astreintes">
-          <td [innerHtml]="showHour(astreinte.heureDebut, astreinte.heureFin)"></td>
+          <td>{{astreinte.heureDebut.viewValue}}-{{astreinte.heureFin.viewValue}}</td>
+          <!-- <td [innerHtml]="showHour(astreinte.heureDebut, astreinte.heureFin)"></td> -->
           <td>{{ astreinte.inscritMax }}</td>
           <td *ngIf="userRole == 'woozoo'">
             <img src="/assets/images/icone_{{astreinte.societe}}.png" alt="{{astreinte.societe}}">

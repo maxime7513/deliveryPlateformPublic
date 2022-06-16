@@ -25,18 +25,18 @@ export class ReturnPlanningPipe implements PipeTransform {
   returnPlanning(crenaux: Crenau[], jour: number, heure: number){
     let res;
     for(let crenau of crenaux){
-      let nombreCreneau = crenau.heureFin - crenau.heureDebut;
+      let nombreCreneau = crenau.heureFin.value - crenau.heureDebut.value;
 
       if(jour == this.getDay(crenau.date)){
         if(nombreCreneau == 1){
-          if(this.heures[heure] == crenau.heureDebut){
+          if(this.heures[heure] == crenau.heureDebut.value){
             if(crenau.inscritMax - crenau.inscrit > 0){
               res = crenau.inscrit + "/" + crenau.inscritMax;
             }
           }
         }else{
           for(let i = 0; i < nombreCreneau; i++){
-            if(this.heures[heure] == crenau.heureDebut + i){
+            if(this.heures[heure] == crenau.heureDebut.value + i){
               if(crenau.inscritMax - crenau.inscrit > 0){
                 res = crenau.inscrit + "/" + crenau.inscritMax;
               }

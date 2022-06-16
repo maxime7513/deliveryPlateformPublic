@@ -29,11 +29,11 @@ export class TwilioService {
         }
       }
       
-      // if(typeMission == "astreinte"){
-        // this.usersService.updateAstreinteInscrit(userId, tabInscrit)
-      // }else{
+      if(typeMission == "astreinte"){
+        this.usersService.updateAstreinteInscrit(userId, tabInscrit)
+      }else{
         this.usersService.updateCrenauInscrit(userId, tabInscrit)
-      // }
+      }                                            
     });
   }
 

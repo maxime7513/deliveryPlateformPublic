@@ -171,7 +171,7 @@ export class CreateCrenauComponent implements OnInit {
       this.crenauservice.getCrenauxByDateandSociete(this.userRole, date).subscribe((res: Crenau[]) => {
         // trier par heure
         this.crenaux = res.sort(function (a:any, b:any) {
-        return a.heureDebut - b.heureDebut
+        return a.heureDebut.value - b.heureDebut.value
         });
       })
     }else{
@@ -188,7 +188,7 @@ export class CreateCrenauComponent implements OnInit {
       this.astreinteservice.getAstreintesByDateandSociete(this.userRole, date).subscribe((res: Crenau[]) => {
         console.log(res)
         this.astreintes = res.sort(function (a:any, b:any) {
-        return a.heureDebut - b.heureDebut
+        return a.heureDebut.value - b.heureDebut.value
         });
       })
     }else{
@@ -198,27 +198,27 @@ export class CreateCrenauComponent implements OnInit {
     }
   }
 
-  showHour(heureDebut: any, heureFin: any){
-    heureDebut = heureDebut.toString();
-    heureFin = heureFin.toString();
+  // showHour(heureDebut: any, heureFin: any){
+  //   heureDebut = heureDebut.toString();
+  //   heureFin = heureFin.toString();
     
-    if(heureDebut.includes('.')){
-      heureDebut = heureDebut.substring(0, heureDebut.length - 2) + 'h30';
-    }
+  //   if(heureDebut.includes('.')){
+  //     heureDebut = heureDebut.substring(0, heureDebut.length - 2) + 'h30';
+  //   }
 
-    if(heureFin.includes('.')){
-      heureFin = heureFin.substring(0, heureFin.length - 2) + 'h30';
-    }else{
-      heureFin += 'h'
-    }
+  //   if(heureFin.includes('.')){
+  //     heureFin = heureFin.substring(0, heureFin.length - 2) + 'h30';
+  //   }else{
+  //     heureFin += 'h'
+  //   }
 
-    return heureDebut + '-' + heureFin
-  }
+  //   return heureDebut + '-' + heureFin
+  // }
 
-  calculDifferenceHeure(heureDebut: number, heureFin: number){
-    var diff_temps = heureFin - heureDebut;
-    return Math.round(diff_temps);
-  }
+  // calculDifferenceHeure(heureDebut: number, heureFin: number){
+  //   var diff_temps = heureFin - heureDebut;
+  //   return Math.round(diff_temps);
+  // }
 
   // envoi du formulaire
   async onSubmit() {
@@ -229,56 +229,50 @@ export class CreateCrenauComponent implements OnInit {
       this.toast.error('Renseigner créneau ou astreinte');
       return;
     }
-    if (!this.crenauForm.valid) {
+    if(!this.crenauForm.valid) {
       console.log('formulaire invalid');
       this.toast.error('Formulaire invalide');
       return;
     }
-
-    if(this.crenauForm.value.heureDebut >= this.crenauForm.value.heureFin){
-      this.toast.error("Heure de début doit être supérieur à l'heure de fin");
+    console.log(this.crenauForm.value.heureFin.value - this.crenauForm.value.heureDebut.value)
+    if(this.crenauForm.value.heureFin.value - this.crenauForm.value.heureDebut.value < 1){
+      this.toast.error("Veuillez renseigner un créneau de 1 heure minimum");
       return;
     }
 
     // date au format string
     this.crenauForm.value.dateString = this.datePipe.transform(this.crenauForm.value.date, 'dd/MM/yyyy');
 
-    const nombreCrenau = this.calculDifferenceHeure(this.crenauForm.value.heureDebut, this.crenauForm.value.heureFin);
-    const heureDebutStorage = this.crenauForm.value.heureDebut;
-    for(let i = 0; i < nombreCrenau; i++){
-      this.crenauForm.value.heureDebut = heureDebutStorage + i;
-      this.crenauForm.value.heureFin = this.crenauForm.value.heureDebut + 1;
-      
-      // setHours de la date avec la valeur de heureDebut du formulaire
-      this.crenauForm.value.date.setHours(this.crenauForm.value.heureDebut);
-      if(this.crenauForm.value.heureDebut % 1 != 0){
-        this.crenauForm.value.date.setMinutes(30);
-      }
-      // inscrit => 0 à la création du créneau
-      this.crenauForm.value.inscrit = 0;
-      
-      if(this.userRole != 'woozoo'){ // si role n'est pas woozoo
-        this.crenauForm.value.societe = this.userRole; // donner a societe la valeur du role de l'utilisateur connecté
-      }
+    // setHours de la date avec la valeur de heureDebut du formulaire
+    this.crenauForm.value.date.setHours(this.crenauForm.value.heureDebut.value);
+    // setMinutes si créneau par demi-heure
+    if(this.crenauForm.value.heureDebut.value % 1 != 0){
+      this.crenauForm.value.date.setMinutes(30);
+    }
 
-      // verifier si creneau/astreinte deja crée
-      if(this.typeChoice == 'creneau'){
-        let verifCrenau = await this.crenauservice.getAcceptAddCrenau2(this.crenauForm.value.societe,this.crenauForm.value.date);
-        if(verifCrenau > 0){
-          this.toast.error('un créneau existe déjà pour '+ this.crenauForm.value.heureDebut +'h');
-          return
-        }
-        // ajouter creneau à firebase
-        this.crenauservice.addCrenau(this.crenauForm.value);
-      }else{
-        let verifCrenau = await this.astreinteservice.getAcceptAddAstreinte(this.crenauForm.value.societe,this.crenauForm.value.dateString, this.crenauForm.value.heureDebut);
-        if(verifCrenau > 0){
-          this.toast.error('une astreinte existe déjà pour '+ this.crenauForm.value.heureDebut +'h');
-          return
-        }
-        // ajouter astreinte à firebase
-        this.astreinteservice.addAstreinte(this.crenauForm.value);
+    this.crenauForm.value.inscrit = 0;
+
+    if(this.userRole != 'woozoo'){ // si role n'est pas woozoo
+      this.crenauForm.value.societe = this.userRole; // donner a societe la valeur du role de l'utilisateur connecté
+    }
+
+    // verifier si creneau/astreinte deja crée
+    if(this.typeChoice == 'creneau'){
+      let verifCrenau = await this.crenauservice.getAcceptAddCrenau2(this.crenauForm.value.societe,this.crenauForm.value.date);
+      if(verifCrenau > 0){
+        this.toast.error('un créneau existe déjà pour '+ this.crenauForm.value.heureDebut.viewValue);
+        return
       }
+      // ajouter creneau à firebase
+      this.crenauservice.addCrenau(this.crenauForm.value);
+    }else{
+      let verifCrenau = await this.astreinteservice.getAcceptAddAstreinte(this.crenauForm.value.societe,this.crenauForm.value.dateString, this.crenauForm.value.heureDebut.value);
+      if(verifCrenau > 0){
+        this.toast.error('une astreinte existe déjà pour '+ this.crenauForm.value.heureDebut.viewValue);
+        return
+      }
+      // ajouter astreinte à firebase
+      this.astreinteservice.addAstreinte(this.crenauForm.value);
     }
     
     const toastValid = this.toast.success(this.typeChoice + ' ajouter',
@@ -289,7 +283,8 @@ export class CreateCrenauComponent implements OnInit {
     );
 
     // envoyer sms à tous les livreurs pour informer creneau ajouter
-    this.send_smsGrouper(this.crenauForm.value.dateString);
+
+    this.send_smsGrouper(this.typeChoice, this.crenauForm.value.dateString);
     
     // toastValid.afterClosed.subscribe((e) => {
     //   this.router.navigate(['/planning']);
@@ -323,11 +318,18 @@ export class CreateCrenauComponent implements OnInit {
   }
 
   // envoyer sms à tous les livreurs
-  async send_smsGrouper(dateCrenau: string) {
-    let userRole = await this.usersservice.canAccess$;
+  async send_smsGrouper(typeChoice: string, dateCrenau: string) {
+    let userRole;
+    if(this.userRole == 'woozoo'){
+      userRole = this.crenauForm.value.societe;
+    }else{
+      userRole = await this.usersservice.canAccess$; // donner a societe la valeur du role de l'utilisateur connecté
+    }
+    
     let tabPhones = await this.twilioservice.livreursPhone$;
 
     let req = {
+      typeMission: typeChoice,
       role: userRole,
       date: dateCrenau,
       phoneTab: tabPhones

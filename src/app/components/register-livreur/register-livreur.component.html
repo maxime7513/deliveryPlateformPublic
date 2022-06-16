@@ -46,11 +46,11 @@
     <tbody>
       <tr *ngFor="let crenau of crenaux">
         <!--<td *ngIf="datePicker < crenau.date.toDate()">{{ crenau.heureDebut }}h à {{ crenau.heureFin }}h</td>-->
-        <td>{{ crenau.heureDebut }}<mat-icon class="hour-arrow">arrow_right_alt</mat-icon>{{ crenau.heureFin }}h</td>
+        <td>{{ crenau.heureDebut.viewValue }}<mat-icon class="hour-arrow">arrow_right_alt</mat-icon>{{ crenau.heureFin.viewValue }}</td>
         <!--<td>{{crenau.societe}}</td>-->
         <!--<td>{{crenau.vehicule}}</td>-->
         <!--<td>{{crenau.dateString}}</td>-->
-        <td matTooltip="place encore disponible">{{ getPlaceRestante(crenau.inscritMax, crenau.inscrit) }}</td>
+        <td matTooltip="place encore disponible" [innerHTML]="getPlaceRestante(crenau.inscritMax, crenau.inscrit)"></td>
         <td>
           <button *ngIf="(crenau.inscrit < crenau.inscritMax) && !(crenau | verifierUserInscrit)" (click)="inscriptionLivreur(crenau,user)">
             <mat-icon>more_time</mat-icon>
@@ -81,7 +81,7 @@
     </thead>
     <tbody>
       <tr *ngFor="let astreinte of astreintes">
-        <td>{{ astreinte.heureDebut }}<mat-icon class="hour-arrow">arrow_right_alt</mat-icon>{{ astreinte.heureFin }}h</td>
+        <td>{{ astreinte.heureDebut.viewValue }}<mat-icon class="hour-arrow">arrow_right_alt</mat-icon>{{ astreinte.heureFin.viewValue }}</td>
         <td matTooltip="place encore disponible">{{ getPlaceRestante(astreinte.inscritMax, astreinte.inscrit) }}</td>
         <td>
           <button *ngIf="(astreinte.inscrit < astreinte.inscritMax) && !(astreinte | verifierUserInscrit)" (click)="inscriptionLivreur(astreinte,user)">

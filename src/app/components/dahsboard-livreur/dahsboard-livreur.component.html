@@ -8,7 +8,9 @@
   </mat-form-field>
 </div>
 
-<div class="table-wrapper">
+<mat-spinner *ngIf="showSpinner"></mat-spinner>
+
+<div class="table-wrapper" *ngIf="!showSpinner">
     <table class="fl-table">
         <thead>
           <tr>
@@ -25,59 +27,32 @@
         <tbody>
           <tr *ngFor="let heure of heures; index as i">
             <td>{{heure}}/{{heure + 1}}h</td>
-            <td *ngFor="let jour of jours" [ngClass]="crenaux | returnCompletLivreur: jour : i" class="creneau_td">
-              <div [innerHTML]="crenaux | returnLogo: jour : i"></div>
-              <mat-icon [innerHTML]="crenaux | returnIcon : jour : i" (click)="openDialogModal(returnCrenau(jour,i))"></mat-icon>
-              <mat-icon [innerHTML]="crenaux | returnMissionRB : jour : i" (click)="returnUrlMissionRB(crenaux, jour, i)" class="voirmission" matTooltip="détail mission"></mat-icon>
+            <td *ngFor="let jour of jours" class="creneau_td">
+              <div [ngClass]="creneaux | returnStatut: jour : i : 'heure'">
+                <div [innerHTML]="creneaux | returnLogo: jour : i : 'heure'"></div>
+                <mat-icon [innerHTML]="creneaux | returnIcon : jour : i : 'heure'" (click)="openDialogModal(returnCrenau(jour,i,'heure'))" matTooltip="annuler ce créneau"></mat-icon>
+                <mat-icon [innerHTML]="creneaux | returnMissionRB : jour : i" (click)="returnUrlMissionRB(creneaux, jour, i)" class="voirmission"></mat-icon>
+              </div>
+              <div class="demi_haut" [ngClass]="creneaux | returnStatut: jour : i : '0/30'">
+                <div [innerHTML]="creneaux | returnLogo: jour : i : '0/30'"></div>
+              </div>
+              <div class="demi_bas" [ngClass]="creneaux | returnStatut: jour : i : '30/60'">
+                <div [innerHTML]="creneaux | returnLogo: jour : i : '30/60'"></div>
+                <mat-icon [innerHTML]="creneaux | returnIcon : jour : i : 'demiHeure'" (click)="openDialogModal(returnCrenau(jour,i,'demiHeure'))"></mat-icon>
+              </div>
             </td>
           </tr>
         <tbody>
     </table>
 </div>
 
-<!--<div class="table-wrapper">
-    <table class="fl-table">
-        <thead>
-          <tr>
-            <th><mat-icon>schedule</mat-icon></th>
-            <th>Lundi</th>
-            <th>Mardi</th>
-            <th>Mercredi</th>
-            <th>Jeudi</th>
-            <th>Vendredi</th>
-            <th>Samedi</th>
-            <th>Dimanche</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr *ngFor="let heure of heures; index as i">
-            <td>{{heure}}/{{heure + 1}}h</td>
-            <td *ngFor="let jour of jours" [ngClass]="{'effectue': returnPlanning(jour,i) == 'effectue'}">
-              <button *ngIf="returnPlanning(jour,i).length == 20 " matTooltip="annuler ce créneau" (click)="openDialogModal(returnPlanning(jour,i))" class="annule">
-                <mat-icon>free_cancellation</mat-icon>
-              </button>
-              <span *ngIf="returnPlanning(jour,i).length < 4 ">Dans <strong>{{ returnPlanning(jour,i) }}</strong> min</span>         
-              <button *ngIf="returnPlanning(jour,i) == 'en cours'" matTooltip="en cours" class="encours">
-                <mat-icon>hourglass_bottom</mat-icon>
-              </button>
-              <button *ngIf="returnPlanning(jour,i) == 'effectue'" matTooltip="créneau effectué">
-                <mat-icon>assignment_turned_in</mat-icon>
-              </button>
-              <span *ngIf="returnPlanning(jour,i) == 'pas pris'"> </span>
-            </td>
-          </tr>
-        <tbody>
-    </table>
-</div>
--->
-
-<div class="explic">
-  <span>
+<div class="explic" *ngIf="!showSpinner">
+  <span class="effectue">
     <mat-icon>assignment_turned_in</mat-icon>
     Effectué
   </span>
   <span>
-    <mat-icon>hourglass_bottom</mat-icon>
+    <mat-icon class="en_cours">hourglass_bottom</mat-icon>
     En cours
   </span>
   <span>

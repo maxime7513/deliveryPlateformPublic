@@ -73,7 +73,7 @@ import { ReturnIconPipe } from './components/dahsboard-livreur/return-icon.pipe'
 import { ReturnPlanningPipe } from './components/planning/return-planning.pipe';
 import { ReturnCompletPipe } from './components/planning/return-complet.pipe';
 import { ReturnInscritPipe } from './components/planning/return-inscrit.pipe';
-import { ReturnCompletLivreurPipe } from './components/dahsboard-livreur/return-complet.pipe';
+import { ReturnStatutPipe } from './components/dahsboard-livreur/return-statut.pipe';
 import { ReturnMissionRbPipe } from './components/dahsboard-livreur/return-missionRB.pipe';
 import { ReturnLivreursPipe } from './components/KYO/planning-kyo/return-livreurs.pipe';
 import { verifierUserInscritPipe } from './components/register-livreur/verifierUserInscrit.pipe';
@@ -81,6 +81,7 @@ import { ReturnUserProfilPipe } from './components/KYO/heures-livreurs/return-us
 import { ReturnHeureLivreurPipe } from './components/KYO/heures-livreurs/return-heureLivreur.pipe';
 import { TotalHeureLivreursPipe } from './components/KYO/heures-livreurs/totalHeureLivreurs.pipe';
 import { CheckFinServicePipe } from './components/KYO/planning-kyo/checkCreneauSuivant.pipe';
+import { CheckPrecedentPriseServicePipe } from './components/KYO/planning-kyo/checkPrecedentPriseService.pipe';
 
 // firebase
 import { provideFirebaseApp, initializeApp } from '@angular/fire/app';
@@ -112,7 +113,7 @@ registerLocaleData(localeFr, 'fr');
     ReturnPlanningPipe,
     ReturnCompletPipe,
     ReturnInscritPipe,
-    ReturnCompletLivreurPipe,
+    ReturnStatutPipe,
     ReturnMissionRbPipe,
     ReturnLivreursPipe,
     verifierUserInscritPipe,
@@ -120,6 +121,7 @@ registerLocaleData(localeFr, 'fr');
     ReturnHeureLivreurPipe,
     TotalHeureLivreursPipe,
     CheckFinServicePipe,
+    CheckPrecedentPriseServicePipe,
     ModalCreateAdresseComponent,
     RosebaieLivraisonComponent,
     MissionRosebaieComponent,

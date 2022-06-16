@@ -25,6 +25,7 @@ export class TotalHeureLivreursPipe implements PipeTransform {
     let res;
     for(let crenau of crenaux){
         // if(jour == this.getDay(crenau.date)){
+          if(crenau.users){
             crenau.users.map(user => {
               if(user.idUser == userId){
                 if(user.priseService && user.finService){
@@ -41,6 +42,7 @@ export class TotalHeureLivreursPipe implements PipeTransform {
                 }
               }
             })
+          }
         // }
     }
     return res

@@ -206,6 +206,16 @@ table{
         font-size: 1.7rem;
     }
 
+    table{
+        tbody{
+            td{
+                padding: 10px;
+            }
+            button{
+                font-weight: 500;
+            }
+        }
+    }
     h1, .date-picker, p, table, mat-radio-group{
         position: relative;
         z-index: 1;
