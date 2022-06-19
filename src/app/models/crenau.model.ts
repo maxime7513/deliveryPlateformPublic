@@ -1,5 +1,6 @@
 export interface Crenau {
     id?: string;
+    typeMission: string;
     date: any;
     dateString : string;
     heureDebut : any;
@@ -11,8 +12,8 @@ export interface Crenau {
     users?: any[];
     idDemandeCreneauRB?: string;
     smsId?: string;
-    astreinte: boolean;
-    astreinteInscrit: number;
+    // astreinte: boolean;
+    // astreinteInscrit: number;
     nbLivreurAstreinte?: number;
     usersAstreinte?: any[];
     call?: boolean;

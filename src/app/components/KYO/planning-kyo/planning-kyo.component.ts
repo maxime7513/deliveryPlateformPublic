@@ -28,6 +28,7 @@ export class PlanningKYOComponent implements OnInit {
   astreinteAffiche: Crenau[];
   astreintesCall: Crenau[] = [];
   typeChoice: string = 'disposition';
+  // datteTest: Date = new Date('2022-06-21T21:00:00');
 
   constructor(private crenauservice: CrenauService, private astreinteservice: AstreinteService, private usersService: UsersService, private twilioService: TwilioService, public dialog: MatDialog, public datePipe : DatePipe, private toast: HotToastService) {
     this.defaultDatePicker = this.datePicker;
@@ -112,6 +113,8 @@ export class PlanningKYOComponent implements OnInit {
       // setMinutes si fin de créneau par demi-heure
       if(creneau.heureFin.value % 1 != 0){
         dateFinService.setMinutes(30);
+      }else{
+        dateFinService.setMinutes(0)
       }
 
       if(this.dateDebutDepasse(creneau)){
@@ -187,7 +190,11 @@ export class PlanningKYOComponent implements OnInit {
     // ajouter priseServiceKYO ou finServiceKYO à table user
     let tabCrenauInscrit: any = await this.getUserInscrit(userId);
     if(heure == 'now'){
-      heure = new Date;
+      if(creneau.date.toDate() > new Date){
+        heure = creneau.date.toDate();
+      }else{
+        heure = new Date;
+      }
     }
 
     for(let creneauInscrit of tabCrenauInscrit){
@@ -266,6 +273,13 @@ export class PlanningKYOComponent implements OnInit {
 
   dateFinDepasse(crenau: Crenau){
     let dateFinService = new Date(crenau.date.toDate().setHours(crenau.heureFin.value));
+    // setMinutes si fin de créneau par demi-heure
+    if(crenau.heureFin.value % 1 != 0){
+      dateFinService.setMinutes(30)
+    }else{
+      dateFinService.setMinutes(0)
+    }
+    
     if(new Date > dateFinService){
       return true
     }else{

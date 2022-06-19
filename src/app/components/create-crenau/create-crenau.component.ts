@@ -1,14 +1,10 @@
 import { DatePipe } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
-import { AbstractControl, FormControl, FormGroup, Validators } from '@angular/forms';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { Router } from '@angular/router';
 import { HotToastService } from '@ngneat/hot-toast';
-import { table } from 'console';
-import { UserProfile } from 'firebase/auth';
-import { type } from 'os';
 import { Crenau } from 'src/app/models/crenau.model';
-import { ProfileUser } from 'src/app/models/user.profil';
 import { AstreinteService } from 'src/app/services/astreinte.service';
 import { CrenauService } from 'src/app/services/crenau.service';
 import { TwilioService } from 'src/app/services/twilio.service';
@@ -100,7 +96,6 @@ export class CreateCrenauComponent implements OnInit {
 
   ];
   societes: Societe[] = [
-    // {value: 'rocket', viewValue: 'Rocket'},
     {value: 'rosebaie', viewValue: 'RoseBaie'},
     {value: 'kyo', viewValue: 'Kyo-sushi'},
     {value: 'woozoo', viewValue: 'WooZoo'},
@@ -127,6 +122,7 @@ export class CreateCrenauComponent implements OnInit {
   async validateform() {
     this.crenauForm = new FormGroup(
       {
+        typeMission: new FormControl('creneau', Validators.required),
         date: new FormControl('', Validators.required),
         heureDebut: new FormControl("", Validators.required),
         heureFin: new FormControl("", Validators.required),
@@ -149,7 +145,7 @@ export class CreateCrenauComponent implements OnInit {
   // getter
   get date() {
     return this.crenauForm.get('date');
-  }  
+  }
   get heureDebut() {
     return this.crenauForm.get('heureDebut');
   }
@@ -162,7 +158,6 @@ export class CreateCrenauComponent implements OnInit {
   get societe() {
     return this.crenauForm.get('societe');
   }
-
 
   // crenaux par date (datepicker)
   async afficherCrenauParDate(){
@@ -198,28 +193,6 @@ export class CreateCrenauComponent implements OnInit {
     }
   }
 
-  // showHour(heureDebut: any, heureFin: any){
-  //   heureDebut = heureDebut.toString();
-  //   heureFin = heureFin.toString();
-    
-  //   if(heureDebut.includes('.')){
-  //     heureDebut = heureDebut.substring(0, heureDebut.length - 2) + 'h30';
-  //   }
-
-  //   if(heureFin.includes('.')){
-  //     heureFin = heureFin.substring(0, heureFin.length - 2) + 'h30';
-  //   }else{
-  //     heureFin += 'h'
-  //   }
-
-  //   return heureDebut + '-' + heureFin
-  // }
-
-  // calculDifferenceHeure(heureDebut: number, heureFin: number){
-  //   var diff_temps = heureFin - heureDebut;
-  //   return Math.round(diff_temps);
-  // }
-
   // envoi du formulaire
   async onSubmit() {
     this.toast.close();
@@ -234,7 +207,6 @@ export class CreateCrenauComponent implements OnInit {
       this.toast.error('Formulaire invalide');
       return;
     }
-    console.log(this.crenauForm.value.heureFin.value - this.crenauForm.value.heureDebut.value)
     if(this.crenauForm.value.heureFin.value - this.crenauForm.value.heureDebut.value < 1){
       this.toast.error("Veuillez renseigner un créneau de 1 heure minimum");
       return;
@@ -248,6 +220,8 @@ export class CreateCrenauComponent implements OnInit {
     // setMinutes si créneau par demi-heure
     if(this.crenauForm.value.heureDebut.value % 1 != 0){
       this.crenauForm.value.date.setMinutes(30);
+    }else{
+      this.crenauForm.value.date.setMinutes(0);
     }
 
     this.crenauForm.value.inscrit = 0;

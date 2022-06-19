@@ -154,7 +154,7 @@ table{
         justify-content: center;
         width: 100%;
         height: 100%;
-        img{
+        img:not(.astreinte){
             width: 40px;
             height: 40px;
             border-radius: 100%;
@@ -174,7 +174,7 @@ table{
             justify-content: center;
             align-items: center;
         }
-        img{
+        img:not(.astreinte){
             width: 27px;
             height: 27px;
             border-radius: 100%;
@@ -182,6 +182,11 @@ table{
             object-position: center;
             background: #fff;
             position: relative;
+        }
+        .astreinte{
+            width: 35%;
+            top: 23%;
+            transform: rotate(-25deg);
         }
     }
     .demi_haut{
@@ -207,6 +212,15 @@ table{
         top: -1px;
         bottom: 0;
         border-top: 1.5px dashed #ccc;
+    }
+    .astreinte{
+        position: absolute;
+        width: 40%;
+        height: auto;
+        top: 30%;
+        left: 0;
+        transform: rotate(-40deg);
+        z-index: 0;
     }
 }
 

@@ -4,7 +4,7 @@
     {{typeChoice}}
   </h3>
   
-  <mat-radio-group [(ngModel)]="typeChoice" [ngModelOptions]="{standalone: true}">
+  <mat-radio-group [(ngModel)]="typeChoice" formControlName="typeMission">
     <mat-radio-button value="creneau" checked>Créneau</mat-radio-button>
     <mat-radio-button value="astreinte">Astreinte</mat-radio-button>
   </mat-radio-group>

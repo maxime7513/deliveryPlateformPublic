@@ -29,8 +29,16 @@ export class CheckPrecedentPriseServicePipe implements PipeTransform {
     res;
     if(creneauPrecedent.length != 0){
       creneauPrecedent.map(creneau => {
+        let dateFinCreneauPrecedent = new Date(creneau.date.toDate().setHours(creneau.heureFin.value));
+        if(creneau.heureFin.value % 1 != 0){
+          dateFinCreneauPrecedent.setMinutes(30)
+        }else{
+          dateFinCreneauPrecedent.setMinutes(0)
+        }
+        
       for(let user of creneau.users){
-        if(userId == user.idUser && user.priseService){
+        if(userId == user.idUser && (user.priseService || new Date <= dateFinCreneauPrecedent)){
+        // if(userId == user.idUser){
           res = true
           break
         }else{

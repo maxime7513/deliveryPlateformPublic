@@ -19,9 +19,14 @@ export class ReturnLogoPipe implements PipeTransform {
 
   returnLogo(crenaux: Crenau[], jour: number, heure: number, tranche: string){
     let res: SafeHtml;
+    let imageAstreinte = "";
 
     for(let crenau of crenaux){
       let nombreCreneau = crenau.heureFin.value - crenau.heureDebut.value;
+
+      if(crenau.typeMission == 'astreinte'){
+        imageAstreinte = `<img class="astreinte" src="/assets/images/astreinte.png">`
+      }
 
       if(jour == this.getDay(crenau.date)){
         for(let i = 0; i < nombreCreneau; i++){
@@ -29,14 +34,14 @@ export class ReturnLogoPipe implements PipeTransform {
             if(crenau.heureDebut.value % 1 == 0){
               if(this.heures[heure] == crenau.heureDebut.value + i && crenau.heureFin.value >= this.heures[heure + 1]){
                 res = this.sanitizer.bypassSecurityTrustHtml(
-                  `<img src="/assets/images/icone_`+ crenau.societe +`.png">`
+                  `<img src="/assets/images/icone_`+ crenau.societe +`.png">` + imageAstreinte
                 );
               }
             }
             else{
               if(this.heures[heure] == crenau.heureDebut.value + i + 0.5 && crenau.heureFin.value >= this.heures[heure + 1]){
                 res = this.sanitizer.bypassSecurityTrustHtml(
-                  `<img src="/assets/images/icone_`+ crenau.societe +`.png">`
+                  `<img src="/assets/images/icone_`+ crenau.societe +`.png">` + imageAstreinte
                 );
               }
             }
@@ -44,14 +49,14 @@ export class ReturnLogoPipe implements PipeTransform {
           if(tranche == '0/30'){
               if(this.heures[heure] + 0.5 == crenau.heureFin.value){
                 res = this.sanitizer.bypassSecurityTrustHtml(
-                  `<div class="dashed_bas"><img src="/assets/images/icone_`+ crenau.societe +`.png"></div>`
+                  `<div class="dashed_bas"><img src="/assets/images/icone_`+ crenau.societe +`.png">` + imageAstreinte + `</div>`
                 );
               }
           }
           if(tranche == '30/60'){
               if(this.heures[heure] + 0.5 == crenau.heureDebut.value){
                 res = this.sanitizer.bypassSecurityTrustHtml(
-                  `<div class="dashed_haut"><img src="/assets/images/icone_`+ crenau.societe +`.png"></div>`
+                  `<div class="dashed_haut"><img src="/assets/images/icone_`+ crenau.societe +`.png">` + imageAstreinte + `</div>`
                 );
               }
           }

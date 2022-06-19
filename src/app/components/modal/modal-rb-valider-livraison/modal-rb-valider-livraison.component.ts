@@ -257,6 +257,7 @@ export class ModalRbValiderLivraisonComponent implements OnInit {
     const nombreCrenau = Math.ceil(this.rbForm.value.time);
     let calculHeureFin = this.rbForm.value.heureEnlevement.value + nombreCrenau;
     const req: Crenau = {
+      typeMission: 'creneau',
       date: this.rbForm.value.date,
       dateString: this.datePipe.transform(this.rbForm.value.date, 'dd/MM/yyyy'),
       heureDebut: this.rbForm.value.heureEnlevement,
@@ -270,8 +271,8 @@ export class ModalRbValiderLivraisonComponent implements OnInit {
       vehicule: "camion",
       societe: "rosebaie",
       idDemandeCreneauRB: idDemandeCreneauRB,
-      astreinte: false,
-      astreinteInscrit: 0
+      // astreinte: false,
+      // astreinteInscrit: 0
     }
 
     this.crenauservice.addCrenau(req); // ajouter creneau(x) à firebase

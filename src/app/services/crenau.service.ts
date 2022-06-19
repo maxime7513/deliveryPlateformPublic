@@ -55,7 +55,6 @@ export class CrenauService {
     return deleteDoc(crenauDocRef);
   }
 
-  // suppression d'un crenau
   getCrenauRB(crenau: DemandecrenauRB){
     const crenauxRef = query(collection(this.firestore, 'crenau'), where("idDemandeCreneauRB", "==", crenau.id));
     return collectionData(crenauxRef, { idField: 'id' });
