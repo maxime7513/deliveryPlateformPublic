@@ -17,7 +17,7 @@ export class CheckPrecedentPriseServicePipe implements PipeTransform {
 
   returnCrenauPrecedent(crenau: Crenau){
     return new Promise<Crenau[]>(resolve => {
-      this.crenauService.getCrenauxByDate3(crenau.dateString, crenau.heureDebut.value, 'kyo').subscribe(res => {
+      this.crenauService.getCrenauxByDate3(crenau.dateString, crenau.heureDebut.value, 'kyoSushi').subscribe(res => {
         resolve(res)
       })
     });

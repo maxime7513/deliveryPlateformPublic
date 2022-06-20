@@ -14,7 +14,7 @@ export class RoleLivreurGuard implements CanActivate {
     console.log(userRole);
     if( userRole == 'livreur'){
       return true;
-    }else if(userRole == 'kyo'){
+    }else if(userRole == 'kyoSushi'){
       this.router.navigate(['/crenau']);
       return false;
     }else{

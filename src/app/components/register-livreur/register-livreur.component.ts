@@ -37,9 +37,9 @@ export class RegisterLivreurComponent implements OnInit {
   societes: Societe[] = [
     // {value: 'rocket', viewValue: 'Rocket'},
     {value: 'rosebaie', viewValue: 'RoseBaie'},
-    {value: 'kyo', viewValue: 'Kyo-shushi'},
+    {value: 'kyoSushi', viewValue: 'Kyo Shushi'},
   ];
-  selectSocieteValue: string = 'kyo';
+  selectSocieteValue: string = 'kyoSushi';
   showSpinner : boolean = true;
 
   constructor(private usersService: UsersService, private crenauservice: CrenauService, private astreinteservice: AstreinteService, private auth: Auth, public datePipe : DatePipe, private toast: HotToastService, public dialog: MatDialog, private twilioservice: TwilioService) {

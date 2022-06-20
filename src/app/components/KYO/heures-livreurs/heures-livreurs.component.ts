@@ -66,7 +66,7 @@ export class HeuresLivreursComponent implements OnInit {
     return new Promise(resolve => {
       let dateLundi = this.setToMonday(this.defaultDatePicker);
       let tab = this.createSemaineTab(dateLundi);
-      this.crenauService.getCrenauxBySemaineAndSociete('kyo',tab).subscribe((res: Crenau[]) => {
+      this.crenauService.getCrenauxBySemaineAndSociete('kyoSushi',tab).subscribe((res: Crenau[]) => {
         resolve(this.crenaux = res);
         this.tabUsersParSemaine();
         this.joursSemaineAffiche();
@@ -79,7 +79,7 @@ export class HeuresLivreursComponent implements OnInit {
     return new Promise(resolve => {
       let dateLundi = this.setToMonday(this.defaultDatePicker);
       let tab = this.createSemaineTab(dateLundi);
-      this.astreinteService.getAstreinteBySemaineAndSociete('kyo', tab).subscribe((res: Crenau[]) => {
+      this.astreinteService.getAstreinteBySemaineAndSociete('kyoSushi', tab).subscribe((res: Crenau[]) => {
         resolve(this.astreintes = res);
         this.tabUsersAstreinteParSemaine();
         this.joursSemaineAffiche();

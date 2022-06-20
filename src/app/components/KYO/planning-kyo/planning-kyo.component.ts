@@ -43,7 +43,7 @@ export class PlanningKYOComponent implements OnInit {
 
   returnCrenauSuivant(crenau: Crenau){
     return new Promise<Crenau[]>(resolve => {
-      this.crenauservice.getCrenauxByDate2(crenau.dateString, crenau.heureFin.value, 'kyo').subscribe(res => {
+      this.crenauservice.getCrenauxByDate2(crenau.dateString, crenau.heureFin.value, 'kyoSushi').subscribe(res => {
         resolve(res)
       })
     });
@@ -51,7 +51,7 @@ export class PlanningKYOComponent implements OnInit {
 
   returnCrenauPrecedent(crenau: Crenau){
     return new Promise<Crenau[]>(resolve => {
-      this.crenauservice.getCrenauxByDate3(crenau.dateString, crenau.heureDebut.value, 'kyo').subscribe(res => {
+      this.crenauservice.getCrenauxByDate3(crenau.dateString, crenau.heureDebut.value, 'kyoSushi').subscribe(res => {
         resolve(res)
       })
     });
@@ -137,7 +137,7 @@ export class PlanningKYOComponent implements OnInit {
   afficherCrenauParDate(){
     this.showSpinner = true; // loading
     let date = this.datePipe.transform(this.defaultDatePicker, 'dd/MM/yyyy');
-    this.crenauservice.getCrenauxByDateandSociete("kyo", date).subscribe((res: Crenau[]) => {
+    this.crenauservice.getCrenauxByDateandSociete("kyoSushi", date).subscribe((res: Crenau[]) => {
       // trier par heure
       this.crenaux = res.sort(function (a:any, b:any) {
       return a.heureDebut.value - b.heureDebut.value
@@ -145,7 +145,7 @@ export class PlanningKYOComponent implements OnInit {
       this.autoValideFinService();
       this.showSpinner = false; // loading
     })
-    this.astreinteservice.getAstreinteByDateandSociete("kyo", date).subscribe((res: Crenau[]) => {
+    this.astreinteservice.getAstreinteByDateandSociete("kyoSushi", date).subscribe((res: Crenau[]) => {
       // trier par heure
       this.astreintes = res.sort(function (a:any, b:any) {
       return a.heureDebut.value - b.heureDebut.value
@@ -314,7 +314,7 @@ export class PlanningKYOComponent implements OnInit {
     let req = {
       nom: user.firstName,
       phone: phoneFormat,
-      role: 'Kyo-sushi'
+      role: 'Kyo Sushi'
     }
     this.twilioService.send_smsAstreinte(req);
 

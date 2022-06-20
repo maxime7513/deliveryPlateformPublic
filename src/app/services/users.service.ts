@@ -115,7 +115,7 @@ export class UsersService {
 
   // retourner tous les admins (role => woozoo et rocket)
   getUsersAdmin(): Observable<ProfileUser[]> {
-    const userxRef = query(collection(this.firestore, 'users'), where('role', 'in', ['woozoo', 'kyo']));
+    const userxRef = query(collection(this.firestore, 'users'), where('role', 'in', ['woozoo', 'kyoSushi']));
     return collectionData(userxRef, { idField: 'id' }) as Observable<ProfileUser[]>;
   }
 

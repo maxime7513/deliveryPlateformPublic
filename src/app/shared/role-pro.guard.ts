@@ -12,7 +12,7 @@ export class RoleProGuard implements CanActivate {
   async canActivate(){
     const userRole = await this.userservice.canAccess$;
     console.log(userRole);
-    if( userRole == 'woozoo' || userRole == 'rosebaie' || userRole == 'kyo'){
+    if( userRole == 'woozoo' || userRole == 'rosebaie' || userRole == 'kyoSushi'){
       return true;
     }else{
       return false;

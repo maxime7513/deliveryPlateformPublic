@@ -23,7 +23,7 @@ export class PlanningComponent implements OnInit {
   userRole: any;
   societeSelectionne: any;
   defaultSociete : string;
-  societes: string[] = ['rosebaie','kyo'];
+  societes: string[] = ['rosebaie','kyoSushi'];
 
   constructor(private crenauservice: CrenauService, private userservice: UsersService, public datePipe : DatePipe, public dialog: MatDialog, private toast: HotToastService, private sanitizer: DomSanitizer) {
     this.defaultDatePicker = new Date;

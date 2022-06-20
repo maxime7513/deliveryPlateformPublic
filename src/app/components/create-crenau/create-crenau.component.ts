@@ -97,7 +97,7 @@ export class CreateCrenauComponent implements OnInit {
   ];
   societes: Societe[] = [
     {value: 'rosebaie', viewValue: 'RoseBaie'},
-    {value: 'kyo', viewValue: 'Kyo-sushi'},
+    {value: 'kyoSushi', viewValue: 'Kyo Sushi'},
     {value: 'woozoo', viewValue: 'WooZoo'},
   ];
   ccE: string = "+33";
