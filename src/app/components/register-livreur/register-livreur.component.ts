@@ -125,7 +125,7 @@ export class RegisterLivreurComponent implements OnInit {
       this.crenauservice.incrementInscrit(crenau)
       // envoyer sms de rappel
       let minutesDiff = this.calculDifferenceDate(new Date(crenau.date.seconds * 1000));
-      if(minutesDiff > 120){ // si inscription au moins 2heures avant le créneau
+      if(minutesDiff > 120 && minutesDiff < 10000){ // si inscription au moins 2heures avant le créneau et 7jours max avant
         this.send_sms_to(crenau, user, 'creneau');
       }else{
         console.log('trop tard pour le sms')
@@ -139,7 +139,7 @@ export class RegisterLivreurComponent implements OnInit {
       this.astreinteservice.incrementInscrit(crenau)
       // envoyer sms de rappel
       let minutesDiff = this.calculDifferenceDate(new Date(crenau.date.seconds * 1000));
-      if(minutesDiff > 120){ // si inscription au moins 2heures avant le créneau
+      if(minutesDiff > 120 && minutesDiff < 10000){
         this.send_sms_to(crenau, user, 'astreinte');
       }else{
         console.log('trop tard pour le sms')
