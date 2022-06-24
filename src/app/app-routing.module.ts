@@ -5,7 +5,6 @@ import { SignUpComponent } from './components/sign-up/sign-up.component';
 import { RegisterLivreurComponent } from './components/register-livreur/register-livreur.component';
 import { ProfileComponent } from './components/profile/profile.component';
 import { CreateCrenauComponent } from './components/create-crenau/create-crenau.component';
-import { PlanningComponent } from './components/planning/planning.component';
 import { DahsboardLivreurComponent } from './components/dahsboard-livreur/dahsboard-livreur.component';
 import { ListeLivreurComponent } from './components/liste-livreur/liste-livreur.component';
 import { MessagesComponent } from './components/messages/messages.component';
@@ -17,6 +16,7 @@ import { RosebaieListLivraisonAttenteComponent } from './components/rosebaie/ros
 import { ListeBonLivraisonComponent } from './components/rosebaie/liste-bon-livraison/liste-bon-livraison.component';
 import { PlanningKYOComponent } from './components/KYO/planning-kyo/planning-kyo.component';
 import { HeuresLivreursComponent } from './components/KYO/heures-livreurs/heures-livreurs.component';
+import { DahsboardSocieteComponent } from './components/dahsboard-societe/dahsboard-societe.component';
 
 import { RoleWoozooGuard } from './shared/role-woozoo.guard';
 import { RoleLivreurGuard } from './shared/role-livreur.guard';
@@ -37,7 +37,7 @@ const routes: Routes = [
   { path: 'register', component: RegisterLivreurComponent, ...canActivate(redirectUnauthorizedToLogin), canActivate:[RoleLivreurGuard] },
   { path: 'profil', component: ProfileComponent, ...canActivate(redirectUnauthorizedToLogin)},
   { path: 'crenau', component: CreateCrenauComponent, ...canActivate(redirectUnauthorizedToLogin), canActivate:[RoleProGuard]},
-  { path: 'planning', component: PlanningComponent, ...canActivate(redirectUnauthorizedToLogin), canActivate:[RoleProGuard] },
+  { path: 'dashboardSociete', component: DahsboardSocieteComponent, ...canActivate(redirectUnauthorizedToLogin), canActivate:[RoleProGuard] },
   { path: 'dashboardlivreur', component: DahsboardLivreurComponent, ...canActivate(redirectUnauthorizedToLogin), canActivate:[RoleLivreurGuard] },
   { path: 'listLivreur', component: ListeLivreurComponent, ...canActivate(redirectUnauthorizedToLogin), canActivate:[RoleWoozooGuard]},
   { path: 'createRosebaie', component: RosebaieCreateLivraisonAttenteComponent, ...canActivate(redirectUnauthorizedToLogin), canActivate:[RoleProGuard]},

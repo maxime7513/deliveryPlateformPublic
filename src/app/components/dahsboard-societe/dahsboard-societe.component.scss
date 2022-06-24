@@ -2,7 +2,7 @@
     display: block;
     width: 100%;
     min-height: 100%;
-    padding: 64px 20px 40px 20px;
+    padding: 64px 30px 40px 30px;
     position: relative;
 }
 
@@ -14,7 +14,6 @@ h1{
     color: var(--primary);
     text-align: center;
     margin-bottom: 25px;
-    text-transform: capitalize;
 }
 
 .date{
@@ -37,12 +36,13 @@ h1{
 
 .table-wrapper{
     max-width: 1600px;
-    margin: 20px auto auto;
+    margin: auto;
+    padding: 20px 0;
 }
 
 table{
     border-collapse: collapse;
-    font-size: 0.85rem;
+    font-size: 13px;
     width: 100%;
     max-width: 100%;
     white-space: nowrap;
@@ -53,10 +53,10 @@ table{
         font-weight: 600;
         th{
             color: #ffffff;
-            background: var(--secondary);
+            background: #4FC3A1;
             padding: 10px 50px;
             &:nth-child(odd) {
-                background: var(--primary);
+                background: #324960;
             }
             &:first-of-type{
                 position: relative;
@@ -103,52 +103,179 @@ table{
         }
         td{
             position: relative;
-            padding: 13px 20px;
+            padding: 0;
             text-align: center;
             &:first-of-type{
-                background: var(--primary);
+                background: #324960;
                 color: #fff;
                 font-weight: 500;
+                padding: 10px 20px;
             }
             &:not(:last-of-type){
                 border-right: 1px solid #ccc;
             }
-            &.active{
-                background: rgba(79,195,161,.45) !important;
-                .complet{
-                    display: block;
-                }
-            }
-            &:hover .voir_livreur{
-                opacity: 0.8;
-            }
-            span{
-                position: relative;
-                color: var(--primary);
-            }
             mat-icon{
-                font-size: 27px;
-                height: 27px;
-                width: 27px;
-                &.complet{
-                    display: none;
-                    margin: auto;
-                    color: var(--primary);
-                }
-                &.voir_livreur{
-                    position: absolute;
-                    bottom: 0;
-                    right: 0;
+                pointer-events: none;
+                position: absolute;
+                width: 25px;
+                height: 25px;
+                top: 2px;
+                right: 2px;
+                z-index: 10;
+            }
+            .assignment_turned_in{
+                background: rgba(79, 195, 161, 0.35);
+                mat-icon:not(.voirmission){
                     color: var(--secondary);
-                    opacity: 0;
-                    transition: .4s;
+                }
+            }
+            .hourglass_bottom{
+                background: rgba(255, 166, 0, 0.41);
+                mat-icon:not(.voirmission){
+                    color: var(--secondary);
+                    color: orange;
+                }  
+            }
+            .event_busy{
+                mat-icon:not(.voirmission, .voir_livreur){
+                    color: #f22;
+                    pointer-events: all;
                     cursor: pointer;
+                    opacity: .7;
+                    transition: .3s;
                     &:hover{
                         opacity: 1;
                     }
                 }
             }
+            .voirmission{
+                color: var(--primary);
+                top: 2px;
+                left: 2px;
+                pointer-events: all;
+                cursor: pointer;
+            }
+            .voir_livreur{
+                position: absolute;
+                bottom: 0;
+                left: 0;
+                color: var(--secondary);
+                opacity: 0;
+                transition: .4s;
+                pointer-events: all;
+                cursor: pointer;
+                &:hover{
+                    opacity: 1 !important;
+                }
+            }
+            &:hover .voir_livreur{
+                opacity: 0.7;
+            }
         }
+    }
+}
+
+::ng-deep .creneau_td{
+    height: 65px;
+    > div:first-of-type{
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 100%;
+        height: 100%;
+        img:not(.astreinte){
+            width: 40px;
+            height: 40px;
+            border-radius: 100%;
+            object-fit: cover;
+            object-position: center;
+            background: #fff;
+        }
+    }
+    .demi_haut, .demi_bas{
+        position: absolute;
+        width: 100%;
+        height: 50%;
+        left: 0;
+        div{
+            height: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        img:not(.astreinte){
+            width: 27px;
+            height: 27px;
+            border-radius: 100%;
+            object-fit: cover;
+            object-position: center;
+            background: #fff;
+            position: relative;
+        }
+        .astreinte{
+            width: 35%;
+            top: 23%;
+            transform: rotate(-25deg);
+        }
+    }
+    .demi_haut{
+        top: 0;
+    }
+    .demi_bas{
+        bottom: 0;
+    }
+    .dashed_bas::after{
+        content: '';
+        position: absolute;
+        left: 0;
+        right: 0;
+        top: 0;
+        bottom: 0;
+        border-bottom: 1.5px dashed #ccc;
+    }
+    .dashed_haut::before{
+        content: '';
+        position: absolute;
+        left: 0;
+        right: 0;
+        top: -1px;
+        bottom: 0;
+        border-top: 1.5px dashed #ccc;
+    }
+    .astreinte{
+        position: absolute;
+        width: 40%;
+        height: auto;
+        top: 30%;
+        left: 0;
+        transform: rotate(-40deg);
+        z-index: 0;
+    }
+}
+
+
+.explic{
+    display: flex;
+    flex-wrap: wrap;
+    span{
+        display: flex;
+        align-items: center;
+        margin-right: 20px;
+        font-size: 15px;
+        mat-icon{
+            color: var(--secondary);
+            margin-right: 3px;
+            &.effectue{
+                color: var(--secondary);
+            }
+            &.en_cours{
+                color: orange;
+            }
+            &.reserve{
+                color: #f22;
+            }
+        }
+
     }
 }
 
@@ -168,7 +295,7 @@ table{
 
 @media (max-width: 1230px) {
     :host{
-        padding: 64px 10px 40px 10px;
+        padding: 64px 10px 20px 10px;
         background: none;
         &:before {
             content: "";
@@ -185,14 +312,28 @@ table{
             -o-background-size: cover;
             background-size: cover;
         }
-        > *:not(.blur){
+        > div:not(.blur), h1{
             position: relative;
             z-index: 1;
         }
     }
 
+    .blur{
+        z-index: 0;
+    }
+
+    .background{
+        padding: 64px 10px 30px 10px;
+    }
+    .explic{
+        padding: 7px 10px 10px;
+        span{
+            margin-bottom: 7px;
+        }
+    }
+    
     .table-wrapper{
-        margin: auto;
+        padding: 10px 0;
         &:before{
             content: url("/assets/images/swipe.svg");
             display: block;
@@ -254,7 +395,7 @@ table{
                     display: flex;
                     align-items: center;
                     justify-content: center;
-                    padding: 10px;
+                    // padding: 10px;
                     height: 60px;
                     box-sizing: border-box;
                     overflow-x: hidden;
@@ -283,9 +424,26 @@ table{
             }
         }
     }
-
-    .blur{
-        z-index: 0;
+    ::ng-deep .creneau_td{
+        .demi_haut, .demi_bas{
+            width: 50%;
+            height: 100%;
+        }
+        .demi_bas{
+            left: auto;
+            right: 0;
+        }
+        .dashed_bas::after{
+            border-right: 1.5px dashed #ccc;
+            border-bottom: none;
+        }
+        .dashed_haut::before{
+            top: 0;
+            left: -1px;
+            border-left: 1.5px dashed #ccc;
+            border-top: none;
+        }
+    
     }
    
 }

@@ -5,8 +5,10 @@ import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { Router } from '@angular/router';
 import { HotToastService } from '@ngneat/hot-toast';
 import { Crenau } from 'src/app/models/crenau.model';
+import { ProfileUser } from 'src/app/models/user.profil';
 import { AstreinteService } from 'src/app/services/astreinte.service';
 import { CrenauService } from 'src/app/services/crenau.service';
+import { MessageService } from 'src/app/services/message.service';
 import { TwilioService } from 'src/app/services/twilio.service';
 import { UsersService } from 'src/app/services/users.service';
 import { ModalDeleteCrenauComponent } from '../modal/modal-delete-crenau/modal-delete-crenau.component';
@@ -44,6 +46,7 @@ export class CreateCrenauComponent implements OnInit {
   showCrenaux: boolean = false;
   showAstreinte: boolean = false;
   userRole: any;
+  user: ProfileUser;
   heures: Heure[] = [
     {value: 8, viewValue: '08h'},
     {value: 8.5, viewValue: '08h30'},
@@ -103,7 +106,7 @@ export class CreateCrenauComponent implements OnInit {
   ccE: string = "+33";
   typeChoice: string = 'creneau';
 
-  constructor(private crenauservice: CrenauService, private astreinteservice: AstreinteService, private toast: HotToastService, private router: Router, public datePipe : DatePipe,  public dialog: MatDialog, private twilioservice: TwilioService, private usersservice: UsersService) {
+  constructor(private crenauservice: CrenauService, private astreinteservice: AstreinteService, private messageService: MessageService, private toast: HotToastService, private router: Router, public datePipe : DatePipe,  public dialog: MatDialog, private twilioservice: TwilioService, private usersservice: UsersService) {
     this.defaultDatePicker = this.datePicker;
   }
 
@@ -116,6 +119,12 @@ export class CreateCrenauComponent implements OnInit {
     // afficher crenaux par date
     this.afficherCrenauParDate();
     this.afficherAstreinteParDate();
+    // return user
+    this.usersservice.currentUserProfile$
+    .pipe()
+    .subscribe((user) => {
+      this.user = user;
+    });
   }
 
   // init validator
@@ -157,6 +166,12 @@ export class CreateCrenauComponent implements OnInit {
   }
   get societe() {
     return this.crenauForm.get('societe');
+  }
+
+  calculDifferenceDate(date: any){
+    var diff_temps = date.getTime() - this.datePicker.getTime();
+    var diff_hour = diff_temps / (1000 * 3600 / 60);
+    return Math.round(diff_hour);
   }
 
   // crenaux par date (datepicker)
@@ -256,10 +271,33 @@ export class CreateCrenauComponent implements OnInit {
       }
     );
 
-    // envoyer sms à tous les livreurs pour informer creneau ajouter
+    // envoie du message dans la boite mail woozoo
+    let date = this.datePipe.transform(this.crenauForm.value.date, 'dd/MM/yyyy');
+    let contenue = this.crenauForm.value.societe + " viens de programmer une livraison." + `\n` +
+    'Type de mission: ' + this.typeChoice + `\n` +
+    'Date: ' + date + ' de ' + this.crenauForm.value.heureDebut.viewValue + ' à ' + this.crenauForm.value.heureFin.viewValue + `\n` +
+    'Nombre de livreurs: ' + this.crenauForm.value.inscritMax;
 
-    this.send_smsGrouper(this.typeChoice, this.crenauForm.value.dateString);
+    if(this.user.photoURL == null){
+      this.user.photoURL = '';
+    }
+
+    const message= {
+      date: new Date,
+      nom: this.user.lastName,
+      prenom: this.user.firstName,
+      photoUrl : this.user.photoURL,
+      contenue : contenue,
+      lu: false,
+      traite: false
+    }
+    this.messageService.addMessage(message);
     
+    // envoyer sms à tous les livreurs pour informer creneau ajouter
+    let minutesDiff = this.calculDifferenceDate(new Date(this.crenauForm.value.date));
+    if(minutesDiff < 10080){ // si inférieur à 7 jours
+      this.send_smsGrouper(this.typeChoice, this.crenauForm.value.dateString);
+    }    
     // toastValid.afterClosed.subscribe((e) => {
     //   this.router.navigate(['/planning']);
     // });

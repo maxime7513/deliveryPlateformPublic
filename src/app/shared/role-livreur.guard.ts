@@ -17,8 +17,11 @@ export class RoleLivreurGuard implements CanActivate {
     }else if(userRole == 'kyoSushi'){
       this.router.navigate(['/crenau']);
       return false;
+    }else if(userRole == 'rosebaie'){
+      this.router.navigate(['/listLivraisonAttenteRB']);
+      return false;
     }else{
-      this.router.navigate(['/planning']);
+      this.router.navigate(['/dashboardSociete']);
       return false;
     }
   }

@@ -104,7 +104,7 @@ export class RegisterLivreurComponent implements OnInit {
     
     let minutesDiff = this.calculDifferenceDate(new Date(crenau.date.seconds * 1000));
     
-    if(minutesDiff < 10080){
+    if(minutesDiff < 10080){ // si inferieur à 7 jours
       // verifier si l'utilisateur n'est pas deja inscrit à un autre créneau sur le meme horaire
       let verifCreneauInscrit = await this.verifierCreneauUserInscritHeure(crenau);
       let verifAstreinteInscrit = await this.verifierAstreinteUserInscritHeure(crenau);
@@ -140,7 +140,6 @@ export class RegisterLivreurComponent implements OnInit {
         // ajouter 1 au inscrit
         this.astreinteservice.incrementInscrit(crenau)
         // envoyer sms de rappel
-        let minutesDiff = this.calculDifferenceDate(new Date(crenau.date.seconds * 1000));
         if(minutesDiff > 120){
           this.send_sms_to(crenau, user, 'astreinte');
         }else{

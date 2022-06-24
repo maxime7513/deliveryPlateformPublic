@@ -49,13 +49,13 @@ import { HeaderComponent } from './components/header/header.component';
 import { SignUpComponent } from './components/sign-up/sign-up.component';
 import { ProfileComponent } from './components/profile/profile.component';
 import { CreateCrenauComponent } from './components/create-crenau/create-crenau.component';
-import { PlanningComponent } from './components/planning/planning.component';
 import { DahsboardLivreurComponent } from './components/dahsboard-livreur/dahsboard-livreur.component';
 import { ListeLivreurComponent } from './components/liste-livreur/liste-livreur.component';
 import { ModalDeleteCrenauComponent } from './components/modal/modal-delete-crenau/modal-delete-crenau.component';
 import { MessagesComponent } from './components/messages/messages.component';
 import { ModalMessageComponent } from './components/modal/modal-message/modal-message.component';
 import { CarnetAdressesComponent } from './components/carnet-adresses/carnet-adresses.component';
+import { DahsboardSocieteComponent } from './components/dahsboard-societe/dahsboard-societe.component';
 
 // Rosebaie
 import { RosebaieCreateLivraisonAttenteComponent } from './components/rosebaie/rosebaie-create-livraison-attente/rosebaie-create-livraison-attente.component';
@@ -70,9 +70,6 @@ import { HeuresLivreursComponent } from './components/KYO/heures-livreurs/heures
 // Pipe
 import { ReturnLogoPipe } from './components/dahsboard-livreur/return-logo.pipe';
 import { ReturnIconPipe } from './components/dahsboard-livreur/return-icon.pipe';
-import { ReturnPlanningPipe } from './components/planning/return-planning.pipe';
-import { ReturnCompletPipe } from './components/planning/return-complet.pipe';
-import { ReturnInscritPipe } from './components/planning/return-inscrit.pipe';
 import { ReturnStatutPipe } from './components/dahsboard-livreur/return-statut.pipe';
 import { ReturnMissionRbPipe } from './components/dahsboard-livreur/return-missionRB.pipe';
 import { ReturnLivreursPipe } from './components/KYO/planning-kyo/return-livreurs.pipe';
@@ -100,7 +97,6 @@ registerLocaleData(localeFr, 'fr');
     SignUpComponent,
     ProfileComponent,
     CreateCrenauComponent,
-    PlanningComponent,
     DahsboardLivreurComponent,
     ListeLivreurComponent,
     ModalUserInscritComponent,
@@ -110,9 +106,6 @@ registerLocaleData(localeFr, 'fr');
     CarnetAdressesComponent,
     ReturnLogoPipe,
     ReturnIconPipe,
-    ReturnPlanningPipe,
-    ReturnCompletPipe,
-    ReturnInscritPipe,
     ReturnStatutPipe,
     ReturnMissionRbPipe,
     ReturnLivreursPipe,
@@ -133,6 +126,7 @@ registerLocaleData(localeFr, 'fr');
     PlanningKYOComponent,
     ModalLivreursAstreinteComponent,
     HeuresLivreursComponent,
+    DahsboardSocieteComponent,
   ],
   imports: [
     BrowserModule,

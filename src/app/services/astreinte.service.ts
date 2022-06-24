@@ -126,4 +126,5 @@ export class AstreinteService {
     const astreinteRef = query(collection(this.firestore, 'astreinte'), where("societe", "==" , Usersociete), where("dateString", 'in', [tabDate[0], tabDate[1], tabDate[2], tabDate[3], tabDate[4], tabDate[5], tabDate[6]]));
     return collectionData(astreinteRef, { idField: 'id' }) as Observable<Crenau[]>;
   }
+
 }

@@ -58,6 +58,13 @@ export class TwilioService {
       });
   }
 
+  send_smsAnnulationCreneau(req:any){
+    return this.http.post("http://localhost:3000/annulationCreneau", req , this.header).subscribe((resp: any) => {
+      // return this.http.post("https://limitless-earth-25794.herokuapp.com/annulationCreneau", req , this.header).subscribe((resp: any) => {
+        console.log(resp);
+      });
+  }
+
   cancel_sms(req: any) {
     return this.http.post("http://localhost:3000/cancelRappelSms", req , this.header).subscribe((resp: any) => {
     // return this.http.post("https://limitless-earth-25794.herokuapp.com/cancelRappelSms", req , this.header).subscribe((resp: any) => {

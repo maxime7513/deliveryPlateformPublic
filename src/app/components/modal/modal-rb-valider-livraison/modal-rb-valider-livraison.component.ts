@@ -151,6 +151,13 @@ export class ModalRbValiderLivraisonComponent implements OnInit {
     return res
   }
 
+
+  calculDifferenceDate(date: any){
+    var diff_temps = date.getTime() - this.datePicker.getTime();
+    var diff_hour = diff_temps / (1000 * 3600 / 60);
+    return Math.round(diff_hour);
+  }
+
   calculDistanceItineraire(origin: any, wayptsTab: any){
     // console.log(wayptsTab)
     return new Promise(async resolve=> {
@@ -376,7 +383,10 @@ export class ModalRbValiderLivraisonComponent implements OnInit {
     // envoyer message à woozoo
     this.messageService.addMessage(message);
     // envoyer sms aux livreurs
-    this.send_smsGrouper(date);
+    let minutesDiff = this.calculDifferenceDate(new Date(this.rbForm.value.date));
+    if(minutesDiff < 10080){ // si inférieur à 7 jours
+      this.send_smsGrouper(date);
+    }
 
     this.toast.close();
     const toastValid = this.toast.success('Demande de livraison prise en compte',{duration: 2000});
