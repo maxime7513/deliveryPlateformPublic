@@ -102,52 +102,60 @@ export class RegisterLivreurComponent implements OnInit {
   async inscriptionLivreur(crenau: Crenau, user: ProfileUser){
     this.toast.close();
     
-    // verifier si l'utilisateur n'est pas deja inscrit à un autre créneau sur le meme horaire
-    let verifCreneauInscrit = await this.verifierCreneauUserInscritHeure(crenau);
-    let verifAstreinteInscrit = await this.verifierAstreinteUserInscritHeure(crenau);
-    if(!verifCreneauInscrit || !verifAstreinteInscrit){
-      this.toast.error('Vous avez déjà reservé au autre créneau au même horaire');
-      return
-    }
-
-    // verifier si user vehicule est égale à crenau vehicule
-    let userVehicule: any =  await this.usersService.userVehicule$;
-    if(!userVehicule.includes(crenau.vehicule) && crenau.vehicule != ''){
-      this.toast.error('Ce créneau de livraison doit être effectué en '+ crenau.vehicule);
-      return
-    }
-
-    // ajouter user id au crenau/astreinte
-    if(this.typeChoice == 'creneau'){
-      this.crenauservice.addLivreur(crenau, this.userUid);
-      await this.usersService.addCrenauToUser(this.userUid, crenau.id)
-      // ajouter 1 au inscrit
-      this.crenauservice.incrementInscrit(crenau)
-      // envoyer sms de rappel
-      let minutesDiff = this.calculDifferenceDate(new Date(crenau.date.seconds * 1000));
-      if(minutesDiff > 120 && minutesDiff < 10000){ // si inscription au moins 2heures avant le créneau et 7jours max avant
-        this.send_sms_to(crenau, user, 'creneau');
-      }else{
-        console.log('trop tard pour le sms')
-      }
-  
-      this.toast.success('Crénau reservé', {duration: 3000});
-    }else{
-      this.astreinteservice.addLivreur(crenau, this.userUid);
-      await this.usersService.addAstreinteToUser(this.userUid, crenau.id)
-      // ajouter 1 au inscrit
-      this.astreinteservice.incrementInscrit(crenau)
-      // envoyer sms de rappel
-      let minutesDiff = this.calculDifferenceDate(new Date(crenau.date.seconds * 1000));
-      if(minutesDiff > 120 && minutesDiff < 10000){
-        this.send_sms_to(crenau, user, 'astreinte');
-      }else{
-        console.log('trop tard pour le sms')
-      }
-  
-      this.toast.success('Astreinte reservé', {duration: 3000});
-    }
+    let minutesDiff = this.calculDifferenceDate(new Date(crenau.date.seconds * 1000));
     
+    if(minutesDiff < 10080){
+      // verifier si l'utilisateur n'est pas deja inscrit à un autre créneau sur le meme horaire
+      let verifCreneauInscrit = await this.verifierCreneauUserInscritHeure(crenau);
+      let verifAstreinteInscrit = await this.verifierAstreinteUserInscritHeure(crenau);
+      if(!verifCreneauInscrit || !verifAstreinteInscrit){
+        this.toast.error('Vous avez déjà reservé au autre créneau au même horaire');
+        return
+      }
+
+      // verifier si user vehicule est égale à crenau vehicule
+      let userVehicule: any =  await this.usersService.userVehicule$;
+      if(!userVehicule.includes(crenau.vehicule) && crenau.vehicule != ''){
+        this.toast.error('Ce créneau de livraison doit être effectué en '+ crenau.vehicule);
+        return
+      }
+
+      // ajouter user id au crenau/astreinte
+      if(this.typeChoice == 'creneau'){
+        this.crenauservice.addLivreur(crenau, this.userUid);
+        await this.usersService.addCrenauToUser(this.userUid, crenau.id)
+        // ajouter 1 au inscrit
+        this.crenauservice.incrementInscrit(crenau)
+        // envoyer sms de rappel
+        if(minutesDiff > 120){ // si inscription au moins 2heures avant le créneau
+          this.send_sms_to(crenau, user, 'creneau');
+        }else{
+          console.log('trop tard pour le sms')
+        }
+      
+        this.toast.success('Crénau reservé', {duration: 3000});
+      }else{
+        this.astreinteservice.addLivreur(crenau, this.userUid);
+        await this.usersService.addAstreinteToUser(this.userUid, crenau.id)
+        // ajouter 1 au inscrit
+        this.astreinteservice.incrementInscrit(crenau)
+        // envoyer sms de rappel
+        let minutesDiff = this.calculDifferenceDate(new Date(crenau.date.seconds * 1000));
+        if(minutesDiff > 120){
+          this.send_sms_to(crenau, user, 'astreinte');
+        }else{
+          console.log('trop tard pour le sms')
+        }
+      
+        this.toast.success('Astreinte reservé', {duration: 3000});
+      }
+    }else{
+      if(this.typeChoice == 'creneau'){
+        this.toast.error('Vous pouvez réserver ce créneau au maximum 7 jours avant sa date')
+      }else{
+        this.toast.error('Vous pouvez réserver cette astreinte au maximum 7 jours avant sa date')
+      }
+    }  
   }
 
   async deleteCreneauUser(crenauId: string){
