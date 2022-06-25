@@ -30,8 +30,8 @@
             <td *ngFor="let jour of jours" class="creneau_td">
               <div [ngClass]="creneaux | returnStatut: jour : i : 'heure'">
                 <div [innerHTML]="creneaux | returnLogo: jour : i : 'heure'"></div>
-                <mat-icon [innerHTML]="creneaux | returnIcon : jour : i : 'heure'" (click)="openDialogModal(returnCrenau(jour,i,'heure'))" matTooltip="annuler ce créneau"></mat-icon>
-                <mat-icon [innerHTML]="creneaux | returnMissionRB : jour : i" (click)="returnUrlMissionRB(creneaux, jour, i)" class="voirmission"></mat-icon>
+                <mat-icon *ngIf="creneaux | returnIcon : jour : i : 'heure'" [innerHTML]="creneaux | returnIcon : jour : i : 'heure'" (click)="openDialogModal(returnCrenau(jour,i,'heure'))" matTooltip="annuler ce créneau"></mat-icon>
+                <mat-icon *ngIf="creneaux | returnMissionRB : jour : i" [innerHTML]="creneaux | returnMissionRB : jour : i" (click)="returnUrlMissionRB(creneaux, jour, i)" class="voirmission"></mat-icon>
               </div>
               <div class="demi_haut" [ngClass]="creneaux | returnStatut: jour : i : '0/30'">
                 <div [innerHTML]="creneaux | returnLogo: jour : i : '0/30'"></div>

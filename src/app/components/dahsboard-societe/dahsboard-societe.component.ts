@@ -101,15 +101,11 @@ export class DahsboardSocieteComponent implements OnInit {
     for(let i = 0; i < this.creneaux.length; i++){
       if(tranche == 'heure'){
         if(jour == this.getDay(this.creneaux[i].date) && this.heures[heure] == this.creneaux[i].heureDebut.value ){
-          if(60 < this.calculDifferenceDate(this.creneaux[i].date.toDate(), new Date)){
-            res = this.creneaux[i];
-          }
+          res = this.creneaux[i];
         }
       }else{
         if(jour == this.getDay(this.creneaux[i].date) && this.heures[heure] + 0.5 == this.creneaux[i].heureDebut.value ){
-          if(60 < this.calculDifferenceDate(this.creneaux[i].date.toDate(), new Date)){
-            res = this.creneaux[i];
-          }
+          res = this.creneaux[i];
         }
       }
     }
@@ -249,7 +245,7 @@ export class DahsboardSocieteComponent implements OnInit {
   // ouvrir popup avec info livreur pour chaque créneaux
   async openDialogModalLivreur(crenau: Crenau) {
     this.toast.loading('Chargement');
-
+    console.log(crenau)
     if(crenau.users && crenau.users.length != 0){
       const users = await this.usersInscrit(crenau);
       console.log(users)
