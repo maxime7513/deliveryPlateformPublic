@@ -125,19 +125,6 @@ export class ModalRbValiderLivraisonComponent implements OnInit {
     });
   }
 
-  // return array telephones des livreurs (Promise for use await dans la fonction send_smsGrouper())
-  get livreursPhone$(){
-    let tab: any = [];
-    return new Promise(resolve => {
-      this.usersService.getUsersByRole('livreur').subscribe((res) => {
-        res.map(user => {
-          tab.push(this.ccE + user.phone)
-        })
-        resolve(tab);
-      })
-    });
-  }
-
   formatTime(time: number){
     let heure = Math.floor(time),
     minutes = parseInt((time * 60).toFixed(0)),
@@ -288,7 +275,7 @@ export class ModalRbValiderLivraisonComponent implements OnInit {
 
   // envoyer sms à tous les livreurs
   async send_smsGrouper(dateCrenau: string) {
-    let tabPhones = await this.livreursPhone$;
+    let tabPhones = await this.twilioservice.livreursPhone$;
 
     let req = {
       typeMission: 'creneau',

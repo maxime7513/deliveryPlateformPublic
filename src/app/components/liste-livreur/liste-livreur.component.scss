@@ -58,6 +58,13 @@ table{
             &:not(:last-of-type){
                 border-bottom: 1px solid #ccc;
             }
+            &.desinscrit{
+                background: #ccc;
+                filter: blur(2px);
+                &:hover{
+                    filter: none;
+                }
+            }
         }
         td{
             padding: 10px 20px;

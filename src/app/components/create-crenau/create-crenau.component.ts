@@ -297,7 +297,7 @@ export class CreateCrenauComponent implements OnInit {
     let minutesDiff = this.calculDifferenceDate(new Date(this.crenauForm.value.date));
     if(minutesDiff < 10080){ // si inférieur à 7 jours
       this.send_smsGrouper(this.typeChoice, this.crenauForm.value.dateString);
-    }    
+    }
     // toastValid.afterClosed.subscribe((e) => {
     //   this.router.navigate(['/planning']);
     // });

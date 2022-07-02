@@ -11,7 +11,7 @@
    </tr>
   </thead>
   <tbody>
-    <tr *ngFor="let livreur of livreurs | slice: lowValueSliceLivreur : highValueSliceLivreur">
+    <tr *ngFor="let livreur of livreurs | slice: lowValueSliceLivreur : highValueSliceLivreur" [ngClass]="{'desinscrit': livreur.desinscrit}">
       <td><img [src]="livreur.photoURL ?? '/assets/images/avatar.svg'"/>{{ livreur.lastName }} {{ livreur.firstName }}</td>
       <td>{{ livreur.email }}</td>
       <!--<td>{{ formatPhone(livreur.phone) }}</td>-->

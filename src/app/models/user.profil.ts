@@ -9,4 +9,5 @@ export interface ProfileUser {
     astreinteInscrit?: string[];
     role?: string;
     vehicule?: Array<string>;
+    desinscrit?: any;
   }

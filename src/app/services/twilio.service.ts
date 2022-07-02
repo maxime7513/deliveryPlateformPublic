@@ -78,7 +78,9 @@ export class TwilioService {
     return new Promise(resolve => {
       this.usersService.getUsersByRole('livreur').subscribe((res) => {
         res.map(user => {
-          tab.push(this.ccE + user.phone)
+          if(!user.desinscrit){
+            tab.push(this.ccE + user.phone)
+          }
         })
         resolve(tab);
       })
