@@ -115,6 +115,7 @@ export class DashboardProComponent implements OnInit {
       this.toast.close();
       const dialogRef = this.dialog.open(ModalUserInscritComponent);
       dialogRef.componentInstance.users = users;
+      dialogRef.componentInstance.date = creneau.date;
       dialogRef.componentInstance.heureDebut = creneau.heureDebut.viewValue;
       dialogRef.componentInstance.heureFin = creneau.heureFin.viewValue;
     }else{
