@@ -18,7 +18,6 @@ import { ModalUserInscritComponent } from '../modal/modal-user-inscrit/modal-use
 })
 export class DashboardProComponent implements OnInit {
   creneaux: Crenau[] = [];
-  // jours: number[]= [1, 2, 3, 4, 5, 6, 0];
   jours = [{view: 'lundi', value : 1},{view: 'mardi', value : 2},{view: 'mercredi', value : 3},{view: 'jeudi', value : 4},{view: 'vendredi', value : 5},{view: 'samedi', value : 6},{view: 'dimanche', value : 0},]
   defaultDatePicker: Date;
   userRole: any;
@@ -41,6 +40,14 @@ export class DashboardProComponent implements OnInit {
     // crenaux par semaine
     this.afficherCrenauParSemaine();
     this.defaultDatePicker = new Date;
+  }
+
+  ngAfterViewChecked(){
+    //supprimer les <div> vides
+    let elements = document.querySelectorAll<HTMLElement>('td div:empty');
+    elements.forEach(element => {
+      element.remove()
+    })
   }
 
   // retourner le lundi de chaque semaine séléctionnée(datepicker)

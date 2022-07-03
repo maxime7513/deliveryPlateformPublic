@@ -80,7 +80,7 @@ table{
     thead{
         font-weight: 600;
         th{
-            color: #ffffff;
+            color: #fff;
             background: #324960;
             padding: 10px 20px;
             &:first-of-type{
@@ -126,6 +126,9 @@ table{
                 }
                 &:not(:first-of-type){
                     border-bottom: 1px solid #ccc;
+                }
+                div:nth-of-type(even){
+                    background: #F8F8F8;
                 }
                 ::ng-deep{
                     p{
