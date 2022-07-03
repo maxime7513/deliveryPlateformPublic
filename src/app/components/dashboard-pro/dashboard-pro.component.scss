@@ -110,9 +110,6 @@ table{
                     border-bottom-right-radius: 13px;
                 }
             }
-            &:not(:last-of-type){
-                border-bottom: 1px solid #ccc;
-            }
             td{
                 position: relative;
                 padding: 0;
@@ -127,38 +124,34 @@ table{
                         cursor: pointer;
                     }
                 }
-                &:not(:last-of-type){
-                    border-right: 1px solid #ccc;
+                &:not(:first-of-type){
+                    border-bottom: 1px solid #ccc;
                 }
-
-                div:nth-of-type(even) {
-                    background: #F8F8F8;
-                }
-            }
-            ::ng-deep{
-                p{
-                    color: var(--primary);
-                    margin: 0;
-                    padding: 12px 25px;
-                    &.minutes_restantes{
-                        font-weight: 500;
+                ::ng-deep{
+                    p{
+                        color: var(--primary);
+                        margin: 0;
+                        padding: 12px 25px;
+                        &.minutes_restantes{
+                            font-weight: 500;
+                            span{
+                                font-weight: 600;
+                                margin-right: 2px;
+                            }
+                        }
                         span{
-                            font-weight: 600;
-                            margin-right: 2px;
+                            color: var(--secondary);
                         }
                     }
-                    span{
-                        color: var(--secondary);
+                    img{
+                        padding: 7px 25px;
                     }
-                }
-                img{
-                    padding: 7px 25px;
-                }
-                .event_busy{
-                    cursor: pointer;
-                }
-                .aucun_inscrit{
-                    opacity: .33;
+                    .event_busy{
+                        cursor: pointer;
+                    }
+                    .aucun_inscrit{
+                        opacity: .33;
+                    }
                 }
             }
         }

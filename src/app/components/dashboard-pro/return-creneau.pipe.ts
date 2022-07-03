@@ -21,7 +21,7 @@ export class ReturnCreneauPipe implements PipeTransform {
         if(choix == 'date'){
             valeurAffiche = `<p>`+ creneau.dateString + `</p>`;
         }else if(choix == 'horaire'){
-            valeurAffiche = `<p>`+ creneau.heureDebut.viewValue + '<span> &#x279E; </span>' + creneau.heureFin.viewValue + `</p>`;
+            valeurAffiche = `<p>`+ creneau.heureDebut.viewValue + '<span> &#10141; </span>' + creneau.heureFin.viewValue + `</p>`;
         }else if(choix == 'inscrit'){
           let classImg = "";
           if(!creneau.users){

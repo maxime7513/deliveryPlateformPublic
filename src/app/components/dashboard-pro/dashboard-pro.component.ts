@@ -95,9 +95,9 @@ export class DashboardProComponent implements OnInit {
 
     const dialogRef = this.dialog.open(ModalDeleteCrenauComponent);
     if(crenau.typeMission == 'creneau'){
-      dialogRef.componentInstance.confirmMessage = "Êtes-vous sûr de vouloir enlever ce créneau de votre planning ?"
+      dialogRef.componentInstance.confirmMessage = "Êtes-vous sûr de vouloir supprimer ce créneau de votre planning ?"
     }else{
-      dialogRef.componentInstance.confirmMessage = "Êtes-vous sûr de vouloir enlever cette astreinte de votre planning ?"
+      dialogRef.componentInstance.confirmMessage = "Êtes-vous sûr de vouloir supprimer cette astreinte de votre planning ?"
     }
     dialogRef.afterClosed().subscribe(async result => {
       if(result == true) {
