@@ -54,11 +54,11 @@ export class AstreinteService {
     return docData(crenauRef, { idField: 'id' }) as Observable<Crenau>;
   }
 
-  async getAcceptAddAstreinte(Usersociete: any, date: string, heureDebut: number) {
-    const astreintesRef = query(collection(this.firestore, 'astreinte'), where("societe", "==" , Usersociete), where("dateString", "==", date), where("heureDebut", "==", heureDebut));
-    let resLength = await getDocs(astreintesRef);
-    return resLength.size
-  }
+  // async getAcceptAddAstreinte(Usersociete: any, date: string, heureDebut: number) {
+  //   const astreintesRef = query(collection(this.firestore, 'astreinte'), where("societe", "==" , Usersociete), where("dateString", "==", date), where("heureDebut", "==", heureDebut));
+  //   let resLength = await getDocs(astreintesRef);
+  //   return resLength.size
+  // }
 
   // retourner tous les crenaux par date
   getAstreintesByDate(date: string): Observable<Crenau[]> {

@@ -9,6 +9,8 @@ import { ProfileUser } from 'src/app/models/user.profil';
 export class ModalUserInscritComponent implements OnInit {
   
   users: ProfileUser[];
+  heureDebut: string;
+  heureFin: string;
   
   constructor() {}
 

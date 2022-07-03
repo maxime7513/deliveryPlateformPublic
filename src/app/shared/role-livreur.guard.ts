@@ -21,7 +21,7 @@ export class RoleLivreurGuard implements CanActivate {
       this.router.navigate(['/listLivraisonAttenteRB']);
       return false;
     }else{
-      this.router.navigate(['/dashboardSociete']);
+      this.router.navigate(['/dashboardPro']);
       return false;
     }
   }

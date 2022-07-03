@@ -126,16 +126,11 @@ export class CrenauService {
     return collectionData(crenauxRef, { idField: 'id' }) as Observable<Crenau[]>;
   }
 
-  async getAcceptAddCrenau(Usersociete: any, date: string, heureDebut: number) {
-    const crenauxRef = query(collection(this.firestore, 'crenau'), where("societe", "==" , Usersociete), where("dateString", "==", date), where("heureDebut", "==", heureDebut));
-    let resLength = await getDocs(crenauxRef);
-    return resLength.size
-  }
-  async getAcceptAddCrenau2(Usersociete: any, date: any) {
-    const crenauxRef = query(collection(this.firestore, 'crenau'), where("societe", "==" , Usersociete), where("date", "==", date));
-    let resLength = await getDocs(crenauxRef);
-    return resLength.size
-  }
+  // async getAcceptAddCrenau(Usersociete: any, date: any) {
+  //   const crenauxRef = query(collection(this.firestore, 'crenau'), where("societe", "==" , Usersociete), where("date", "==", date));
+  //   let resLength = await getDocs(crenauxRef);
+  //   return resLength.size
+  // }
 
   async returnNumeroCrenau(Usersociete: any) {
     const crenauxRef = query(collection(this.firestore, 'crenau'), where("societe", "==" , Usersociete));

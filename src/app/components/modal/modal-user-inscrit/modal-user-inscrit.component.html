@@ -1,5 +1,6 @@
 <!--<h1 mat-dialog-title>Livreurs de {{crenau.heureDebut}}h à {{crenau.heureFin}}h</h1>-->
 <div mat-dialog-content>
+  <h3>Livreurs de {{heureDebut}} à {{heureFin}}</h3>
   <div *ngFor="let user of users" class="user">
     <img [src]="user.photoURL ?? '/assets/images/avatar.svg'"/>
     <span>{{user.lastName}}</span>

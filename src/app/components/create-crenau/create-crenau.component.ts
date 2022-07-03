@@ -245,21 +245,22 @@ export class CreateCrenauComponent implements OnInit {
       this.crenauForm.value.societe = this.userRole; // donner a societe la valeur du role de l'utilisateur connecté
     }
 
-    // verifier si creneau/astreinte deja crée
     if(this.typeChoice == 'creneau'){
-      let verifCrenau = await this.crenauservice.getAcceptAddCrenau2(this.crenauForm.value.societe,this.crenauForm.value.date);
-      if(verifCrenau > 0){
-        this.toast.error('un créneau existe déjà pour '+ this.crenauForm.value.heureDebut.viewValue);
-        return
-      }
+      // verifier si creneau deja crée
+      // let verifCrenau = await this.crenauservice.getAcceptAddCrenau(this.crenauForm.value.societe,this.crenauForm.value.date);
+      // if(verifCrenau > 0){
+      //   this.toast.error('un créneau existe déjà pour '+ this.crenauForm.value.heureDebut.viewValue);
+      //   return
+      // }
       // ajouter creneau à firebase
       this.crenauservice.addCrenau(this.crenauForm.value);
     }else{
-      let verifCrenau = await this.astreinteservice.getAcceptAddAstreinte(this.crenauForm.value.societe,this.crenauForm.value.dateString, this.crenauForm.value.heureDebut.value);
-      if(verifCrenau > 0){
-        this.toast.error('une astreinte existe déjà pour '+ this.crenauForm.value.heureDebut.viewValue);
-        return
-      }
+      // verifier si astreinte deja crée
+      // let verifCrenau = await this.astreinteservice.getAcceptAddAstreinte(this.crenauForm.value.societe,this.crenauForm.value.dateString, this.crenauForm.value.heureDebut.value);
+      // if(verifCrenau > 0){
+      //   this.toast.error('une astreinte existe déjà pour '+ this.crenauForm.value.heureDebut.viewValue);
+      //   return
+      // }
       // ajouter astreinte à firebase
       this.astreinteservice.addAstreinte(this.crenauForm.value);
     }

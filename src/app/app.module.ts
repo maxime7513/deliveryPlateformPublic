@@ -55,7 +55,7 @@ import { ModalDeleteCrenauComponent } from './components/modal/modal-delete-cren
 import { MessagesComponent } from './components/messages/messages.component';
 import { ModalMessageComponent } from './components/modal/modal-message/modal-message.component';
 import { CarnetAdressesComponent } from './components/carnet-adresses/carnet-adresses.component';
-import { DahsboardSocieteComponent } from './components/dahsboard-societe/dahsboard-societe.component';
+import { DashboardProComponent } from './components/dashboard-pro/dashboard-pro.component';
 
 // Rosebaie
 import { RosebaieCreateLivraisonAttenteComponent } from './components/rosebaie/rosebaie-create-livraison-attente/rosebaie-create-livraison-attente.component';
@@ -79,6 +79,7 @@ import { ReturnHeureLivreurPipe } from './components/KYO/heures-livreurs/return-
 import { TotalHeureLivreursPipe } from './components/KYO/heures-livreurs/totalHeureLivreurs.pipe';
 import { CheckFinServicePipe } from './components/KYO/planning-kyo/checkCreneauSuivant.pipe';
 import { CheckPrecedentPriseServicePipe } from './components/KYO/planning-kyo/checkPrecedentPriseService.pipe';
+import { ReturnCreneauPipe } from './components/dashboard-pro/return-creneau.pipe';
 
 // firebase
 import { provideFirebaseApp, initializeApp } from '@angular/fire/app';
@@ -115,6 +116,7 @@ registerLocaleData(localeFr, 'fr');
     TotalHeureLivreursPipe,
     CheckFinServicePipe,
     CheckPrecedentPriseServicePipe,
+    ReturnCreneauPipe,
     ModalCreateAdresseComponent,
     RosebaieLivraisonComponent,
     MissionRosebaieComponent,
@@ -126,7 +128,7 @@ registerLocaleData(localeFr, 'fr');
     PlanningKYOComponent,
     ModalLivreursAstreinteComponent,
     HeuresLivreursComponent,
-    DahsboardSocieteComponent,
+    DashboardProComponent,
   ],
   imports: [
     BrowserModule,
