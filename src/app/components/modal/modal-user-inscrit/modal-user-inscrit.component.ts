@@ -17,6 +17,10 @@ export class ModalUserInscritComponent implements OnInit {
 
   ngOnInit(): void { }
 
+  ngOnDestroy(): void {
+    this.users = null;
+  }
+  
   formatPhone(phone: string){
     return phone.replace(/(.{2})(?=.)/g,"$1 ")
   }
