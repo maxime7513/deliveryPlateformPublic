@@ -1,7 +1,7 @@
 import { DatePipe } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { MatDialog, MatDialogRef } from '@angular/material/dialog';
+import { FormControl, FormGroup, FormGroupDirective, Validators } from '@angular/forms';
+import { MatDialog } from '@angular/material/dialog';
 import { Router } from '@angular/router';
 import { HotToastService } from '@ngneat/hot-toast';
 import { Crenau } from 'src/app/models/crenau.model';
@@ -82,6 +82,7 @@ export class CreateCrenauComponent implements OnInit {
     {value: 23.5, viewValue: '23h30'},
     {value: 24, viewValue: '24h'},
   ];
+  heuresFin: Heure[] = this.heures;
   inscritsMax: inscritMax[] = [
     {value: 1, viewValue: '1 livreur'},
     {value: 2, viewValue: '2 livreur'},
@@ -104,7 +105,8 @@ export class CreateCrenauComponent implements OnInit {
     {value: 'woozoo', viewValue: 'WooZoo'},
   ];
   ccE: string = "+33";
-  typeChoice: string = 'creneau';
+  showDatePickerRecurrence: boolean = false;
+  minPickerRecurrence: Date;
 
   constructor(private crenauservice: CrenauService, private astreinteservice: AstreinteService, private messageService: MessageService, private toast: HotToastService, private router: Router, public datePipe : DatePipe,  public dialog: MatDialog, private twilioservice: TwilioService, private usersservice: UsersService) {
     this.defaultDatePicker = this.datePicker;
@@ -138,6 +140,8 @@ export class CreateCrenauComponent implements OnInit {
         inscritMax: new FormControl('', Validators.required),
         vehicule: new FormControl(''),
         societe: new FormControl(''),
+        recurrence: new FormControl(false),
+        dateRecurrence: new FormControl(''),
       }
     );
   }
@@ -147,11 +151,13 @@ export class CreateCrenauComponent implements OnInit {
       this.societe.setValidators([Validators.required]);
       // salaryControl.setValidators(null);
     }
-        
     this.societe.updateValueAndValidity();
   }
 
   // getter
+  get typeMission() {
+    return this.crenauForm.get('typeMission');
+  }
   get date() {
     return this.crenauForm.get('date');
   }
@@ -166,6 +172,42 @@ export class CreateCrenauComponent implements OnInit {
   }
   get societe() {
     return this.crenauForm.get('societe');
+  }
+  get dateRecurrence() {
+    return this.crenauForm.get('dateRecurrence');
+  }
+
+  changeMinPickerRecurrence(){
+    if(this.crenauForm.value.date == null){
+      return
+    }
+
+    this.minPickerRecurrence = new Date(this.crenauForm.value.date);
+    this.minPickerRecurrence.setDate(this.minPickerRecurrence.getDate() + 7)
+  }
+  
+  adapteHeureFin(){
+    if(this.heureDebut.value == null){
+      return
+    }
+
+    let newTab: Heure[] = [];
+    this.heuresFin.map(heure => {
+      if(heure.value >= (this.heureDebut.value.value + 1)){
+        newTab.push(heure)
+      }
+    })
+    this.heuresFin = newTab;
+  }
+
+  changeCheckbox(){
+    this.showDatePickerRecurrence = !this.showDatePickerRecurrence;
+    if(this.crenauForm.value.recurrence){
+      this.dateRecurrence.setValidators([Validators.required]);
+    }else{
+      this.dateRecurrence.setValidators(null);
+    }
+    this.dateRecurrence.updateValueAndValidity();
   }
 
   calculDifferenceDate(date: any){
@@ -207,18 +249,17 @@ export class CreateCrenauComponent implements OnInit {
       })
     }
   }
-
+  
   // envoi du formulaire
-  async onSubmit() {
+  async onSubmit(formDirective: FormGroupDirective) {
     this.toast.close();
     this.submitCrenauForm = true;
 
-    if(!this.typeChoice){
+    if(!this.typeMission){
       this.toast.error('Renseigner créneau ou astreinte');
       return;
     }
     if(!this.crenauForm.valid) {
-      console.log('formulaire invalid');
       this.toast.error('Formulaire invalide');
       return;
     }
@@ -229,9 +270,11 @@ export class CreateCrenauComponent implements OnInit {
 
     // date au format string
     this.crenauForm.value.dateString = this.datePipe.transform(this.crenauForm.value.date, 'dd/MM/yyyy');
+    let dateStringReferenceSaved = this.datePipe.transform(this.crenauForm.value.date, 'dd/MM/yyyy');
 
     // setHours de la date avec la valeur de heureDebut du formulaire
     this.crenauForm.value.date.setHours(this.crenauForm.value.heureDebut.value);
+    let dateReferenceSaved = new Date(this.crenauForm.value.date);
     // setMinutes si créneau par demi-heure
     if(this.crenauForm.value.heureDebut.value % 1 != 0){
       this.crenauForm.value.date.setMinutes(30);
@@ -239,45 +282,125 @@ export class CreateCrenauComponent implements OnInit {
       this.crenauForm.value.date.setMinutes(0);
     }
 
+    if(this.crenauForm.value.date <= new Date){
+      this.toast.error('Le créneau que vous voulez créer est déjà passé dans le temps');
+      return
+    }
+    
     this.crenauForm.value.inscrit = 0;
 
     if(this.userRole != 'woozoo'){ // si role n'est pas woozoo
       this.crenauForm.value.societe = this.userRole; // donner a societe la valeur du role de l'utilisateur connecté
     }
 
-    if(this.typeChoice == 'creneau'){
-      // verifier si creneau deja crée
-      // let verifCrenau = await this.crenauservice.getAcceptAddCrenau(this.crenauForm.value.societe,this.crenauForm.value.date);
-      // if(verifCrenau > 0){
-      //   this.toast.error('un créneau existe déjà pour '+ this.crenauForm.value.heureDebut.viewValue);
-      //   return
-      // }
-      // ajouter creneau à firebase
-      this.crenauservice.addCrenau(this.crenauForm.value);
+    if(this.crenauForm.value.typeMission == 'creneau'){
+      if(this.crenauForm.value.recurrence){
+        let dateJusqua = this.crenauForm.value.dateRecurrence;
+        dateJusqua.setHours(this.crenauForm.value.heureDebut.value)
+        if(this.crenauForm.value.heureDebut.value % 1 != 0){ // setMinutes si créneau par demi-heure
+          dateJusqua.setMinutes(30);
+        }
+        
+        // this.crenauForm.get('recurrence').disable(); // ne pas afficher dans firebase
+        // this.crenauForm.get('dateRecurrence').disable(); // ne pas afficher dans firebase
+
+        // ajouter creneau à firebase
+        for(; this.crenauForm.value.date <= dateJusqua; this.crenauForm.value.date.setDate(this.crenauForm.value.date.getDate() + 7)){
+          this.crenauForm.value.dateString = this.datePipe.transform(this.crenauForm.value.date, 'dd/MM/yyyy'); // date au format string
+          console.log(this.crenauForm.value.societe)
+          this.crenauservice.addCrenau(this.crenauForm.value);
+          // envoie du message dans la boite mail woozoo
+          this.sendMessageBox(this.crenauForm);
+        }
+      }else{
+        this.crenauservice.addCrenau(this.crenauForm.value); // ajouter creneau à firebase
+        this.sendMessageBox(this.crenauForm); // envoie du message dans la boite mail woozoo
+      }
     }else{
-      // verifier si astreinte deja crée
-      // let verifCrenau = await this.astreinteservice.getAcceptAddAstreinte(this.crenauForm.value.societe,this.crenauForm.value.dateString, this.crenauForm.value.heureDebut.value);
-      // if(verifCrenau > 0){
-      //   this.toast.error('une astreinte existe déjà pour '+ this.crenauForm.value.heureDebut.viewValue);
-      //   return
-      // }
-      // ajouter astreinte à firebase
-      this.astreinteservice.addAstreinte(this.crenauForm.value);
+      if(this.crenauForm.value.recurrence){
+        let dateJusqua = this.crenauForm.value.dateRecurrence;
+        dateJusqua.setHours(this.crenauForm.value.heureDebut.value)
+        if(this.crenauForm.value.heureDebut.value % 1 != 0){ // setMinutes si créneau par demi-heure
+          dateJusqua.setMinutes(30);
+        }
+        
+        // this.crenauForm.get('recurrence').disable(); // ne pas afficher dans firebase
+        // this.crenauForm.get('dateRecurrence').disable(); // ne pas afficher dans firebase
+
+        // ajouter creneau à firebase
+        for(; this.crenauForm.value.date <= dateJusqua; this.crenauForm.value.date.setDate(this.crenauForm.value.date.getDate() + 7)){
+          this.crenauForm.value.dateString = this.datePipe.transform(this.crenauForm.value.date, 'dd/MM/yyyy'); // date au format string
+          this.astreinteservice.addAstreinte(this.crenauForm.value);
+          // envoie du message dans la boite mail woozoo
+          this.sendMessageBox(this.crenauForm);
+        }
+      }else{
+        this.astreinteservice.addAstreinte(this.crenauForm.value); // ajouter astreinte à firebase
+        this.sendMessageBox(this.crenauForm); // envoie du message dans la boite mail woozoo
+      }
     }
-    
-    const toastValid = this.toast.success(this.typeChoice + ' ajouter',
+
+    const toastValid = this.toast.success(this.crenauForm.value.typeMission + ' ajouter',
       {
         // dismissible: true,
         duration: 2500
       }
     );
 
-    // envoie du message dans la boite mail woozoo
-    let date = this.datePipe.transform(this.crenauForm.value.date, 'dd/MM/yyyy');
-    let contenue = this.crenauForm.value.societe + " viens de programmer une livraison." + `\n` +
-    'Type de mission: ' + this.typeChoice + `\n` +
-    'Date: ' + date + ' de ' + this.crenauForm.value.heureDebut.viewValue + ' à ' + this.crenauForm.value.heureFin.viewValue + `\n` +
-    'Nombre de livreurs: ' + this.crenauForm.value.inscritMax;
+    // envoyer sms à tous les livreurs pour informer creneau/astreinte ajouté
+    let minutesDiff = this.calculDifferenceDate(new Date(dateReferenceSaved));
+    if(minutesDiff < 10080){ // si inférieur à 7 jours
+      this.send_smsGrouper(this.crenauForm.value.typeMission, dateStringReferenceSaved);
+    }
+
+    toastValid.afterClosed.subscribe((e) => {
+      // reinitialiser formulaire
+      this.resetForm(formDirective);
+    });
+  }
+
+  resetForm(formDirective: FormGroupDirective){
+    this.submitCrenauForm = false;
+    this.showDatePickerRecurrence = false;
+    // this.crenauForm.get('recurrence').enable();
+    // this.crenauForm.get('dateRecurrence').enable();
+    formDirective.resetForm();
+    this.validateform();
+    this.setValidators();
+  }
+  
+  // ouvrir popup confirmation suppression du créneau
+  openDialogModal(crenau: Crenau) {
+    const dialogRef = this.dialog.open(ModalDeleteCrenauComponent);
+    dialogRef.componentInstance.confirmMessage = "Êtes-vous sûr de vouloir supprimer ce créneau ?"
+    dialogRef.afterClosed().subscribe(result => {
+      if(result == true) {
+        this.crenauservice.deleteCrenau(crenau).then(() => 
+          this.toast.success('Crénau supprimé',{duration: 2500})
+        );
+      }    
+    });
+  }
+
+  // ouvrir popup confirmation suppression du créneau
+  openDialogModal2(crenau: Crenau) {
+    const dialogRef = this.dialog.open(ModalDeleteCrenauComponent);
+    dialogRef.componentInstance.confirmMessage = "Êtes-vous sûr de vouloir supprimer cette astreinte ?"
+    dialogRef.afterClosed().subscribe(result => {
+      if(result == true) {
+        this.astreinteservice.deleteAstreinte(crenau).then(() => 
+          this.toast.success('Astreinte supprimé',{duration: 2500})
+        );
+      }    
+    });
+  }
+
+  sendMessageBox(form: FormGroup){
+    let date = this.datePipe.transform(form.value.date, 'dd/MM/yyyy');
+    let contenue = form.value.societe + " viens de programmer une livraison." + `\n` +
+    'Type de mission: ' + form.value.typeMission + `\n` +
+    'Date: ' + date + ' de ' + form.value.heureDebut.viewValue + ' à ' + form.value.heureFin.viewValue + `\n` +
+    'Nombre de livreurs: ' + form.value.inscritMax;
 
     if(this.user.photoURL == null){
       this.user.photoURL = '';
@@ -292,46 +415,11 @@ export class CreateCrenauComponent implements OnInit {
       lu: false,
       traite: false
     }
+
     this.messageService.addMessage(message);
-    
-    // envoyer sms à tous les livreurs pour informer creneau ajouter
-    let minutesDiff = this.calculDifferenceDate(new Date(this.crenauForm.value.date));
-    if(minutesDiff < 10080){ // si inférieur à 7 jours
-      this.send_smsGrouper(this.typeChoice, this.crenauForm.value.dateString);
-    }
-    // toastValid.afterClosed.subscribe((e) => {
-    //   this.router.navigate(['/planning']);
-    // });
   }
 
-  // ouvrir popup confirmation suppression du créneaux
-  openDialogModal(crenau: Crenau) {
-    const dialogRef = this.dialog.open(ModalDeleteCrenauComponent);
-    dialogRef.componentInstance.confirmMessage = "Êtes-vous sûr de vouloir supprimer ce créneau ?"
-    dialogRef.afterClosed().subscribe(result => {
-      if(result == true) {
-        this.crenauservice.deleteCrenau(crenau).then(() => 
-          this.toast.success('Crénau supprimé',{duration: 2500})
-        );
-      }    
-    });
-  }
-
-  // ouvrir popup confirmation suppression du créneaux
-  openDialogModal2(crenau: Crenau) {
-    const dialogRef = this.dialog.open(ModalDeleteCrenauComponent);
-    dialogRef.componentInstance.confirmMessage = "Êtes-vous sûr de vouloir supprimer cette astreinte ?"
-    dialogRef.afterClosed().subscribe(result => {
-      if(result == true) {
-        this.astreinteservice.deleteAstreinte(crenau).then(() => 
-          this.toast.success('Astreinte supprimé',{duration: 2500})
-        );
-      }    
-    });
-  }
-
-  // envoyer sms à tous les livreurs
-  async send_smsGrouper(typeChoice: string, dateCrenau: string) {
+  async send_smsGrouper(typeMission: string, dateCrenau: string) {
     let userRole;
     if(this.userRole == 'woozoo'){
       userRole = this.crenauForm.value.societe;
@@ -342,13 +430,12 @@ export class CreateCrenauComponent implements OnInit {
     let tabPhones = await this.twilioservice.livreursPhone$;
 
     let req = {
-      typeMission: typeChoice,
+      typeMission: typeMission,
       role: userRole,
       date: dateCrenau,
       phoneTab: tabPhones
     }
 
-    // requete twilio
     this.twilioservice.send_smsGroupe(req);
   }
 

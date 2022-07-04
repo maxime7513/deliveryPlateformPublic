@@ -68,10 +68,14 @@ form{
             }
         }
     }
+    mat-checkbox{
+        align-self: flex-start;
+        color: var(--primary);
+    }
     button{
         background: var(--secondary);
         color: #fff;
-        margin-top: 13px;
+        margin-top: 20px;
     }
 }
 
@@ -164,6 +168,7 @@ table{
     }
     span{
         margin: 0 13px;
+        color: var(--primary);
     }
 }
 /* Responsive */
