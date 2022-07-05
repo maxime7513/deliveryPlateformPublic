@@ -238,7 +238,6 @@ export class CreateCrenauComponent implements OnInit {
     let date = this.datePipe.transform(this.defaultDatePicker, 'dd/MM/yyyy');
     if(this.userRole != 'woozoo'){
       this.astreinteservice.getAstreintesByDateandSociete(this.userRole, date).subscribe((res: Crenau[]) => {
-        console.log(res)
         this.astreintes = res.sort(function (a:any, b:any) {
         return a.heureDebut.value - b.heureDebut.value
         });
@@ -291,53 +290,38 @@ export class CreateCrenauComponent implements OnInit {
 
     if(this.userRole != 'woozoo'){ // si role n'est pas woozoo
       this.crenauForm.value.societe = this.userRole; // donner a societe la valeur du role de l'utilisateur connecté
-    }
+    } 
 
-    if(this.crenauForm.value.typeMission == 'creneau'){
-      if(this.crenauForm.value.recurrence){
-        let dateJusqua = this.crenauForm.value.dateRecurrence;
-        dateJusqua.setHours(this.crenauForm.value.heureDebut.value)
-        if(this.crenauForm.value.heureDebut.value % 1 != 0){ // setMinutes si créneau par demi-heure
-          dateJusqua.setMinutes(30);
-        }
-        
-        // this.crenauForm.get('recurrence').disable(); // ne pas afficher dans firebase
-        // this.crenauForm.get('dateRecurrence').disable(); // ne pas afficher dans firebase
+    if(this.crenauForm.value.recurrence){
+      let dateJusqua = this.crenauForm.value.dateRecurrence;
+      dateJusqua.setHours(this.crenauForm.value.heureDebut.value)
+      if(this.crenauForm.value.heureDebut.value % 1 != 0){ // setMinutes si créneau par demi-heure
+        dateJusqua.setMinutes(30);
+      }
 
-        // ajouter creneau à firebase
-        for(; this.crenauForm.value.date <= dateJusqua; this.crenauForm.value.date.setDate(this.crenauForm.value.date.getDate() + 7)){
-          this.crenauForm.value.dateString = this.datePipe.transform(this.crenauForm.value.date, 'dd/MM/yyyy'); // date au format string
-          console.log(this.crenauForm.value.societe)
+      delete this.crenauForm.value.recurrence; // ne pas afficher dans firebase
+      delete this.crenauForm.value.dateRecurrence; // ne pas afficher dans firebase
+      
+      for(; this.crenauForm.value.date <= dateJusqua; this.crenauForm.value.date.setDate(this.crenauForm.value.date.getDate() + 7)){
+        this.crenauForm.value.dateString = this.datePipe.transform(this.crenauForm.value.date, 'dd/MM/yyyy');
+        if(this.crenauForm.value.typeMission == 'creneau'){
           this.crenauservice.addCrenau(this.crenauForm.value);
-          // envoie du message dans la boite mail woozoo
-          this.sendMessageBox(this.crenauForm);
+        }else{
+          this.astreinteservice.addAstreinte(this.crenauForm.value);
         }
-      }else{
-        this.crenauservice.addCrenau(this.crenauForm.value); // ajouter creneau à firebase
-        this.sendMessageBox(this.crenauForm); // envoie du message dans la boite mail woozoo
+        // envoie du message dans la boite mail woozoo
+        this.sendMessageBox(this.crenauForm);
       }
     }else{
-      if(this.crenauForm.value.recurrence){
-        let dateJusqua = this.crenauForm.value.dateRecurrence;
-        dateJusqua.setHours(this.crenauForm.value.heureDebut.value)
-        if(this.crenauForm.value.heureDebut.value % 1 != 0){ // setMinutes si créneau par demi-heure
-          dateJusqua.setMinutes(30);
-        }
-        
-        // this.crenauForm.get('recurrence').disable(); // ne pas afficher dans firebase
-        // this.crenauForm.get('dateRecurrence').disable(); // ne pas afficher dans firebase
+      delete this.crenauForm.value.recurrence; // ne pas afficher dans firebase
+      delete this.crenauForm.value.dateRecurrence; // ne pas afficher dans firebase
 
-        // ajouter creneau à firebase
-        for(; this.crenauForm.value.date <= dateJusqua; this.crenauForm.value.date.setDate(this.crenauForm.value.date.getDate() + 7)){
-          this.crenauForm.value.dateString = this.datePipe.transform(this.crenauForm.value.date, 'dd/MM/yyyy'); // date au format string
-          this.astreinteservice.addAstreinte(this.crenauForm.value);
-          // envoie du message dans la boite mail woozoo
-          this.sendMessageBox(this.crenauForm);
-        }
+      if(this.crenauForm.value.typeMission == 'creneau'){
+        this.crenauservice.addCrenau(this.crenauForm.value);
       }else{
-        this.astreinteservice.addAstreinte(this.crenauForm.value); // ajouter astreinte à firebase
-        this.sendMessageBox(this.crenauForm); // envoie du message dans la boite mail woozoo
+        this.astreinteservice.addAstreinte(this.crenauForm.value);
       }
+      this.sendMessageBox(this.crenauForm);
     }
 
     const toastValid = this.toast.success(this.crenauForm.value.typeMission + ' ajouter',
