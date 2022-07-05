@@ -5,8 +5,10 @@ import { HotToastService } from '@ngneat/hot-toast';
 import { MatDialog } from '@angular/material/dialog';
 import { ModalMessageComponent } from '../modal/modal-message/modal-message.component';
 import { PageEvent } from '@angular/material/paginator';
+import { HeaderComponent } from '../header/header.component';
 
 @Component({
+  providers:[HeaderComponent],
   selector: 'app-messages',
   templateUrl: './messages.component.html',
   styleUrls: ['./messages.component.scss']
@@ -19,7 +21,7 @@ export class MessagesComponent implements OnInit {
   nombreMessageNonLu : number;
   showSpinner : boolean = true;
 
-  constructor(private messageService: MessageService, public dialog: MatDialog, private toast: HotToastService) { }
+  constructor(private messageService: MessageService, private headerComponent: HeaderComponent, public dialog: MatDialog, private toast: HotToastService) { }
 
   ngOnInit(): void {
     this.messageService.getMessages().subscribe((res: Message[]) => {
@@ -49,6 +51,7 @@ export class MessagesComponent implements OnInit {
 
   updateLu(message: Message, el2: boolean){
     this.messageService.updateLuMessage(message, el2);
+    this.headerComponent.returnNombreMessagesNonLu();
   }
 
   deleteMessage(message: Message){
