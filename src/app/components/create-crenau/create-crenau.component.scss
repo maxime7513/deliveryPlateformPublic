@@ -66,6 +66,9 @@ form{
             .mat-radio-button.mat-accent.mat-radio-checked .mat-radio-outer-circle{
                 border-color: var(--secondary);
             }
+            .mat-ripple-element{
+                background-color: var(--blue-secondary);
+            }
         }
     }
     mat-checkbox{
