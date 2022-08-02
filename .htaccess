@@ -1,3 +1,8 @@
+# REDIRIGER EN HTTPS
+RewriteEngine On
+RewriteCond %{HTTPS} off
+RewriteRule (.*) https://%{HTTP_HOST}%{REQUEST_URI} [R,L]
+
 # REFRESH WORK
 RewriteEngine On 
   # If an existing asset or directory is requested go to it as it is 
@@ -7,7 +12,3 @@ RewriteEngine On
  
   # If the requested resource doesn't exist, use index.html 
   RewriteRule ^ /index.html
-
-# REDIRIGER EN HTTPS
-RewriteCond %{HTTPS} off
-RewriteRule (.*) https://%{HTTP_HOST}%{REQUEST_URI} [R,L]
